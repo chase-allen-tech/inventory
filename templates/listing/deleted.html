@@ -169,6 +169,8 @@
                 <a href="#" data-id="{{product.id}}" class="edit-action"><i class="icon-pencil5 color-primary"></i></a>
                 <a href="#" data-object-id="{{product.content_object.id}}" data-class-id="{{product.content_type_id}}"
                   class="edit-contract"><i class="icon-stack-text ml-3 color-danger"></i></a>
+                <a href="#" data-contract-id="{{product.content_object.contract_id}}" data-product-id="{{product.id}}"
+                  class="remove-contract"><i class="icon-minus-circle2 ml-3 color-danger"></i></a>
               </td>
             </tr>
             {% endfor %}
@@ -347,6 +349,26 @@
           },
           success: function (result) {
             location.href = result.url;
+          }
+        });
+      });
+
+      $('a.remove-contract').click(function (e) {
+        e.preventDefault();
+        if (!confirm('{% trans "Are you sure you want to remove this data?" %}')) return;
+        var $this = $(this);
+        var contract_id = $this.data('contract-id');
+        $.ajax({
+          type: 'DELETE',
+          url: "{% url 'contract:contract-update-path-permanent' %}",
+          data: {
+            contract_id: contract_id,
+          },
+          beforeSend: function (request) {
+            request.setRequestHeader('X-CSRFToken', csrftoken);
+          },
+          success: function (result) {
+            location.href = location.href;
           }
         });
       });

@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-    TraderSalesContractView, TraderPurchasesContractView, HallSalesContractView, HallPurchasesContractView,
+    ContractClassNameAjaxViewPermanent, TraderSalesContractView, TraderPurchasesContractView, HallSalesContractView, HallPurchasesContractView,
     TraderSalesValidateAjaxView, TraderPurchasesValidateAjaxView, HallSalesValidateAjaxView, HallPurchasesValidateAjaxView,
     ContractShippingLabelAjaxView, ContractManagerAjaxView, ContractClassNameAjaxView, CheckTaxableAjaxView,
 )
@@ -37,5 +37,6 @@ urlpatterns = [
     path('shipping-label/', ContractShippingLabelAjaxView.as_view(), name='shipping-label'),
     path('manager/', ContractManagerAjaxView.as_view(), name='manager-list'),
     path('contract-update-path/', ContractClassNameAjaxView.as_view(), name='contract-update-path'),
+    path('contract-update-path-permanent/', ContractClassNameAjaxViewPermanent.as_view(), name='contract-update-path-permanent'),
     path('check-taxable/', CheckTaxableAjaxView.as_view(), name='check-taxable'),
 ]

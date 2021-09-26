@@ -44,6 +44,39 @@ class ContractShippingLabelAjaxView(AdminLoginRequiredMixin, View):
             return JsonResponse({'data': get_shipping_date_label(data)}, status=200)
         return JsonResponse({'success': False}, status=400)
 
+class ContractClassNameAjaxViewPermanent(AdminLoginRequiredMixin, View):
+
+    def delete(self, *args, **kwargs):
+        dels = QueryDict(self.request.body)
+        contract_id = dels.get('contract_id')
+
+        print('*****', dels)
+
+        purchase_trader_class_id = ContentType.objects.get(model='traderpurchasescontract').id
+        purchase_hall_class_id = ContentType.objects.get(model='hallpurchasescontract').id
+        sales_trader_class_id = ContentType.objects.get(model='tradersalescontract').id
+        sales_hall_class_id = ContentType.objects.get(model='hallsalescontract').id
+
+        queryset = ContractProduct.objects.filter(
+            Q(content_type_id=purchase_trader_class_id) |
+            Q(content_type_id=purchase_hall_class_id) |
+            Q(content_type_id=sales_trader_class_id) |
+            Q(content_type_id=sales_hall_class_id)
+        ).order_by('-pk')
+
+        queryset.filter(
+            Q(trader_purchases_contract__contract_id__icontains=contract_id) |
+            Q(hall_purchases_contract__contract_id__icontains=contract_id) |
+            Q(trader_sales_contract__contract_id__icontains=contract_id) |
+            Q(hall_sales_contract__contract_id__icontains=contract_id)
+        ).all().delete()
+
+        TraderPurchasesContract.objects.filter(contract_id__icontains=contract_id).all().delete()
+        HallPurchasesContract.objects.filter(contract_id__icontains=contract_id).all().delete()
+        TraderSalesContract.objects.filter(contract_id__icontains=contract_id).all().delete()
+        HallSalesContract.objects.filter(contract_id__icontains=contract_id).all().delete()
+
+        return JsonResponse({'url': "url"}, status=200)
 
 class ContractClassNameAjaxView(AdminLoginRequiredMixin, View):
     def post(self, *args, **kwargs):
