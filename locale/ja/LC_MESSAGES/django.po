@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 03:53+0400\n"
+"POT-Creation-Date: 2021-09-27 18:19+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -155,7 +155,7 @@ msgstr "支出"
 
 #: .\contracts\invoice_views.py:128 .\contracts\invoice_views.py:518
 #: .\contracts\invoice_views.py:1056 .\contracts\invoice_views.py:1077
-#: .\contracts\invoice_views.py:1539
+#: .\contracts\invoice_views.py:1540
 #: .\templates\contracts\hall_purchases.html:56
 #: .\templates\contracts\hall_sales.html:56
 msgid "Sales contract"
@@ -197,19 +197,19 @@ msgstr "様"
 msgid "Trader purchases"
 msgstr "業者買"
 
-#: .\contracts\invoice_views.py:1539 .\templates\contracts\hall_sales.html:5
+#: .\contracts\invoice_views.py:1540 .\templates\contracts\hall_sales.html:5
 #: .\templates\contracts\hall_sales.html:20
 #: .\templates\contracts\hall_sales.html:28 .\templates\layout\sidebar.html:46
 msgid "Hall sales"
 msgstr "ホール売"
 
-#: .\contracts\invoice_views.py:1996
+#: .\contracts\invoice_views.py:1997
 #, fuzzy
 #| msgid "Purchases (contract)"
 msgid "Purchase contract"
 msgstr "仕入（売買契求書）"
 
-#: .\contracts\invoice_views.py:1996
+#: .\contracts\invoice_views.py:1997
 #, fuzzy
 #| msgid "Hall purchases"
 msgid "Hall purchase"
@@ -1468,8 +1468,7 @@ msgstr "削除（売買契求書）"
 msgid "Edit"
 msgstr "編集"
 
-#: .\templates\listing\deleted.html:313 .\templates\listing\deleted.html:358
-#: .\templates\listing\inventory.html:366
+#: .\templates\listing\deleted.html:313 .\templates\listing\inventory.html:366
 #: .\templates\listing\purchases.html:313 .\templates\listing\sales.html:315
 #: .\templates\masterdata\customers.html:281
 #: .\templates\masterdata\documents.html:188
@@ -1479,6 +1478,10 @@ msgstr "編集"
 #: .\templates\masterdata\senders.html:263
 msgid "Are you sure you want to remove this data?"
 msgstr "このデータを削除してもよろしいですか？"
+
+#: .\templates\listing\deleted.html:358
+msgid "May I delete this data in the comments? I can not restore it again."
+msgstr "コメントこのデータを削除してもよろしいですか？ 二度と復元できません。"
 
 #: .\templates\listing\history.html:4 .\templates\listing\inventory.html:4
 #: .\templates\listing\inventory.html:18 .\templates\listing\inventory.html:26

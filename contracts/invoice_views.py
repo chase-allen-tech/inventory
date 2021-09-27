@@ -1031,11 +1031,11 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                                                 borders: right_color black, right thin;')
         seal_address_tel_style = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック; alignment: wrap True; align: vert center, horiz left;\
                                                 borders: right_color black, left_color black, left thin, right thin;')
-        seal_address_tel_style1 = xlwt.easyxf('font: height 190, name ＭＳ Ｐゴシック; alignment: wrap True; align: vert center, horiz left;\
+        seal_address_tel_style1 = xlwt.easyxf('font: height 190, name ＭＳ Ｐゴシック; alignment: wrap True; align: vert center, horiz center;\
                                                 borders: right_color black, left_color black, left thin, right thin;')
-        seal_company_style = xlwt.easyxf('font: height 320, name ＭＳ Ｐゴシック; align: vert center, horiz left;\
+        seal_company_style = xlwt.easyxf('font: height 320, name ＭＳ Ｐゴシック; align: vert center, horiz center;\
                                                 borders: right_color black, left_color black, left thin, right thin;')
-        seal_supplier_style = xlwt.easyxf('font: height 190, name ＭＳ Ｐゴシック; align: vert center, horiz left;\
+        seal_supplier_style = xlwt.easyxf('font: height 190, name ＭＳ Ｐゴシック; align: vert center, horiz center;\
                                                 borders: left_color black, left thin;')
         seal_mark_style = xlwt.easyxf('font: height 190, name ＭＳ Ｐゴシック; align: vert center, horiz left;\
                                                 borders: right_color black, right thin;')
@@ -1328,11 +1328,11 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
         ws.write_merge(row_no, row_no, 7, 10, document_sender_tel + '/' + document_sender_fax, sender_table_text_style)
         row_no += 1
 
-        ws.write(row_no, 0, '到着予定日：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 1, 5, product_desired_arrival_date, sender_table_text_style)
-        ws.write(row_no, 6, '到着予定日：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 7, 10, document_desired_arrival_date, sender_table_text_style)
-        row_no += 1
+        # ws.write(row_no, 0, '到着予定日：', sender_table_field_style)
+        # ws.write_merge(row_no, row_no, 1, 5, product_desired_arrival_date, sender_table_text_style)
+        # ws.write(row_no, 6, '到着予定日：', sender_table_field_style)
+        # ws.write_merge(row_no, row_no, 7, 10, document_desired_arrival_date, sender_table_text_style)
+        # row_no += 1
 
         ws.row(row_no).height = space_height
         ws.write(row_no, 0, '', border_left)
@@ -1360,19 +1360,20 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
         for i in range(0, 6):
             ws.row(row_no + i).height = int(20 * 16.5)
             ws.write(row_no + i, 0, '', border_left)
+            ws.write(row_no + i, 10, '', border_right)
         
-        ws.write_merge(row_no, row_no, 6, 10, '〒537-0021　大阪府大阪市東成区東中本2丁目4-15', seal_address_tel_style1)
+        ws.write_merge(row_no, row_no, 0, 5, '〒537-0021　大阪府大阪市東成区東中本2丁目4-15', seal_address_tel_style1)
         row_no += 1
         
-        ws.write_merge(row_no, row_no + 1, 6, 10, 'バッジオ株式会社', seal_company_style)
+        ws.write_merge(row_no, row_no + 1, 0, 5, 'バッジオ株式会社', seal_company_style)
         row_no += 2
 
-        ws.write_merge(row_no, row_no, 6, 9, '代表取締役　金　昇志', seal_supplier_style)
+        ws.write_merge(row_no, row_no, 0, 4, '代表取締役　金　昇志', seal_supplier_style)
         ws.write(row_no, 5, '㊞', seal_mark_style)
         ws.write(row_no, 10, '㊞', seal_mark_style)
         row_no += 1
 
-        ws.write_merge(row_no, row_no, 6, 10, 'TEL 06-6753-8078 FAX 06-6753-8079', seal_address_tel_style)
+        ws.write_merge(row_no, row_no, 0, 5, 'TEL 06-6753-8078 FAX 06-6753-8079', seal_address_tel_style)
         row_no += 1
 
         ws.row(row_no).height = space_height
@@ -1429,7 +1430,7 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
         ws.row(row_no).height = int(20 * 15)
 
         ws.write_merge(row_no, row_no, 0, 1, '振込先口座', transfer_account_style)
-        ws.write_merge(row_no, row_no, 2, 10, 'りそな銀行　船場支店（101）　普通　0530713　バッジオカブシキガイシャ', font_11_left_with_border)
+        ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
         row_no += 1
 
         ws.row(row_no).height = int(20 * 15)
@@ -1458,7 +1459,7 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
 
         ws.row(row_no).height = int(20 * 15)
 
-        ws.write(row_no, 0, 'No.{}'.format(contract_id), font_11_left)
+        ws.write(row_no, 0, 'No.{}'.format(contract_id), xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz left'))
         
         wb.save(response)
         return response

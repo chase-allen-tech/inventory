@@ -355,7 +355,7 @@
 
       $('a.remove-contract').click(function (e) {
         e.preventDefault();
-        if (!confirm('{% trans "Are you sure you want to remove this data?" %}')) return;
+        if (!confirm('{% trans "May I delete this data in the comments? I can not restore it again." %}')) return;
         var $this = $(this);
         var contract_id = $this.data('contract-id');
         $.ajax({
