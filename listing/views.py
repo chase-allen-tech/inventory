@@ -198,8 +198,6 @@ class PurchasesListView(AdminLoginRequiredMixin, ListView):
         #     Q(content_type_id=purchase_hall_class_id)
         # ).order_by('-pk')
 
-        print('[number1]', len(queryset))
-
         search_form = ListingSearchForm(self.request.GET)
         if search_form.is_valid():
             contract_id = search_form.cleaned_data.get('contract_id')
@@ -243,7 +241,6 @@ class PurchasesListView(AdminLoginRequiredMixin, ListView):
             if inventory_status:
                 queryset = queryset.filter(Q(status=inventory_status))
 
-        print('[number]', queryset)
         return queryset.order_by('-pk')
     
     def post(self, request, *args, **kwargs):
@@ -835,12 +832,14 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
             report_date = json.loads(p.report_date) if p.report_date else {}
 
             while True:
-
                 if p.content_object == None: break
                 deliver_place = ''
                 if p.content_type_id == phid:
                     if p.content_object.hall:
                         deliver_place = p.content_object.hall.name
+
+                # if p.content_object.contract_id == '422065412864':
+                    # print(json.dumps(p.content_object, indent=4)
 
                 item = {
                     "id": p.id,
@@ -850,7 +849,7 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
                     "object_id": p.content_object.id,
                     "contract_date": p.content_object.created_at,
                     "customer_name": p.content_object.customer.name if p.content_object.customer else '',
-                    "delivered_place": p.content_object.hall.name if p.content_type_id == phid else '',
+                    "delivered_place": deliver_place,
                     "person_in_charge": p.content_object.person_in_charge,
                     "payment_date": p.content_object.shipping_date, # if p.content_type_id == phid else '',
                     "product_name": p.product.name if p.product else '',

@@ -16,7 +16,7 @@ from .forms import (
     ProductForm, DocumentForm, DocumentFeeForm, MilestoneForm,
 )
 from .utilities import generate_contract_id
-
+from datetime import datetime
 
 class TraderSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
     template_name = 'contracts/trader_sales.html'
@@ -370,8 +370,17 @@ class HallSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         id = kwargs.get('pk')
         contract_form = HallSalesContractForm(self.request.POST, id=id)
+        mdate = self.request.POST.dict()['milestone-0-date']
+        try: 
+            try:
+                mdate = datetime.strptime(mdate, '%m/%d/%Y')
+            except:
+                print('error occured')
+                mdate = datetime.strptime(mdate, '%Y/%m/%d')
+        except:
+            mdate = None
         if contract_form.is_valid():
-            contract = contract_form.save()
+            contract = contract_form.save(mdate)
         else:
             return render(request, self.template_name, self.get_context_data(**kwargs))
             
@@ -562,8 +571,16 @@ class HallPurchasesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         id = kwargs.get('pk')
         contract_form = HallPurchasesContractForm(self.request.POST, id=id)
+        mdate = self.request.POST.dict()['milestone-0-date']
+        try:
+            try:
+                mdate = datetime.strptime(mdate, '%m/%d/%Y')
+            except:
+                mdate = datetime.strptime(mdate, '%Y/%m/%d')
+        except:
+            mdate = None
         if contract_form.is_valid():
-            contract = contract_form.save()
+            contract = contract_form.save(mdate)
             
         product_formset = ProductFormSet(
             self.request.POST,
