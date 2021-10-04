@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // customer-search select2 changed event
     $('.select-customer').on('select2:select', function(e) {
-        console.log('clicked');
+        console.log('clicked--oks');
         var customer = e.params.data;
         var frigana = customer.frigana;
         var postal_code = customer.postal_code;
@@ -156,6 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // customer-search select2 changed event
     $('.select-hall-customer').on('select2:select', function(e) {
+        console.log('[hall clicked]');
         var hall = e.params.data;
         var name = hall.name;
         var address = hall.address;

@@ -459,11 +459,13 @@ class HallSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         id = kwargs.get('pk')
         contract = HallSalesContract.objects.get(id=id)
+        print(contract.hall.customer_name)
         contract_data = {
             'contract_id': contract.contract_id,
             'created_at': contract.created_at,
             'customer_id': contract.customer.id if contract.customer else None,
-            'customer_name': contract.customer.name if contract.customer else None,
+            # 'customer_name': contract.customer.name if contract.customer else None,
+            "customer_name": contract.hall.customer_name if contract.hall else None,
             'hall_id': contract.hall.id if contract.hall else None,
             'hall_name': contract.hall.name if contract.hall else None,
             'hall_address': contract.hall.address if contract.hall else None,
@@ -661,7 +663,8 @@ class HallPurchasesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
             'contract_id': contract.contract_id,
             'created_at': contract.created_at,
             'customer_id': contract.customer.id if contract.customer else None,
-            'customer_name': contract.customer.name if contract.customer else None,
+            # 'customer_name': contract.customer.name if contract.customer else None,
+            "customer_name": contract.hall.customer_name if contract.hall else None,
             'hall_id': contract.hall.id if contract.hall else None,
             'hall_name': contract.hall.name if contract.hall else None,
             'hall_address': contract.hall.address if contract.hall else None,
