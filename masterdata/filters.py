@@ -32,8 +32,9 @@ class HallFilter(django_filters.FilterSet):
         fields = '__all__'
         
     def filter_by_keyword(self, queryset, name, value):
-        value = "株式会社"
         queryset = queryset.filter(
+            Q(customer_name__icontains=value) |
+            Q(customer_frigana__icontains=value) |
             Q(name__icontains=value) |
             Q(frigana__icontains=value) |
             Q(tel__icontains=value) |
