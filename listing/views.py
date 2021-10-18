@@ -827,9 +827,12 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
         # Contruct display data
         p_result = []
         p_contract_id_list = []
+        prev_contract_id = None
         for p in purchase_data.all():
             pq = p.quantity
-            same_order = 0
+            if not prev_contract_id or prev_contract_id != p.content_object.contract_id:
+                prev_contract_id = p.content_object.contract_id
+                same_order = 0
             report_date = json.loads(p.report_date) if p.report_date else {}
 
             while True:
@@ -838,9 +841,6 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
                 if p.content_type_id == phid:
                     if p.content_object.hall:
                         deliver_place = p.content_object.hall.name
-
-                # if p.content_object.contract_id == '422065412864':
-                    # print(json.dumps(p.content_object, indent=4)
 
                 item = {
                     "id": p.id,
@@ -868,9 +868,13 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
 
         s_result = []
         s_contract_id_list = []
+        prev_contract_id = None
         for s in sales_data.all():
             sq = s.quantity
-            same_order = 0
+            if not prev_contract_id or prev_contract_id != s.content_object.contract_id:
+                prev_contract_id = s.content_object.contract_id
+                same_order = 0
+                
             report_date = json.loads(s.report_date) if s.report_date else {}
             while True:
                 if s.content_object == None: break

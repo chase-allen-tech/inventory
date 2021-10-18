@@ -872,10 +872,12 @@
         $('.purchase-tr-active').removeClass('purchase-tr-active');
         $(this).addClass('purchase-tr-active');
         if (e.target.tagName == 'TD') {
+          console.log('[same order]',$(this).data('same-order'))
+
           $('#p_link_input').val($(this).data('product-name'));
           $('#p_link_contract_id').val($(this).data('contract-id'));
           $('#p_link_same_order').val($(this).data('same-order'));
-          console.log($(this).data('customer-name'))
+          // console.log($(this).data('customer-name'))
 
           if ($(this).data('customer-name'))
             $('#p_link_customer_name').text('(' + $(this).data('customer-name') + ')');
@@ -908,7 +910,7 @@
       $('button.btn-make-link').click(e => {
         e.preventDefault();
         let $this = $(this);
-        console.log($("#p_link_contract_id").val(), '--', $("#s_link_contract_id").val())
+        console.log($("#p_link_contract_id").val(), ">", $("#p_link_same_order").val(), '--', $("#s_link_contract_id").val())
         if (!$("#p_link_contract_id").val() || !$("#s_link_contract_id").val()) {
           alert('{% trans "Please Fill the Fields!" %}');
           return;
