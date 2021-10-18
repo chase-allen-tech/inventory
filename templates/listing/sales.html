@@ -131,7 +131,7 @@
               <th>{% trans "Payment date" %}</th>
               <th class="w-18-5">{% trans "Product name" %}</th>
               <th>{% trans "Unit count" %}</th>
-              <th>{% trans "Amount" %}</th>
+              <th>{% trans "Price" %}</th>
               <th class="w-5">{% trans "Inventory status" %}</th>
               <th>{% trans "Action" %}</th>
             </tr>
@@ -164,7 +164,7 @@
               {% endif %}
               <td>{{ product.product.name }}</td>
               <td>{{ product.quantity }}</td>
-              <td>{{ product.amount }}</td>
+              <td>{{ product.price }}</td>
               <td>{{ product.get_status_display }}</td>
               <td>
                 <a href="#" data-id="{{product.id}}" class="edit-action"><i class="icon-pencil5 color-primary"></i></a>

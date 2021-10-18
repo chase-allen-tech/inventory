@@ -790,7 +790,8 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
                 )
 
             if s_customer:
-                sales_queryset = purchase_queryset.filter(
+                print('customer]', s_customer)
+                sales_queryset = sales_queryset.filter(
                     Q(trader_sales_contract__customer__name__icontains=s_customer) |
                     # Q(hall_sales_contract__customer__name__icontains=s_customer)
                     Q(hall_sales_contract__hall__customer_name__icontains=s_customer)
