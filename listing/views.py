@@ -394,6 +394,8 @@ class DeletedListView(AdminLoginRequiredMixin, ListView):
                 queryset = queryset.filter(Q(product__name__icontains=name))
             if inventory_status:
                 queryset = queryset.filter(Q(status=inventory_status))
+
+            print(queryset)
         return queryset.order_by('-pk')
   
     def get_context_data(self, **kwargs):
@@ -856,6 +858,7 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
                     "product_name": p.product.name if p.product else '',
                     "quantity": 1 if p.quantity > 0 else 0,
                     "amount": p.amount,
+                    "price": p.price,
                     "inventory_status": p.get_status_display(),
                     "report_date": datetime.strptime(report_date[str(same_order)], '%Y/%m/%d').date() if str(same_order) in report_date else '',
                     'linked': False
@@ -897,6 +900,7 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
                     "product_name": s.product.name if s.product else '',
                     "quantity": 1 if s.quantity > 0 else 0,
                     "amount": s.amount,
+                    "price": s.price,
                     "inventory_status": s.get_status_display(),
                     "report_date": datetime.strptime(report_date[str(same_order)], '%Y/%m/%d').date() if str(same_order) in report_date else '',
                     'linked': False

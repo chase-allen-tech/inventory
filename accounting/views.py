@@ -266,6 +266,7 @@ class PurchasesListView(AdminLoginRequiredMixin, TemplateView):
             }
 
             if none_date == 'Enable' and item['print_date'] is None: continue
+            if none_date == 'Disable' and item['print_date'] is not None: continue
             contract_list_json.append(item)
     
         contract_list_json = { each['contract_id'] : each for each in contract_list_json }.values()

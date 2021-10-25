@@ -215,7 +215,7 @@
                 <th>{% trans "Date of shipment" %}</th>
                 <th class="w-18-5">{% trans "Product name" %}</th>
                 <th>{% trans "Unit count" %}</th>
-                <th>{% trans "Amount" %}</th>
+                <th>{% trans "Price" %}</th>
                 <th class="w-5">{% trans "Inventory status" %}</th>
                 <th>{% trans "Report Date" %}</th>
                 <th>{% trans "Action" %}</th>
@@ -241,7 +241,7 @@
                 <td>{{ purchase.payment_date }}</td>
                 <td>{{ purchase.product_name }}</td>
                 <td>{{ purchase.quantity }}</td>
-                <td>{{ purchase.amount }}</td>
+                <td>{{ purchase.price }}</td>
                 <td>{{ purchase.inventory_status }}</td>
                 <td>
                   <div class="input-group">
@@ -477,7 +477,7 @@
                 <th>{% trans "Date of shipment" %}</th>
                 <th class="w-18-5">{% trans "Product name" %}</th>
                 <th>{% trans "Unit count" %}</th>
-                <th>{% trans "Amount" %}</th>
+                <th>{% trans "Price" %}</th>
                 <th class="w-5">{% trans "Inventory status" %}</th>
                 <th>{% trans "Report Date" %}</th>
                 <th>{% trans "Action" %}</th>
@@ -503,7 +503,7 @@
                 <td>{{ sale.payment_date }}</td>
                 <td>{{ sale.product_name }}</td>
                 <td>{{ sale.quantity }}</td>
-                <td>{{ sale.amount }}</td>
+                <td>{{ sale.price }}</td>
                 <td>{{ sale.inventory_status }}</td>
                 <td>
                   <div class="input-group">
