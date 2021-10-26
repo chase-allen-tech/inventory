@@ -439,12 +439,26 @@ class LinkProductsAjaxView(AdminLoginRequiredMixin, View):
             purchase_contract = purchase_queryset.filter(
                 Q(trader_purchases_contract__contract_id__icontains=p_contract_id) |
                 Q(hall_purchases_contract__contract_id__icontains=p_contract_id)
-            ).first()
+            ).all()
+
+            sum = 0
+            for p in purchase_contract:
+                sum += p.quantity
+                if sum > int(p_same_order):
+                    purchase_contract = p
+                    break
 
             sale_contract = sales_queryset.filter(
                 Q(trader_sales_contract__contract_id__icontains=s_contract_id) |
                 Q(hall_sales_contract__contract_id__icontains=s_contract_id)
-            ).first()
+            ).all()
+
+            sum = 0
+            for s in sale_contract:
+                sum += s.quantity
+                if sum > int(s_same_order):
+                    sale_contract = s
+                    break
             
             link_item = TraderLink.objects.filter(purchase_contract=purchase_contract, sale_contract=sale_contract, purchase_same_order=p_same_order, sale_same_order=s_same_order)
             if link_item:
@@ -837,6 +851,8 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
                 same_order = 0
             report_date = json.loads(p.report_date) if p.report_date else {}
 
+            print('[product]', p)
+
             while True:
                 if p.content_object == None: break
                 deliver_place = ''
@@ -925,11 +941,16 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
         # Already exists
         traderLinks = TraderLink.objects.order_by('-pk').all()
         pids = [(pid.purchase_contract_id, pid.purchase_same_order) for pid in traderLinks]
+        print(pids)
         for idx, p in enumerate(p_result):
+            print("**", p['id'], p['same_order'])
             p_result[idx]['linked'] = (int(p['id']), int(p['same_order'])) in pids
 
+        print('*' * 20)
         sids = [(sid.sale_contract_id, sid.sale_same_order) for sid in traderLinks]
+        print(sids)
         for idx, s in enumerate(s_result):
+            print("**", s['id'], s['same_order'])
             s_result[idx]['linked'] = (int(s['id']), int(s['same_order'])) in sids
             
 
