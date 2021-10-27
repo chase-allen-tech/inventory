@@ -297,6 +297,7 @@ class PurchasesListView(AdminLoginRequiredMixin, TemplateView):
     
     def post(self, request, *args, **kwargs):
         income_items = json.loads(self.request.POST.get('printable-items'))
+        print(income_items)
 
         user_id = self.request.user.id
         log_export_operation(user_id, "{} - {}".format(_("Accounting software CSV"), _("Purchase")))
@@ -341,7 +342,7 @@ class PurchasesListView(AdminLoginRequiredMixin, TemplateView):
         date_style.num_format_str = 'yyyy/mm/dd' if self.request.LANGUAGE_CODE == 'ja' else 'mm/dd/yyyy'
         contract_list = self.get_contract_list()[2]
         for contract in contract_list:
-            if income_items[contract.contract_id]:
+            if contract.contract_id in income_items.keys() and income_items[contract.contract_id]:
 
                 customer_name = ''
                 try:
