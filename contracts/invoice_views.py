@@ -691,9 +691,9 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
         row_no += 1
 
         ws.row(row_no).height = int(20 * 15)
-        ws.write_merge(18, 19, 0, 6, remarks, remark_content_style)
-        ws.write_merge(18, 18, 7, 8, '保険代（非課税）', fee_label_style)
-        ws.write_merge(18, 18, 9, 10, fee, fee_value_style)
+        ws.write_merge(row_no, row_no + 1, 0, 6, remarks, remark_content_style)
+        ws.write_merge(row_no, row_no, 7, 8, '保険代（非課税）', fee_label_style)
+        ws.write_merge(row_no, row_no, 9, 10, fee, fee_value_style)
         row_no += 1
 
         ws.row(row_no).height = int(20 * 15)

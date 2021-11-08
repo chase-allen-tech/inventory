@@ -425,6 +425,7 @@ class HallSearchAjaxView(AdminLoginRequiredMixin, View):
             start = 30 * (page - 1)
             end = 30 * page
             hall_qs = Hall.objects.filter(
+                Q(customer_name__icontains=search) |
                 Q(name__icontains=search) |
                 Q(frigana__icontains=search) |
                 Q(tel__icontains=search) |
