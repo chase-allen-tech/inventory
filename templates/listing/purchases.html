@@ -157,9 +157,9 @@
               {% endif %}
               <td>{{ product.content_object.person_in_charge }}</td>
               {% if product.content_type_id == hall_contract_id %}
-              <td>{{ product.content_object.payment_due_date }}</td>
+              <td>{{ product.content_object.shipping_date }}</td>
               {% else %}
-              <td>{{ product.content_object.transfer_deadline }}</td>
+              <td>{{ product.content_object.payment_due_date }}</td>
               {% endif %}
               <td>{{ product.product.name|truncatechars:20 }}</td>
               <td>{{ product.quantity }}</td>
