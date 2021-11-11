@@ -124,6 +124,19 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
         transfer_account_style = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz center;\
                                                 borders: left_color black, top_color black, top thin, left thin;')
 
+        TTL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left medium, right thin, bottom thin;')
+        TT_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, bottom_color black, right_color black, top medium, right thin, bottom thin;')
+        TTR_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left thin, right medium, bottom thin;')
+        TC_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: bottom_color black, right_color black, right thin, bottom thin;', num_format_str='#,###')
+        TR_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: bottom_color black, right_color black, right medium, bottom thin;', num_format_str='#,###')
+        F11 = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on;')
+        LINE_TOP = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on; borders: top_color black, top medium;')
+        TTR_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left thin, right medium, bottom thin;', num_format_str='#,###')
+        TL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: bottom_color black, left_color black, right_color black, right thin, bottom thin, left medium;')
+        TBL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: left_color black, bottom_color black, right_color black, left medium, right thin, bottom medium;')
+        TBR_RIGHT_TOTAL = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック, bold on; align: horiz right, vert center, wrap on; borders: bottom_color black, right_color black, right medium, bottom medium;', num_format_str='"¥"#,###')
+        TL = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on; borders: bottom_color black, left_color black, right_color black, right thin, bottom thin, left medium;')
+
         user_id = self.request.user.id
         log_export_operation(user_id, "{} - {}".format(_("Sales contract"), _("Trader sales")))
         contract_form = TraderSalesContractForm(self.request.POST)
@@ -165,115 +178,20 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
             ws.row(i).height_mismatch = True
             ws.row(i).height = cell_height
 
-        ws.row(0).height_mismatch = True
-        ws.row(0).height = top_padding_height
-
-        ws.row(1).height = header_height
-
-        ws.write_merge(1, 1, 1, 8, '請  求  書', title_style)
-        # ws.write_merge(1, 1, 9, 10, created_at, contract_date_style)
-
-        ws.row(2).height = height_16
-        ws.row(3).height = height_16
-
-        ws.write_merge(2, 2, 9, 10, '契約日', font_11_center_with_border)
-        ws.write_merge(3, 3, 9, 10, created_at, font_11_center_with_border)
-
-        ws.row(4).height = company_height
-        ws.write_merge(4, 4, 0, 2, company, company_title_style)
-        ws.write_merge(4, 4, 3, 4, _('CO.'), company_label_style)
-
-        ws.row(5).height = height_18
-
-        # ws.write_merge(6, 6, 1, 2, manager, company_supplier)
-        # ws.write(6, 3, '', border_bottom)
-        # ws.write(6, 4, _('Mr.'), company_supplier_label)
-        ws.write(5, 0, '住所：', primary_text_style)
-        ws.write_merge(5, 5, 1, 8, address, primary_text_style)
-
-        ws.row(6).height = space_height
-        ws.row(7).height = height_16_5
-        # ws.write(6, 0, 'TEL:', primary_text_style)
-        ws.write_merge(7, 7, 0, 1, 'FAX: {}'.format(fax), font_11_left)
-        ws.write_merge(7, 7, 2, 4, 'TEL {}'.format(tel), font_11_left)
-
-        ws.row(8).height = height_16_5
-        ws.row(9).height = height_16_5
-        ws.write_merge(8, 9, 6, 10, "バッジオ株式会社", company_label_style1)
-
-        ws.row(10).height = height_16_5
-        ws.write_merge(10, 10, 6, 10, "〒537-0021　大阪府大阪市東成区東中本2丁目4-15", font_11_left)
-
-        ws.row(11).height = height_16_5
-        ws.write_merge(11, 11, 6, 10, "TEL 06-6753-8078 FAX 06-6753-8079", font_11_left)
-
-        ws.row(12).height = height_16_5
-        ws.write(12, 6, '担当：', font_11_left)
-        ws.write_merge(12, 12, 7, 10, person_in_charge, font_11_left)
-
-        ws.row(13).height = space_height
-
-        ws.row(14).height = height_15
-        ws.write_merge(14, 14, 0, 6, '商　品　名', product_table_first_th_style)
-        ws.write(14, 7, '数量', product_table_th_style)
-        ws.write(14, 8, '単　価', product_table_th_style)
-        ws.write_merge(14, 14, 9, 10, '金　額', product_table_last_th_style)
-
-        # Product Table
-        row_no = 15
+        
         product_formset = ProductFormSet(
             self.request.POST,
             prefix='product'
         )
         num_of_products = product_formset.total_form_count()
-        if num_of_products:
-            for form in product_formset.forms:
-                form.is_valid()
-                id = form.cleaned_data.get('product_id')
-                product_name = Product.objects.get(id=id).name
-                quantity = form.cleaned_data.get('quantity', 0)
-                price = form.cleaned_data.get('price', 0)
-                amount = quantity * price
 
-                ws.row(row_no).height = height_18
-                ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
-                ws.write(row_no, 7, quantity, product_content_style)
-                ws.write(row_no, 8, price, product_content_style)
-                ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
-                row_no += 1
-
-        # Document Table
         document_formset = DocumentFormSet(
             self.request.POST,
             prefix='document'
         )
         num_of_documents = document_formset.total_form_count()
-        if num_of_documents:
-            for form in document_formset.forms:
-                form.is_valid()
-                id = form.cleaned_data.get('document_id')
-                document_name = Document.objects.get(id=id).name
-                document_name = document_name.replace('（売上）', '').replace('（仕入）', '')
-                quantity = form.cleaned_data.get('quantity', 0)
-                price = form.cleaned_data.get('price', 0)
-                amount = quantity * price
 
-                ws.row(row_no).height = height_18
-                ws.write_merge(row_no, row_no, 0, 6, document_name, product_first_content_style)
-                ws.write(row_no, 7, quantity, product_content_style)
-                ws.write(row_no, 8, price, product_content_style)
-                ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
-                row_no += 1
-        
         total_number = num_of_products + num_of_documents
-        if total_number < 6:
-            for i in range(0, 6 - total_number):
-                ws.row(row_no).height = height_18
-                ws.write_merge(row_no, row_no, 0, 6, None, product_first_content_style)
-                ws.write(row_no, 7, None, product_content_style)
-                ws.write(row_no, 8, None, product_content_style)
-                ws.write_merge(row_no, row_no, 9, 10, None, product_last_content_style)
-                row_no += 1
 
         shipping_method = contract_form.data.get('shipping_method')
         shipping_date = contract_form.data.get('shipping_date')
@@ -296,102 +214,283 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
             tax = 0
             fee = 0
             total = 0
-        
-        ws.row(row_no).height = height_15
-        # ws.write_merge(row_no, row_no, 0, 1, '{}: '.format(shipping_date_label), shipping_date_label_style)
-        # ws.write_merge(row_no, row_no, 2, 6, shipping_date, shipping_date_style)
-        ws.write_merge(row_no, row_no, 0, 6, '', bold_medium_top)
-        ws.write_merge(row_no, row_no, 7, 8, '小　計', subtotal_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, sub_total, subtotal_value_style)
-        row_no += 1
 
-        ws.row(row_no).height = height_15
-        # ws.write(row_no, 0, '※備考', remark_lebel_style)
-        ws.write_merge(row_no, row_no, 7, 8, '消費税（10%）', fee_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, tax, fee_value_style)
-        row_no += 1
+        #### Start drawing ###############################################################
 
-        ws.row(row_no).height = height_15
-        # ws.write_merge(row_no, row_no + 1, 0, 6, remarks, remark_content_style)
-        ws.write_merge(row_no, row_no, 7, 8, '保険代（非課税）', fee_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, fee, fee_value_style)
-        row_no += 1
+        if total_number <= 6: 
+            ws.row(0).height_mismatch = True
+            ws.row(0).height = top_padding_height
 
-        ws.row(row_no).height = height_15
-        
-        ws.write_merge(row_no, row_no, 7, 8, '合　計', total_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, total, total_value_style)
-        row_no += 1
+            ws.row(1).height = header_height
 
-        ws.row(row_no).height = space_height
-        row_no += 1
+            ws.write_merge(1, 1, 1, 8, '請  求  書', title_style)
+            # ws.write_merge(1, 1, 9, 10, created_at, contract_date_style)
 
-        ws.write(row_no, 4, '下記の通り御請求申し上げます。', font_11_left)
-        row_no += 1
+            ws.row(2).height = height_16
+            ws.row(3).height = height_16
 
-        ws.write_merge(row_no, row_no, 0, 2, '発送日', font_11_center_with_border)
-        ws.write_merge(row_no, row_no + 4, 4, 5, 'お支払内訳', font_11_center_with_left_side_border)
+            ws.write_merge(2, 2, 9, 10, '契約日', font_11_center_with_border)
+            ws.write_merge(3, 3, 9, 10, created_at, font_11_center_with_border)
 
-        for i in range(5):
-            if i == 0:
-                ws.write(row_no + i, 6, '初回', font_11_center_with_top_border)
-                ws.write_merge(row_no, row_no, 7, 8, shipping_date, font_11_center_with_top_border)
-                ws.write_merge(row_no, row_no, 9, 10, total, font_11_center_with_top_right_border)
-            else:
-                ws.write(row_no + i, 6, str(i+1) + '回', font_11_center_with_border)
-                ws.write_merge(row_no + i, row_no + i, 7, 8, '', font_11_center_with_border)
-                ws.write_merge(row_no + i, row_no + i, 9, 10, '', font_11_center_with_right_border)
+            ws.row(4).height = company_height
+            ws.write_merge(4, 4, 0, 2, company, company_title_style)
+            ws.write_merge(4, 4, 3, 4, _('CO.'), company_label_style)
 
-        row_no += 1
-        ws.write_merge(row_no, row_no, 0, 2, shipping_date, font_11_center_with_border)
-        row_no += 2
+            ws.row(5).height = height_18
 
-        ws.write_merge(row_no, row_no, 0, 2, 'お支払方法', font_11_center_with_border)
-        ws.write_merge(row_no + 1, row_no + 1, 0, 2, '振込', font_11_center_with_border)
+            # ws.write_merge(6, 6, 1, 2, manager, company_supplier)
+            # ws.write(6, 3, '', border_bottom)
+            # ws.write(6, 4, _('Mr.'), company_supplier_label)
+            ws.write(5, 0, '住所：', primary_text_style)
+            ws.write_merge(5, 5, 1, 8, address, primary_text_style)
 
-        # ws.write_merge(row_no, row_no + 1, 5, 7, 'お支払期限', billed_deadline_label_style)
-        # ws.write_merge(row_no, row_no + 1, 8, 10, payment_due_date, billed_deadline_value_style)
-        row_no += 1
-        ws.row(row_no).height = height_16
+            ws.row(6).height = space_height
+            ws.row(7).height = height_16_5
+            # ws.write(6, 0, 'TEL:', primary_text_style)
+            ws.write_merge(7, 7, 0, 1, 'FAX: {}'.format(fax), font_11_left)
+            ws.write_merge(7, 7, 2, 4, 'TEL {}'.format(tel), font_11_left)
 
-        row_no += 1
-        ws.row(row_no).height = height_16
-        ws.write_merge(row_no, row_no, 6, 10, '', bold_medium_top)
+            ws.row(8).height = height_16_5
+            ws.row(9).height = height_16_5
+            ws.write_merge(8, 9, 6, 10, "バッジオ株式会社", company_label_style1)
 
-        row_no += 1
-        ws.row(row_no).height = height_16
-        
-        ws.write(row_no, 0, '※ お振込み手数料は貴社ご負担でお願い致します。', font_11_left)
-        row_no += 1
+            ws.row(10).height = height_16_5
+            ws.write_merge(10, 10, 6, 10, "〒537-0021　大阪府大阪市東成区東中本2丁目4-15", font_11_left)
 
-        ws.write_merge(row_no, row_no, 0, 1, '振込先口座', transfer_account_style)
-        ws.write_merge(row_no, row_no, 2, 10, 'りそな銀行　船場支店（101）　普通　0530713　バッジオカブシキガイシャ', font_11_left_with_border)
-        row_no += 1
+            ws.row(11).height = height_16_5
+            ws.write_merge(11, 11, 6, 10, "TEL 06-6753-8078 FAX 06-6753-8079", font_11_left)
 
-        ws.write(row_no, 0, '', border_left)
-        ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
-        row_no += 1
+            ws.row(12).height = height_16_5
+            ws.write(12, 6, '担当：', font_11_left)
+            ws.write_merge(12, 12, 7, 10, person_in_charge, font_11_left)
 
-        ws.write(row_no, 0, '', border_left)
-        ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
-        row_no += 1
+            ws.row(13).height = space_height
 
-        ws.row(row_no).height = space_height
-        for i in range(0, 11):
-            ws.write(row_no, i, '', border_top)
-        row_no += 1
+            ws.row(14).height = height_15
+            ws.write_merge(14, 14, 0, 6, '商　品　名', product_table_first_th_style)
+            ws.write(14, 7, '数量', product_table_th_style)
+            ws.write(14, 8, '単　価', product_table_th_style)
+            ws.write_merge(14, 14, 9, 10, '金　額', product_table_last_th_style)
 
-        ws.write_merge(row_no, row_no, 0, 4, 'P-SENSOR {} {}'.format(_('Member ID'), P_SENSOR_NUMBER), font_11_left)
-        row_no += 1
-        ws.row(row_no).height = space_height
-        row_no += 1
-        ws.row(row_no).height = height_16
-        row_no += 1
-        ws.write(row_no, 0, 'No.{}'.format(contract_id), font_11_left)
-        
+            # Product Table
+            row_no = 15
+            if num_of_products:
+                for form in product_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('product_id')
+                    product_name = Product.objects.get(id=id).name
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    ws.row(row_no).height = height_18
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
+                    ws.write(row_no, 7, quantity, product_content_style)
+                    ws.write(row_no, 8, price, product_content_style)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
+                    row_no += 1
+
+            # Document Table
+            if num_of_documents:
+                for form in document_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('document_id')
+                    document_name = Document.objects.get(id=id).name
+                    document_name = document_name.replace('（売上）', '').replace('（仕入）', '')
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    ws.row(row_no).height = height_18
+                    ws.write_merge(row_no, row_no, 0, 6, document_name, product_first_content_style)
+                    ws.write(row_no, 7, quantity, product_content_style)
+                    ws.write(row_no, 8, price, product_content_style)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
+                    row_no += 1
+            
+            if total_number < 6:
+                for i in range(0, 6 - total_number):
+                    ws.row(row_no).height = height_18
+                    ws.write_merge(row_no, row_no, 0, 6, None, product_first_content_style)
+                    ws.write(row_no, 7, None, product_content_style)
+                    ws.write(row_no, 8, None, product_content_style)
+                    ws.write_merge(row_no, row_no, 9, 10, None, product_last_content_style)
+                    row_no += 1
+            
+            ws.row(row_no).height = height_15
+            # ws.write_merge(row_no, row_no, 0, 1, '{}: '.format(shipping_date_label), shipping_date_label_style)
+            # ws.write_merge(row_no, row_no, 2, 6, shipping_date, shipping_date_style)
+            ws.write_merge(row_no, row_no, 0, 6, '', bold_medium_top)
+            ws.write_merge(row_no, row_no, 7, 8, '小　計', subtotal_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, sub_total, subtotal_value_style)
+            row_no += 1
+
+            ws.row(row_no).height = height_15
+            # ws.write(row_no, 0, '※備考', remark_lebel_style)
+            ws.write_merge(row_no, row_no, 7, 8, '消費税（10%）', fee_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, tax, fee_value_style)
+            row_no += 1
+
+            ws.row(row_no).height = height_15
+            # ws.write_merge(row_no, row_no + 1, 0, 6, remarks, remark_content_style)
+            ws.write_merge(row_no, row_no, 7, 8, '保険代（非課税）', fee_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, fee, fee_value_style)
+            row_no += 1
+
+            ws.row(row_no).height = height_15
+            
+            ws.write_merge(row_no, row_no, 7, 8, '合　計', total_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, total, total_value_style)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            row_no += 1
+
+            ws.write(row_no, 4, '下記の通り御請求申し上げます。', font_11_left)
+            row_no += 1
+
+            ws.write_merge(row_no, row_no, 0, 2, '発送日', font_11_center_with_border)
+            ws.write_merge(row_no, row_no + 4, 4, 5, 'お支払内訳', font_11_center_with_left_side_border)
+
+            for i in range(5):
+                if i == 0:
+                    ws.write(row_no + i, 6, '初回', font_11_center_with_top_border)
+                    ws.write_merge(row_no, row_no, 7, 8, shipping_date, font_11_center_with_top_border)
+                    ws.write_merge(row_no, row_no, 9, 10, total, font_11_center_with_top_right_border)
+                else:
+                    ws.write(row_no + i, 6, str(i+1) + '回', font_11_center_with_border)
+                    ws.write_merge(row_no + i, row_no + i, 7, 8, '', font_11_center_with_border)
+                    ws.write_merge(row_no + i, row_no + i, 9, 10, '', font_11_center_with_right_border)
+
+            row_no += 1
+            ws.write_merge(row_no, row_no, 0, 2, shipping_date, font_11_center_with_border)
+            row_no += 2
+
+            ws.write_merge(row_no, row_no, 0, 2, 'お支払方法', font_11_center_with_border)
+            ws.write_merge(row_no + 1, row_no + 1, 0, 2, '振込', font_11_center_with_border)
+
+            # ws.write_merge(row_no, row_no + 1, 5, 7, 'お支払期限', billed_deadline_label_style)
+            # ws.write_merge(row_no, row_no + 1, 8, 10, payment_due_date, billed_deadline_value_style)
+            row_no += 1
+            ws.row(row_no).height = height_16
+
+            row_no += 1
+            ws.row(row_no).height = height_16
+            ws.write_merge(row_no, row_no, 6, 10, '', bold_medium_top)
+
+            row_no += 1
+            ws.row(row_no).height = height_16
+            
+            ws.write(row_no, 0, '※ お振込み手数料は貴社ご負担でお願い致します。', font_11_left)
+            row_no += 1
+
+            ws.write_merge(row_no, row_no, 0, 1, '振込先口座', transfer_account_style)
+            ws.write_merge(row_no, row_no, 2, 10, 'りそな銀行　船場支店（101）　普通　0530713　バッジオカブシキガイシャ', font_11_left_with_border)
+            row_no += 1
+
+            ws.write(row_no, 0, '', border_left)
+            ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
+            row_no += 1
+
+            ws.write(row_no, 0, '', border_left)
+            ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            for i in range(0, 11):
+                ws.write(row_no, i, '', border_top)
+            row_no += 1
+
+            ws.write_merge(row_no, row_no, 0, 4, 'P-SENSOR {} {}'.format(_('Member ID'), P_SENSOR_NUMBER), font_11_left)
+            row_no += 1
+            ws.row(row_no).height = space_height
+            row_no += 1
+            ws.row(row_no).height = height_16
+            row_no += 1
+            ws.write(row_no, 0, 'No.{}'.format(contract_id), font_11_left)
+            
+        else:
+            w_arr = [9.15, 8.04, 10.04, 2.04, 5.04, 8.04, 6.71, 7.15, 12.59, 6.71, 6.71]
+            for i in range(11): 
+                ws.col(i).width = int(300 * w_arr[i])
+            for i in range(56):
+                ws.row(i).height_mismatch = True
+                ws.row(i).height = int(20 * 18)
+            ws.row(44).height = int(20 * 3.75)
+            ws.row(45).height = int(20 * 15.75)
+
+            ####################################### Table #####################################
+            ws.write_merge(0, 0, 0, 6, '商　品　名', TTL_CENTER)
+            ws.write(0, 7, '数量', TT_CENTER)
+            ws.write(0, 8, '単　価', TT_CENTER)
+            ws.write_merge(0, 0, 9, 10, '金　額', TTR_CENTER)
+
+            row_no = 1
+
+            total_quantity = total_price = 0
+            ##### Products
+            if num_of_products:
+                for form in product_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('product_id')
+                    product_name = Product.objects.get(id=id).name
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    total_quantity += quantity
+                    total_price += price
+
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write(row_no, 7, quantity, TC_RIGHT)
+                    ws.write(row_no, 8, price, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
+
+                    row_no += 1
+
+            ###### Documents
+            if num_of_documents:
+                for form in document_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('document_id')
+                    document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    total_quantity += quantity
+                    total_price += price
+
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write(row_no, 7, quantity, TC_RIGHT)
+                    ws.write(row_no, 8, price, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
+
+                    row_no += 1
+
+            if total_number < 39:
+                for i in range(0, 39 - total_number):
+
+                    ws.write_merge(row_no, row_no, 0, 6, None, TL)
+                    ws.write(row_no, 7, None, TC_RIGHT)
+                    ws.write(row_no, 8, None, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
+
+                    row_no += 1
+
+            ws.write_merge(40, 40, 0, 6, '※備考', LINE_TOP)
+            ws.write_merge(40, 40, 7, 8, '小　計', TTL_CENTER)
+            ws.write_merge(40, 40, 9, 10, sub_total, TTR_RIGHT)
+            ws.write_merge(41, 41, 7, 8, '消費税（10%）', TL_CENTER)        
+            ws.write_merge(41, 41, 9, 10, tax, TR_RIGHT)
+            ws.write_merge(42, 42, 7, 8, '保険代（非課税）', TL_CENTER)
+            ws.write_merge(42, 42, 9, 10, fee, TR_RIGHT)
+            ws.write_merge(43, 43, 7, 8, '合　計', TBL_CENTER)
+            ws.write_merge(43, 43, 9, 10, total, TBR_RIGHT_TOTAL)
+
+            ws.write_merge(45, 45, 0, 3, 'No.{}'.format(contract_id), F11)
         wb.save(response)
         return response
-
 
 class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
     def post(self, *args, **kwargs):
@@ -513,6 +612,18 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
                                                 right medium, top medium, left thin, bottom medium;')
         transfer_account_style = xlwt.easyxf('font: height 190, name ＭＳ Ｐゴシック; align: vert center, horiz center;\
                                                 borders: left_color black, top_color black, top thin, left thin;')
+        TTL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left medium, right thin, bottom thin;')
+        TT_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, bottom_color black, right_color black, top medium, right thin, bottom thin;')
+        TTR_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left thin, right medium, bottom thin;')
+        TC_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: bottom_color black, right_color black, right thin, bottom thin;', num_format_str='#,###')
+        TR_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: bottom_color black, right_color black, right medium, bottom thin;', num_format_str='#,###')
+        F11 = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on;')
+        LINE_TOP = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on; borders: top_color black, top medium;')
+        TTR_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left thin, right medium, bottom thin;', num_format_str='#,###')
+        TL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: bottom_color black, left_color black, right_color black, right thin, bottom thin, left medium;')
+        TBL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: left_color black, bottom_color black, right_color black, left medium, right thin, bottom medium;')
+        TBR_RIGHT_TOTAL = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック, bold on; align: horiz right, vert center, wrap on; borders: bottom_color black, right_color black, right medium, bottom medium;', num_format_str='"¥"#,###')
+        TL = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on; borders: bottom_color black, left_color black, right_color black, right thin, bottom thin, left medium;')
 
         user_id = self.request.user.id
         log_export_operation(user_id, "{} - {}".format(_("Sales contract"), _("Trader sales")))
@@ -533,125 +644,19 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
             tel = customer.tel
             fax = customer.fax
 
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xls"'.format(contract_id)
-        wb = xlwt.Workbook(encoding='utf-8')
-        ws = wb.add_sheet('請求書', cell_overwrite_ok=True)
-
-        ws.set_header_str(str.encode(''))
-        ws.set_footer_str(str.encode(''))
-        ws.set_left_margin(0.314961)
-        ws.set_top_margin(0.393701)
-        ws.set_right_margin(0.314961)
-        ws.set_bottom_margin(0.19685)
-
-        for i in range(11):
-            ws.col(i).width = cell_width_list[i]
-
-        for i in range(1, 80):
-            ws.row(i).height_mismatch = True
-            ws.row(i).height = cell_height
-
-        ws.row(0).height_mismatch = True
-        ws.row(0).height = top_padding_height
-
-        ws.row(1).height = header_height
-
-        ws.write_merge(1, 1, 1, 8, '売買契約書　兼　請求書', title_style)
-        ws.write_merge(1, 1, 9, 10, created_at, contract_date_style)
-
-        ws.row(2).height = space_height
-
-        ws.row(3).height = company_height
-        ws.write_merge(3, 3, 0, 2, company, company_title_style)
-        ws.write_merge(3, 3, 3, 4, _('CO.'), company_label_style)
-
-        ws.row(4).height = space_height
-
-        ws.row(5).height = int(20 * 19.35)
-        ws.write_merge(5, 5, 1, 2, manager, company_supplier)
-        ws.write(5, 3, '', border_bottom)
-        ws.write(5, 4, _('Mr.'), company_supplier_label)
-
-        ws.row(6).height = int(20 * 15.75)
-        ws.write_merge(6, 6, 0, 6, address, font_10_left)
-        ws.write_merge(6, 6, 7, 10, 'P-SENSOR {} {}'.format(_('Member ID'), P_SENSOR_NUMBER), font_10_left)
-
-        ws.row(7).height = int(20 * 12.75)
-        ws.write_merge(7, 7, 0, 2, 'TEL {}'.format(tel), font_12_left)
-        ws.write_merge(7, 7, 3, 6, 'FAX {}'.format(fax), font_12_left)
-        
-        ws.write(7, 7, '担当：', in_charge_style)
-        ws.write_merge(7, 7, 8, 10, person_in_charge, in_charge_style)
-
-        ws.row(8).height = space_height
-
-        ws.row(9).height = int(20 * 12.95)
-        ws.write_merge(9, 9, 0, 6, '商　品　名', product_table_first_th_style)
-        ws.write(9, 7, '数量', product_table_th_style)
-        ws.write(9, 8, '単　価', product_table_th_style)
-        ws.write_merge(9, 9, 9, 10, '金　額', product_table_last_th_style)
-
-        # Product Table
-        row_no = 10
         product_formset = ProductFormSet(
             self.request.POST,
             prefix='product'
         )
         num_of_products = product_formset.total_form_count()
-        if num_of_products:
-            for form in product_formset.forms:
-                form.is_valid()
-                id = form.cleaned_data.get('product_id')
-                product_name = Product.objects.get(id=id).name
 
-                
-
-                quantity = form.cleaned_data.get('quantity', 0)
-                price = form.cleaned_data.get('price', 0)
-                amount = quantity * price
-
-                ws.row(row_no).height = int(20 * 15)
-                ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
-                ws.write(row_no, 7, quantity, product_content_style)
-                ws.write(row_no, 8, price, product_content_style)
-                ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
-                row_no += 1
-
-        # Document Table
         document_formset = DocumentFormSet(
             self.request.POST,
             prefix='document'
         )
         num_of_documents = document_formset.total_form_count()
-        if num_of_documents:
-            for form in document_formset.forms:
-                form.is_valid()
-                id = form.cleaned_data.get('document_id')
-                document_name = Document.objects.get(id=id).name
 
-                document_name = document_name.replace('（売上）', '').replace('（仕入）', '')
-
-                quantity = form.cleaned_data.get('quantity', 0)
-                price = form.cleaned_data.get('price', 0)
-                amount = quantity * price
-
-                ws.row(row_no).height = int(20 * 15)
-                ws.write_merge(row_no, row_no, 0, 6, document_name, product_first_content_style)
-                ws.write(row_no, 7, quantity, product_content_style)
-                ws.write(row_no, 8, price, product_content_style)
-                ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
-                row_no += 1
-        
         total_number = num_of_products + num_of_documents
-        if total_number < 6:
-            for i in range(0, 6 - total_number):
-                ws.row(row_no).height = int(20 * 15)
-                ws.write_merge(row_no, row_no, 0, 6, None, product_first_content_style)
-                ws.write(row_no, 7, None, product_content_style)
-                ws.write(row_no, 8, None, product_content_style)
-                ws.write_merge(row_no, row_no, 9, 10, None, product_last_content_style)
-                row_no += 1
 
         shipping_method = contract_form.data.get('shipping_method')
         shipping_date = contract_form.data.get('shipping_date')
@@ -676,256 +681,447 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
             tax = 0
             fee = 0
             total = 0
-        
-        ws.row(row_no).height = int(20 * 15)
-        ws.write_merge(row_no, row_no, 0, 1, '{}: '.format(shipping_date_label), shipping_date_label_style)
-        ws.write_merge(row_no, row_no, 2, 6, shipping_date, shipping_date_style)
-        ws.write_merge(row_no, row_no, 7, 8, '小　計', subtotal_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, sub_total, subtotal_value_style)
-        row_no += 1
 
-        ws.row(row_no).height = int(20 * 15)
-        ws.write(row_no, 0, '※備考', remark_lebel_style)
-        ws.write_merge(row_no, row_no, 7, 8, '消費税（10%）', fee_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, tax, fee_value_style)
-        row_no += 1
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xls"'.format(contract_id)
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('請求書', cell_overwrite_ok=True)
 
-        ws.row(row_no).height = int(20 * 15)
-        ws.write_merge(row_no, row_no + 1, 0, 6, remarks, remark_content_style)
-        ws.write_merge(row_no, row_no, 7, 8, '保険代（非課税）', fee_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, fee, fee_value_style)
-        row_no += 1
+        ws.set_header_str(str.encode(''))
+        ws.set_footer_str(str.encode(''))
+        ws.set_left_margin(0.314961)
+        ws.set_top_margin(0.393701)
+        ws.set_right_margin(0.314961)
+        ws.set_bottom_margin(0.19685)
 
-        ws.row(row_no).height = int(20 * 15)
-        
-        ws.write_merge(row_no, row_no, 7, 8, '合　計', total_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, total, total_value_style)
-        row_no += 1
+        for i in range(11):
+            ws.col(i).width = cell_width_list[i]
 
-        ws.row(row_no).height = space_height
-        row_no += 1
-        remark_text_list = [
-            "※ 売主、買主、双方の署名・捺印が揃った時点で契約が成立したものとします。",
-            "※ 契約が成立後、原則として売買契約を解除できないものとします。",
-            "※ 当該商品に不備及び故障がある場合の保障は、納品後３日以内とします。",
-            "※ 買主が代金金額の支払いを完了するまでは、売買物件の所有権は売主において留保する。",
-            "※ 売買物件の所有権は、引渡しが終了し、支払いが完了した時点で買主に移行するものとする。",
-            "※ 下記の場合の売主は、何らかの手続きを経ずして、その選択により期限の利益を喪失せしめて残代金の",
-            "  即時支払いを求めるか、又は本契約を解除して売買物件を引き上げる事が出来る。",
-            "1)代金の支払いを1回でも怠った場合。",
-            "2)仮差押え、仮処分等の執行を受け、整理・和議・破損等の申立てを受けた場合。"
-        ]
+        for i in range(1, 80):
+            ws.row(i).height_mismatch = True
+            ws.row(i).height = cell_height
 
-        for remark_text in remark_text_list:
-            ws.row(row_no).height = int(20 * 9.95)
-            ws.write(row_no, 0, remark_text, remark_text_style)
+        if total_number <= 6:
+            ws.row(0).height_mismatch = True
+            ws.row(0).height = top_padding_height
+
+            ws.row(1).height = header_height
+
+            ws.write_merge(1, 1, 1, 8, '売買契約書　兼　請求書', title_style)
+            ws.write_merge(1, 1, 9, 10, created_at, contract_date_style)
+
+            ws.row(2).height = space_height
+
+            ws.row(3).height = company_height
+            ws.write_merge(3, 3, 0, 2, company, company_title_style)
+            ws.write_merge(3, 3, 3, 4, _('CO.'), company_label_style)
+
+            ws.row(4).height = space_height
+
+            ws.row(5).height = int(20 * 19.35)
+            ws.write_merge(5, 5, 1, 2, manager, company_supplier)
+            ws.write(5, 3, '', border_bottom)
+            ws.write(5, 4, _('Mr.'), company_supplier_label)
+
+            ws.row(6).height = int(20 * 15.75)
+            ws.write_merge(6, 6, 0, 6, address, font_10_left)
+            ws.write_merge(6, 6, 7, 10, 'P-SENSOR {} {}'.format(_('Member ID'), P_SENSOR_NUMBER), font_10_left)
+
+            ws.row(7).height = int(20 * 12.75)
+            ws.write_merge(7, 7, 0, 2, 'TEL {}'.format(tel), font_12_left)
+            ws.write_merge(7, 7, 3, 6, 'FAX {}'.format(fax), font_12_left)
+            
+            ws.write(7, 7, '担当：', in_charge_style)
+            ws.write_merge(7, 7, 8, 10, person_in_charge, in_charge_style)
+
+            ws.row(8).height = space_height
+
+            ws.row(9).height = int(20 * 12.95)
+            ws.write_merge(9, 9, 0, 6, '商　品　名', product_table_first_th_style)
+            ws.write(9, 7, '数量', product_table_th_style)
+            ws.write(9, 8, '単　価', product_table_th_style)
+            ws.write_merge(9, 9, 9, 10, '金　額', product_table_last_th_style)
+
+            # Product Table
+            row_no = 10
+            
+            if num_of_products:
+                for form in product_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('product_id')
+                    product_name = Product.objects.get(id=id).name
+
+                    
+
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    ws.row(row_no).height = int(20 * 15)
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
+                    ws.write(row_no, 7, quantity, product_content_style)
+                    ws.write(row_no, 8, price, product_content_style)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
+                    row_no += 1
+
+            # Document Table
+            if num_of_documents:
+                for form in document_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('document_id')
+                    document_name = Document.objects.get(id=id).name
+
+                    document_name = document_name.replace('（売上）', '').replace('（仕入）', '')
+
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    ws.row(row_no).height = int(20 * 15)
+                    ws.write_merge(row_no, row_no, 0, 6, document_name, product_first_content_style)
+                    ws.write(row_no, 7, quantity, product_content_style)
+                    ws.write(row_no, 8, price, product_content_style)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
+                    row_no += 1
+
+            for i in range(0, 6 - total_number):
+                ws.row(row_no).height = int(20 * 15)
+                ws.write_merge(row_no, row_no, 0, 6, None, product_first_content_style)
+                ws.write(row_no, 7, None, product_content_style)
+                ws.write(row_no, 8, None, product_content_style)
+                ws.write_merge(row_no, row_no, 9, 10, None, product_last_content_style)
+                row_no += 1
+
+            ws.row(row_no).height = int(20 * 15)
+            ws.write_merge(row_no, row_no, 0, 1, '{}: '.format(shipping_date_label), shipping_date_label_style)
+            ws.write_merge(row_no, row_no, 2, 6, shipping_date, shipping_date_style)
+            ws.write_merge(row_no, row_no, 7, 8, '小　計', subtotal_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, sub_total, subtotal_value_style)
             row_no += 1
 
-        ws.row(row_no).height = int(20 * 8.45)
-        row_no += 1
+            ws.row(row_no).height = int(20 * 15)
+            ws.write(row_no, 0, '※備考', remark_lebel_style)
+            ws.write_merge(row_no, row_no, 7, 8, '消費税（10%）', fee_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, tax, fee_value_style)
+            row_no += 1
 
-        product_sender_form = TraderSalesProductSenderForm(self.request.POST)
-        document_sender_form = TraderSalesDocumentSenderForm(self.request.POST)
-        product_sender_id = self.request.POST.get('product_sender_id')
-        product_expected_arrival_date = self.request.POST.get('product_expected_arrival_date')
-        product_sender_company = ""
-        if product_sender_id:
-            product_sender = Sender.objects.get(id=product_sender_id)
-            product_sender_company = product_sender.name
-        product_sender_address = product_sender_form.data.get('product_sender_address')
-        product_sender_tel = product_sender_form.data.get('product_sender_tel')
-        product_sender_fax = product_sender_form.data.get('product_sender_fax')
-        product_sender_postal_code = product_sender_form.data.get('product_sender_postal_code')
+            ws.row(row_no).height = int(20 * 15)
+            ws.write_merge(row_no, row_no + 1, 0, 6, remarks, remark_content_style)
+            ws.write_merge(row_no, row_no, 7, 8, '保険代（非課税）', fee_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, fee, fee_value_style)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 15)
+            
+            ws.write_merge(row_no, row_no, 7, 8, '合　計', total_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, total, total_value_style)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            row_no += 1
+            remark_text_list = [
+                "※ 売主、買主、双方の署名・捺印が揃った時点で契約が成立したものとします。",
+                "※ 契約が成立後、原則として売買契約を解除できないものとします。",
+                "※ 当該商品に不備及び故障がある場合の保障は、納品後３日以内とします。",
+                "※ 買主が代金金額の支払いを完了するまでは、売買物件の所有権は売主において留保する。",
+                "※ 売買物件の所有権は、引渡しが終了し、支払いが完了した時点で買主に移行するものとする。",
+                "※ 下記の場合の売主は、何らかの手続きを経ずして、その選択により期限の利益を喪失せしめて残代金の",
+                "  即時支払いを求めるか、又は本契約を解除して売買物件を引き上げる事が出来る。",
+                "1)代金の支払いを1回でも怠った場合。",
+                "2)仮差押え、仮処分等の執行を受け、整理・和議・破損等の申立てを受けた場合。"
+            ]
+
+            for remark_text in remark_text_list:
+                ws.row(row_no).height = int(20 * 9.95)
+                ws.write(row_no, 0, remark_text, remark_text_style)
+                row_no += 1
+
+            ws.row(row_no).height = int(20 * 8.45)
+            row_no += 1
+
+            product_sender_form = TraderSalesProductSenderForm(self.request.POST)
+            document_sender_form = TraderSalesDocumentSenderForm(self.request.POST)
+            product_sender_id = self.request.POST.get('product_sender_id')
+            product_expected_arrival_date = self.request.POST.get('product_expected_arrival_date')
+            product_sender_company = ""
+            if product_sender_id:
+                product_sender = Sender.objects.get(id=product_sender_id)
+                product_sender_company = product_sender.name
+            product_sender_address = product_sender_form.data.get('product_sender_address')
+            product_sender_tel = product_sender_form.data.get('product_sender_tel')
+            product_sender_fax = product_sender_form.data.get('product_sender_fax')
+            product_sender_postal_code = product_sender_form.data.get('product_sender_postal_code')
+            
+            document_sender_id = self.request.POST.get('document_sender_id')
+            document_expected_arrival_date = self.request.POST.get('document_expected_arrival_date')
+            document_sender_company = ""
+            if document_sender_id:
+                document_sender = Sender.objects.get(id=document_sender_id)
+                document_sender_company = document_sender.name
+            document_sender_address = document_sender_form.data.get('document_sender_address')
+            document_sender_tel = document_sender_form.data.get('document_sender_tel', "")
+            document_sender_fax = document_sender_form.data.get('document_sender_fax', "")
+            document_sender_postal_code = document_sender_form.data.get('document_sender_postal_code')
+
+            ws.row(row_no).height = int(20 * 11.45)
+            ws.write_merge(row_no, row_no, 0, 5, '【商品発送先】', sender_table_title_style)
+            ws.write_merge(row_no, row_no, 6, 10, '【書類発送先】', sender_table_title_style)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', border_left)
+            ws.write(row_no, 5, '', border_right)
+            ws.write(row_no, 10, '', border_right)
+            row_no += 1
+            
+            ws.row(row_no).height = int(20 * 15)
+            ws.write(row_no, 0, '会社名：', sender_table_field_style)
+            ws.write_merge(row_no, row_no, 1, 5, product_sender_company, sender_table_text_style)
+            ws.write(row_no, 6, '会社名：', sender_table_field_style)
+            ws.write_merge(row_no, row_no, 7, 10, document_sender_company, sender_table_text_style)
+            row_no += 1
+
+            for i in range(0, 6):
+                ws.row(row_no + i).height = int(20 * 15)
+            ws.write(row_no, 0, '住所：', sender_table_field_style)
+            ws.write(row_no, 6, '住所：', sender_table_field_style)
+            ws.write_merge(row_no, row_no + 3, 1, 5, '〒 {} \n {}'.format(product_sender_postal_code, product_sender_address), sender_address_style)
+            ws.write_merge(row_no, row_no + 3, 7, 10, '〒 {} \n {}'.format(document_sender_postal_code, document_sender_address), sender_address_style)
+            row_no += 1
+
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', sender_table_field_style)
+            row_no += 1
+
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', sender_table_field_style)
+            row_no += 1
+
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', sender_table_field_style)
+            row_no += 1
+
+            ws.write(row_no, 0, 'TEL／FAX：', sender_table_field_style)
+            ws.write_merge(row_no, row_no, 1, 5, '{} / {}'.format(product_sender_tel, product_sender_fax), sender_table_text_style)
+            ws.write(row_no, 6, 'TEL／FAX：', sender_table_field_style)
+            ws.write_merge(row_no, row_no, 7, 10, '{} / {}'.format(document_sender_tel, document_sender_fax), sender_table_text_style)
+            row_no += 1
+
+            ws.write(row_no, 0, '到着予定日：', sender_table_field_style)
+            ws.write(row_no, 6, '到着予定日：', sender_table_field_style)
+            ws.write_merge(row_no, row_no, 1, 5, product_expected_arrival_date, sender_table_text_style)
+            ws.write_merge(row_no, row_no, 7, 10, document_expected_arrival_date, sender_table_text_style)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', border_left)
+            ws.write(row_no, 10, '', border_right)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            for i in range(0, 11):
+                ws.write(row_no, i, '', border_top)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 11.45)
+            ws.write_merge(row_no, row_no, 0, 5, '【買主 署名捺印欄】', sender_table_title_style)
+            ws.write_merge(row_no, row_no, 6, 10, '【売主 署名捺印欄】', sender_table_title_style)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            ws.write(row_no, 6, '', border_left)
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 5, '', border_right)
+            ws.write(row_no, 10, '', border_right)
+            row_no += 1
+
+            for i in range(0, 5):
+                ws.row(row_no + i).height = int(20 * 16.5)
+                ws.write(row_no + i, 0, '', border_left)
+            
+            # ws.write_merge(row_no, row_no, 0, 5, '〒537-0021　大阪府大阪市東成区東中本2丁目4-15', seal_address_tel_style)
+            ws.write_merge(row_no, row_no, 6, 10, '〒537-0021　大阪府大阪市東成区東中本2丁目4-15', seal_address_tel_style1)
+            row_no += 1
+            
+            # ws.write_merge(row_no, row_no + 1, 0, 5, 'バッジオ株式会社', seal_company_style)
+            ws.write_merge(row_no, row_no + 1, 6, 10, 'バッジオ株式会社', seal_company_style)
+            row_no += 2
+
+            # ws.write_merge(row_no, row_no, 0, 4, '代表取締役　金　昇志', seal_supplier_style)
+            ws.write_merge(row_no, row_no, 6, 9, '代表取締役　金　昇志', seal_supplier_style)
+            ws.write(row_no, 5, '㊞', seal_mark_style)
+            ws.write(row_no, 10, '㊞', seal_mark_style)
+            row_no += 1
+
+            # ws.write_merge(row_no, row_no, 0, 5, 'TEL 06-6753-8078 FAX 06-6753-8079', seal_address_tel_style)
+            ws.write_merge(row_no, row_no, 6, 10, 'TEL 06-6753-8078 FAX 06-6753-8079', seal_address_tel_style)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', border_left)
+            ws.write(row_no, 10, '', border_right)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            for i in range(0, 11):
+                ws.write(row_no, i, '', border_top)
+            row_no += 1
+
+            ws.write(row_no, 5, '下記の通り御請求申し上げます。', font_11_left)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 13.5)
+            ws.write_merge(row_no, row_no, 0, 2, '運送方法', font_11_center_with_border)
+            ws.write_merge(row_no, row_no + 1, 5, 7, '御請求金額', billed_deadline_label_style)
+            ws.write_merge(row_no, row_no + 1, 8, 10, total, billing_amount_value_style)
+            row_no += 1
+            ws.row(row_no).height = int(20 * 13.5)
+
+            shipping_method_label = ''
+            if shipping_method == 'D': shipping_method_label = '発送'
+            if shipping_method == 'R': shipping_method_label = '引取'
+            if shipping_method == 'C': shipping_method_label = 'ID変更'
+            if shipping_method == 'B': shipping_method_label = '* 空白'
+
+            ws.write_merge(row_no, row_no, 0, 2, shipping_method_label, font_11_center_with_border)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 8.25)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 13.5)
+            ws.row(row_no+1).height = int(20 * 13.5)
+            ws.write_merge(row_no, row_no, 0, 2, 'お支払方法', font_11_center_with_border)
+            ws.write_merge(row_no + 1, row_no + 1, 0, 2, '振込', font_11_center_with_border)
+
+            ws.write_merge(row_no, row_no + 1, 5, 7, 'お支払期限', billed_deadline_label_style)
+            ws.write_merge(row_no, row_no + 1, 8, 10, payment_due_date, billed_deadline_value_style)
+            row_no += 2
+
+            
+
+            ws.row(row_no).height = space_height
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 14.1)
+            ws.write(row_no, 0, '※ お振込み手数料は貴社ご負担でお願い致します。', font_11_left)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 15)
+            ws.write_merge(row_no, row_no, 0, 1, '振込先口座', transfer_account_style)
+            ws.write_merge(row_no, row_no, 2, 10, 'りそな銀行　船場支店（101）　普通　0530713　バッジオカブシキガイシャ', font_11_left_with_border)
+            row_no += 1
+            ws.row(row_no).height = int(20 * 15)
+
+            # ws.write(row_no, 0, '', border_left)
+            # ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
+            # row_no += 1
+
+            ws.write(row_no, 0, '', border_left)
+            ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            for i in range(0, 11):
+                ws.write(row_no, i, '', border_top)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 17.25)
+            ws.write(row_no, 0, '内容をご確認の上、ご捺印後弊社まで返信お願いします。', font_11_left)
+            ws.write(row_no, 7, 'FAX 06-6753-8079', font_14_left1)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 14.1)
+            ws.write(row_no, 0, '※ 請求書原本が必要な場合は必ずチェックしてください。　【　必要　・　不要　】', font_11_left)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 15)
+            ws.write(row_no, 0, 'No.{}'.format(contract_id), font_11_left)
         
-        document_sender_id = self.request.POST.get('document_sender_id')
-        document_expected_arrival_date = self.request.POST.get('document_expected_arrival_date')
-        document_sender_company = ""
-        if document_sender_id:
-            document_sender = Sender.objects.get(id=document_sender_id)
-            document_sender_company = document_sender.name
-        document_sender_address = document_sender_form.data.get('document_sender_address')
-        document_sender_tel = document_sender_form.data.get('document_sender_tel', "")
-        document_sender_fax = document_sender_form.data.get('document_sender_fax', "")
-        document_sender_postal_code = document_sender_form.data.get('document_sender_postal_code')
+        else:
+            w_arr = [9.15, 8.04, 10.04, 2.04, 5.04, 8.04, 6.71, 7.15, 12.59, 6.71, 6.71]
+            for i in range(11): 
+                ws.col(i).width = int(300 * w_arr[i])
+            for i in range(56):
+                ws.row(i).height_mismatch = True
+                ws.row(i).height = int(20 * 18)
+            ws.row(44).height = int(20 * 3.75)
+            ws.row(45).height = int(20 * 15.75)
 
-        ws.row(row_no).height = int(20 * 11.45)
-        ws.write_merge(row_no, row_no, 0, 5, '【商品発送先】', sender_table_title_style)
-        ws.write_merge(row_no, row_no, 6, 10, '【書類発送先】', sender_table_title_style)
-        row_no += 1
+            ####################################### Table #####################################
+            ws.write_merge(0, 0, 0, 6, '商　品　名', TTL_CENTER)
+            ws.write(0, 7, '数量', TT_CENTER)
+            ws.write(0, 8, '単　価', TT_CENTER)
+            ws.write_merge(0, 0, 9, 10, '金　額', TTR_CENTER)
 
-        ws.row(row_no).height = space_height
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', border_left)
-        ws.write(row_no, 5, '', border_right)
-        ws.write(row_no, 10, '', border_right)
-        row_no += 1
-        
-        ws.row(row_no).height = int(20 * 15)
-        ws.write(row_no, 0, '会社名：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 1, 5, product_sender_company, sender_table_text_style)
-        ws.write(row_no, 6, '会社名：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 7, 10, document_sender_company, sender_table_text_style)
-        row_no += 1
+            row_no = 1
 
-        for i in range(0, 6):
-            ws.row(row_no + i).height = int(20 * 15)
-        ws.write(row_no, 0, '住所：', sender_table_field_style)
-        ws.write(row_no, 6, '住所：', sender_table_field_style)
-        ws.write_merge(row_no, row_no + 3, 1, 5, '〒 {} \n {}'.format(product_sender_postal_code, product_sender_address), sender_address_style)
-        ws.write_merge(row_no, row_no + 3, 7, 10, '〒 {} \n {}'.format(document_sender_postal_code, document_sender_address), sender_address_style)
-        row_no += 1
+            total_quantity = total_price = 0
+            ##### Products
+            if num_of_products:
+                for form in product_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('product_id')
+                    product_name = Product.objects.get(id=id).name
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
 
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', sender_table_field_style)
-        row_no += 1
+                    total_quantity += quantity
+                    total_price += price
 
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', sender_table_field_style)
-        row_no += 1
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write(row_no, 7, quantity, TC_RIGHT)
+                    ws.write(row_no, 8, price, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
 
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', sender_table_field_style)
-        row_no += 1
+                    row_no += 1
 
-        ws.write(row_no, 0, 'TEL／FAX：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 1, 5, '{} / {}'.format(product_sender_tel, product_sender_fax), sender_table_text_style)
-        ws.write(row_no, 6, 'TEL／FAX：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 7, 10, '{} / {}'.format(document_sender_tel, document_sender_fax), sender_table_text_style)
-        row_no += 1
+            ###### Documents
+            if num_of_documents:
+                for form in document_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('document_id')
+                    document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
 
-        ws.write(row_no, 0, '到着予定日：', sender_table_field_style)
-        ws.write(row_no, 6, '到着予定日：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 1, 5, product_expected_arrival_date, sender_table_text_style)
-        ws.write_merge(row_no, row_no, 7, 10, document_expected_arrival_date, sender_table_text_style)
-        row_no += 1
+                    total_quantity += quantity
+                    total_price += price
 
-        ws.row(row_no).height = space_height
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', border_left)
-        ws.write(row_no, 10, '', border_right)
-        row_no += 1
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write(row_no, 7, quantity, TC_RIGHT)
+                    ws.write(row_no, 8, price, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
 
-        ws.row(row_no).height = space_height
-        for i in range(0, 11):
-            ws.write(row_no, i, '', border_top)
-        row_no += 1
+                    row_no += 1
 
-        ws.row(row_no).height = int(20 * 11.45)
-        ws.write_merge(row_no, row_no, 0, 5, '【買主 署名捺印欄】', sender_table_title_style)
-        ws.write_merge(row_no, row_no, 6, 10, '【売主 署名捺印欄】', sender_table_title_style)
-        row_no += 1
+            if total_number < 39:
+                for i in range(0, 39 - total_number):
 
-        ws.row(row_no).height = space_height
-        ws.write(row_no, 6, '', border_left)
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 5, '', border_right)
-        ws.write(row_no, 10, '', border_right)
-        row_no += 1
+                    ws.write_merge(row_no, row_no, 0, 6, None, TL)
+                    ws.write(row_no, 7, None, TC_RIGHT)
+                    ws.write(row_no, 8, None, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
 
-        for i in range(0, 5):
-            ws.row(row_no + i).height = int(20 * 16.5)
-            ws.write(row_no + i, 0, '', border_left)
-        
-        # ws.write_merge(row_no, row_no, 0, 5, '〒537-0021　大阪府大阪市東成区東中本2丁目4-15', seal_address_tel_style)
-        ws.write_merge(row_no, row_no, 6, 10, '〒537-0021　大阪府大阪市東成区東中本2丁目4-15', seal_address_tel_style1)
-        row_no += 1
-        
-        # ws.write_merge(row_no, row_no + 1, 0, 5, 'バッジオ株式会社', seal_company_style)
-        ws.write_merge(row_no, row_no + 1, 6, 10, 'バッジオ株式会社', seal_company_style)
-        row_no += 2
+                    row_no += 1
 
-        # ws.write_merge(row_no, row_no, 0, 4, '代表取締役　金　昇志', seal_supplier_style)
-        ws.write_merge(row_no, row_no, 6, 9, '代表取締役　金　昇志', seal_supplier_style)
-        ws.write(row_no, 5, '㊞', seal_mark_style)
-        ws.write(row_no, 10, '㊞', seal_mark_style)
-        row_no += 1
+            ws.write_merge(40, 40, 0, 6, '※備考', LINE_TOP)
+            ws.write_merge(40, 40, 7, 8, '小　計', TTL_CENTER)
+            ws.write_merge(40, 40, 9, 10, sub_total, TTR_RIGHT)
+            ws.write_merge(41, 41, 7, 8, '消費税（10%）', TL_CENTER)        
+            ws.write_merge(41, 41, 9, 10, tax, TR_RIGHT)
+            ws.write_merge(42, 42, 7, 8, '保険代（非課税）', TL_CENTER)
+            ws.write_merge(42, 42, 9, 10, fee, TR_RIGHT)
+            ws.write_merge(43, 43, 7, 8, '合　計', TBL_CENTER)
+            ws.write_merge(43, 43, 9, 10, total, TBR_RIGHT_TOTAL)
 
-        # ws.write_merge(row_no, row_no, 0, 5, 'TEL 06-6753-8078 FAX 06-6753-8079', seal_address_tel_style)
-        ws.write_merge(row_no, row_no, 6, 10, 'TEL 06-6753-8078 FAX 06-6753-8079', seal_address_tel_style)
-        row_no += 1
+            ws.write_merge(45, 45, 0, 3, 'No.{}'.format(contract_id), F11)
 
-        ws.row(row_no).height = space_height
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', border_left)
-        ws.write(row_no, 10, '', border_right)
-        row_no += 1
-
-        ws.row(row_no).height = space_height
-        for i in range(0, 11):
-            ws.write(row_no, i, '', border_top)
-        row_no += 1
-
-        ws.write(row_no, 5, '下記の通り御請求申し上げます。', font_11_left)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 13.5)
-        ws.write_merge(row_no, row_no, 0, 2, '運送方法', font_11_center_with_border)
-        ws.write_merge(row_no, row_no + 1, 5, 7, '御請求金額', billed_deadline_label_style)
-        ws.write_merge(row_no, row_no + 1, 8, 10, total, billing_amount_value_style)
-        row_no += 1
-        ws.row(row_no).height = int(20 * 13.5)
-
-        shipping_method_label = ''
-        if shipping_method == 'D': shipping_method_label = '発送'
-        if shipping_method == 'R': shipping_method_label = '引取'
-        if shipping_method == 'C': shipping_method_label = 'ID変更'
-        if shipping_method == 'B': shipping_method_label = '* 空白'
-
-        ws.write_merge(row_no, row_no, 0, 2, shipping_method_label, font_11_center_with_border)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 8.25)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 13.5)
-        ws.row(row_no+1).height = int(20 * 13.5)
-        ws.write_merge(row_no, row_no, 0, 2, 'お支払方法', font_11_center_with_border)
-        ws.write_merge(row_no + 1, row_no + 1, 0, 2, '振込', font_11_center_with_border)
-
-        ws.write_merge(row_no, row_no + 1, 5, 7, 'お支払期限', billed_deadline_label_style)
-        ws.write_merge(row_no, row_no + 1, 8, 10, payment_due_date, billed_deadline_value_style)
-        row_no += 2
-
-        
-
-        ws.row(row_no).height = space_height
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 14.1)
-        ws.write(row_no, 0, '※ お振込み手数料は貴社ご負担でお願い致します。', font_11_left)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 15)
-        ws.write_merge(row_no, row_no, 0, 1, '振込先口座', transfer_account_style)
-        ws.write_merge(row_no, row_no, 2, 10, 'りそな銀行　船場支店（101）　普通　0530713　バッジオカブシキガイシャ', font_11_left_with_border)
-        row_no += 1
-        ws.row(row_no).height = int(20 * 15)
-
-        # ws.write(row_no, 0, '', border_left)
-        # ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
-        # row_no += 1
-
-        ws.write(row_no, 0, '', border_left)
-        ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
-        row_no += 1
-
-        ws.row(row_no).height = space_height
-        for i in range(0, 11):
-            ws.write(row_no, i, '', border_top)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 17.25)
-        ws.write(row_no, 0, '内容をご確認の上、ご捺印後弊社まで返信お願いします。', font_11_left)
-        ws.write(row_no, 7, 'FAX 06-6753-8079', font_14_left1)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 14.1)
-        ws.write(row_no, 0, '※ 請求書原本が必要な場合は必ずチェックしてください。　【　必要　・　不要　】', font_11_left)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 15)
-        ws.write(row_no, 0, 'No.{}'.format(contract_id), font_11_left)
-        
         wb.save(response)
         return response
 
@@ -1052,6 +1248,19 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
         transfer_account_style = xlwt.easyxf('font: height 190, name ＭＳ Ｐゴシック; align: vert center, horiz center;\
                                                 borders: left_color black, top_color black, top thin, left thin;')
 
+        TTL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left medium, right thin, bottom thin;')
+        TT_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, bottom_color black, right_color black, top medium, right thin, bottom thin;')
+        TTR_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left thin, right medium, bottom thin;')
+        TC_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: bottom_color black, right_color black, right thin, bottom thin;', num_format_str='#,###')
+        TR_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: bottom_color black, right_color black, right medium, bottom thin;', num_format_str='#,###')
+        F11 = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on;')
+        LINE_TOP = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on; borders: top_color black, top medium;')
+        TTR_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left thin, right medium, bottom thin;', num_format_str='#,###')
+        TL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: bottom_color black, left_color black, right_color black, right thin, bottom thin, left medium;')
+        TBL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: left_color black, bottom_color black, right_color black, left medium, right thin, bottom medium;')
+        TBR_RIGHT_TOTAL = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック, bold on; align: horiz right, vert center, wrap on; borders: bottom_color black, right_color black, right medium, bottom medium;', num_format_str='"¥"#,###')
+        TL = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on; borders: bottom_color black, left_color black, right_color black, right thin, bottom thin, left medium;')
+
         user_id = self.request.user.id
         log_export_operation(user_id, "{} - {}".format(_("Sales contract"), _("Trader sales")))
         contract_form = TraderPurchasesContractForm(self.request.POST)
@@ -1071,120 +1280,21 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             tel = customer.tel
             fax = customer.fax
 
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="trader_purchases_contract_{}.xls"'.format(contract_id)
-        wb = xlwt.Workbook(encoding='utf-8')
-        ws = wb.add_sheet("{}-{}".format(_('Sales contract'), _('Trader purchases')), cell_overwrite_ok=True)
-
-        ws.set_header_str(str.encode(''))
-        ws.set_footer_str(str.encode(''))
-        ws.set_left_margin(0.314961)
-        ws.set_top_margin(0.393701)
-        ws.set_right_margin(0.314961)
-        ws.set_bottom_margin(0.19685)
-
-        for i in range(8):
-            ws.col(i).width = cell_width_list[i]
-
-        for i in range(1, 80):
-            ws.row(i).height_mismatch = True
-            ws.row(i).height = cell_height
-
-        ws.row(0).height_mismatch = True
-        ws.row(0).height = top_padding_height
-
-        ws.row(1).height = header_height
-
-        ws.write_merge(1, 1, 1, 8, '売買契約書　兼　請求書', title_style)
-        ws.write_merge(1, 1, 9, 10, created_at, contract_date_style)
-
-        ws.row(2).height = space_height
-        ws.row(3).height = company_height
-        ws.write_merge(3, 3, 0, 2, company, company_title_style)
-        ws.write_merge(3, 3, 3, 4, _('CO.'), company_label_style)
-
-        ws.row(4).height = space_height
-
-        ws.row(5).height = int(20 * 19.35)
-        ws.write_merge(5, 5, 1, 2, manager, company_supplier)
-        ws.write(5, 3, '', border_bottom)
-        ws.write(5, 4, _('Mr.'), company_supplier_label)
-
-        ws.row(6).height = int(20 * 15.75)
-        ws.write_merge(6, 6, 0, 6, address, font_11_left)
-        ws.write_merge(6, 6, 7, 10, 'P-SENSOR {} {}'.format(_('Member ID'), P_SENSOR_NUMBER), font_11_left)
-
-        ws.row(7).height = int(20 * 12.75)
-        ws.write_merge(7, 7, 0, 2, 'TEL {}'.format(tel), font_11_left_r)
-        ws.write_merge(7, 7, 3, 6, 'FAX {}'.format(fax), font_11_left_r)
-
-        ws.write(7, 7, '担当：', in_charge_style)
-        ws.write_merge(7, 7, 8, 10, person_in_charge, in_charge_style)
-
-        ws.row(8).height = space_height
-        ws.row(9).height = int(20 * 12.95)
-        ws.write_merge(9, 9, 0, 6, '商　品　名', product_table_first_th_style)
-        ws.write(9, 7, '数量', product_table_th_style)
-        ws.write(9, 8, '単　価', product_table_th_style)
-        ws.write_merge(9, 9, 9, 10, '金　額', product_table_last_th_style)
-
-        row_no = 10
         product_formset = ProductFormSet(
             self.request.POST,
             prefix='product'
         )
 
         num_of_products = product_formset.total_form_count()
-        if num_of_products:
-            for form in product_formset.forms:
-                form.is_valid()
-                id = form.cleaned_data.get('product_id')
-                product_name = Product.objects.get(id=id).name
-                quantity = form.cleaned_data.get('quantity', 0)
-                price = form.cleaned_data.get('price', 0)
-                amount = quantity * price
-
-                ws.row(row_no).height = int(20 * 15)
-                ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
-                ws.write(row_no, 7, quantity, product_content_style)
-                ws.write(row_no, 8, price, product_content_style)
-                ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
-                row_no += 1
 
         document_formset = DocumentFormSet(
             self.request.POST,
             prefix='document'
         )
         num_of_documents = document_formset.total_form_count()
-        if num_of_documents:
-            for form in document_formset.forms:
-                form.is_valid()
-                id = form.cleaned_data.get('document_id')
-                document_name = Document.objects.get(id=id).name
-
-                document_name = document_name.replace('（売上）', '').replace('（仕入）', '')
-
-                quantity = form.cleaned_data.get('quantity', 0)
-                price = form.cleaned_data.get('price', 0)
-                amount = quantity * price
-
-                ws.row(row_no).height = int(20 * 15)
-                ws.write_merge(row_no, row_no, 0, 6, document_name, product_first_content_style)
-                ws.write(row_no, 7, quantity, product_content_style)
-                ws.write(row_no, 8, price, product_content_style)
-                ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
-                row_no += 1
 
         total_number = num_of_products + num_of_documents
-        if total_number < 6:
-            for i in range(0, 6 - total_number):
-                ws.row(row_no).height = int(20 * 15)
-                ws.write_merge(row_no, row_no, 0, 6, None, product_first_content_style)
-                ws.write(row_no, 7, None, product_content_style)
-                ws.write(row_no, 8, None, product_content_style)
-                ws.write_merge(row_no, row_no, 9, 10, None, product_last_content_style)
-                row_no += 1
-        
+
         shipping_method = contract_form.data.get('shipping_method')
         shipping_date = contract_form.data.get('shipping_date')
         payment_method = contract_form.data.get('payment_method')
@@ -1207,259 +1317,448 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             fee = 0
             total = 0
 
-        # row_no += 1
-        ws.row(row_no).height = int(20 * 15)
-        ws.write_merge(row_no, row_no, 0, 1, '{}: '.format(shipping_date_label), shipping_date_label_style)
-        ws.write_merge(row_no, row_no, 2, 6, shipping_date, shipping_date_style)
-        ws.write_merge(row_no, row_no, 7, 8, '小　計', subtotal_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, sub_total, subtotal_value_style)
-        row_no += 1
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="trader_purchases_contract_{}.xls"'.format(contract_id)
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet("{}-{}".format(_('Sales contract'), _('Trader purchases')), cell_overwrite_ok=True)
 
-        ws.row(row_no).height = int(20 * 15)
-        ws.write(row_no, 0, '※備考', remark_lebel_style)
-        ws.write_merge(row_no, row_no, 7, 8, '消費税（10%）', fee_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, tax, fee_value_style)
-        row_no += 1
+        ws.set_header_str(str.encode(''))
+        ws.set_footer_str(str.encode(''))
+        ws.set_left_margin(0.314961)
+        ws.set_top_margin(0.393701)
+        ws.set_right_margin(0.314961)
+        ws.set_bottom_margin(0.19685)
 
-        ws.row(row_no).height = int(20 * 15)
-        ws.write_merge(18, 19, 0, 6, remarks, remark_content_style)
-        ws.write_merge(18, 18, 7, 8, '保険代（非課税）', fee_label_style)
-        ws.write_merge(18, 18, 9, 10, fee, fee_value_style)
-        row_no += 1
+        for i in range(8):
+            ws.col(i).width = cell_width_list[i]
 
-        ws.row(row_no).height = int(20 * 15)
+        for i in range(1, 80):
+            ws.row(i).height_mismatch = True
+            ws.row(i).height = cell_height
+
         
-        ws.write_merge(row_no, row_no, 7, 8, '合　計', total_label_style)
-        ws.write_merge(row_no, row_no, 9, 10, total, total_value_style)
-        row_no += 1
 
-        ws.row(row_no).height = space_height
-        row_no += 1
-        remark_text_list = [
-            "※ 売主、買主、双方の署名・捺印が揃った時点で契約が成立したものとします。",
-            "※ 契約が成立後、原則として売買契約を解除できないものとします。",
-            "※ 当該商品に不備及び故障がある場合の保障は、納品後３日以内とします。",
-            "※ 買主が代金金額の支払いを完了するまでは、売買物件の所有権は売主において留保する。",
-            "※ 売買物件の所有権は、引渡しが終了し、支払いが完了した時点で買主に移行するものとする。",
-            "※ 下記の場合の売主は、何らかの手続きを経ずして、その選択により期限の利益を喪失せしめて残代金の",
-            "  即時支払いを求めるか、又は本契約を解除して売買物件を引き上げる事が出来る。",
-            "1)代金の支払いを1回でも怠った場合。",
-            "2)仮差押え、仮処分等の執行を受け、整理・和議・破損等の申立てを受けた場合。"
-        ]
+        if total_number <= 6:
 
-        for remark_text in remark_text_list:
-            ws.row(row_no).height = int(20 * 9.95)
-            ws.write(row_no, 0, remark_text, remark_text_style)
+            ws.row(0).height_mismatch = True
+            ws.row(0).height = top_padding_height
+
+            ws.row(1).height = header_height
+
+            ws.write_merge(1, 1, 1, 8, '売買契約書　兼　請求書', title_style)
+            ws.write_merge(1, 1, 9, 10, created_at, contract_date_style)
+
+            ws.row(2).height = space_height
+            ws.row(3).height = company_height
+            ws.write_merge(3, 3, 0, 2, company, company_title_style)
+            ws.write_merge(3, 3, 3, 4, _('CO.'), company_label_style)
+
+            ws.row(4).height = space_height
+
+            ws.row(5).height = int(20 * 19.35)
+            ws.write_merge(5, 5, 1, 2, manager, company_supplier)
+            ws.write(5, 3, '', border_bottom)
+            ws.write(5, 4, _('Mr.'), company_supplier_label)
+
+            ws.row(6).height = int(20 * 15.75)
+            ws.write_merge(6, 6, 0, 6, address, font_11_left)
+            ws.write_merge(6, 6, 7, 10, 'P-SENSOR {} {}'.format(_('Member ID'), P_SENSOR_NUMBER), font_11_left)
+
+            ws.row(7).height = int(20 * 12.75)
+            ws.write_merge(7, 7, 0, 2, 'TEL {}'.format(tel), font_11_left_r)
+            ws.write_merge(7, 7, 3, 6, 'FAX {}'.format(fax), font_11_left_r)
+
+            ws.write(7, 7, '担当：', in_charge_style)
+            ws.write_merge(7, 7, 8, 10, person_in_charge, in_charge_style)
+
+            ws.row(8).height = space_height
+            ws.row(9).height = int(20 * 12.95)
+            ws.write_merge(9, 9, 0, 6, '商　品　名', product_table_first_th_style)
+            ws.write(9, 7, '数量', product_table_th_style)
+            ws.write(9, 8, '単　価', product_table_th_style)
+            ws.write_merge(9, 9, 9, 10, '金　額', product_table_last_th_style)
+
+            row_no = 10
+            
+            if num_of_products:
+                for form in product_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('product_id')
+                    product_name = Product.objects.get(id=id).name
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    ws.row(row_no).height = int(20 * 15)
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
+                    ws.write(row_no, 7, quantity, product_content_style)
+                    ws.write(row_no, 8, price, product_content_style)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
+                    row_no += 1
+            
+            if num_of_documents:
+                for form in document_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('document_id')
+                    document_name = Document.objects.get(id=id).name
+
+                    document_name = document_name.replace('（売上）', '').replace('（仕入）', '')
+
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    ws.row(row_no).height = int(20 * 15)
+                    ws.write_merge(row_no, row_no, 0, 6, document_name, product_first_content_style)
+                    ws.write(row_no, 7, quantity, product_content_style)
+                    ws.write(row_no, 8, price, product_content_style)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
+                    row_no += 1
+
+            for i in range(0, 6 - total_number):
+                ws.row(row_no).height = int(20 * 15)
+                ws.write_merge(row_no, row_no, 0, 6, None, product_first_content_style)
+                ws.write(row_no, 7, None, product_content_style)
+                ws.write(row_no, 8, None, product_content_style)
+                ws.write_merge(row_no, row_no, 9, 10, None, product_last_content_style)
+                row_no += 1
+        
+        
+
+            # row_no += 1
+            ws.row(row_no).height = int(20 * 15)
+            ws.write_merge(row_no, row_no, 0, 1, '{}: '.format(shipping_date_label), shipping_date_label_style)
+            ws.write_merge(row_no, row_no, 2, 6, shipping_date, shipping_date_style)
+            ws.write_merge(row_no, row_no, 7, 8, '小　計', subtotal_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, sub_total, subtotal_value_style)
             row_no += 1
 
-        ws.row(row_no).height = int(20 * 8.45)
-        row_no += 1
+            ws.row(row_no).height = int(20 * 15)
+            ws.write(row_no, 0, '※備考', remark_lebel_style)
+            ws.write_merge(row_no, row_no, 7, 8, '消費税（10%）', fee_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, tax, fee_value_style)
+            row_no += 1
 
-        product_sender_form = TraderPurchasesProductSenderForm(self.request.POST)
-        document_sender_form = TraderPurchasesDocumentSenderForm(self.request.POST)
-        product_sender_id = self.request.POST.get('product_sender_id')
-        product_shipping_company = self.request.POST.get('product_shipping_company')
-        product_sender_remarks = self.request.POST.get('product_sender_remarks')
-        product_desired_arrival_date = self.request.POST.get('product_desired_arrival_date')
-        product_sender_company = None
-        if product_sender_id:
-            product_sender = Sender.objects.get(id=product_sender_id)
-            product_sender_company = product_sender.name
-        product_sender_address = product_sender_form.data.get('product_sender_address')
-        product_sender_tel = product_sender_form.data.get('product_sender_tel') or ''
-        product_sender_fax = product_sender_form.data.get('product_sender_fax') or ''
-        product_sender_postal_code = product_sender_form.data.get('product_sender_postal_code')
+            ws.row(row_no).height = int(20 * 15)
+            ws.write_merge(18, 19, 0, 6, remarks, remark_content_style)
+            ws.write_merge(18, 18, 7, 8, '保険代（非課税）', fee_label_style)
+            ws.write_merge(18, 18, 9, 10, fee, fee_value_style)
+            row_no += 1
 
-        document_sender_company = None
-        document_sender_id = self.request.POST.get('document_sender_id')
-        document_shipping_company = self.request.POST.get('document_shipping_company')
-        document_sender_remarks = self.request.POST.get('document_sender_remarks')
-        document_desired_arrival_date = self.request.POST.get('document_desired_arrival_date')
-        if document_sender_id:
-            document_sender = Sender.objects.get(id=document_sender_id)
-            document_sender_company = document_sender.name
-        document_sender_address = document_sender_form.data.get('document_sender_address')
-        document_sender_tel = document_sender_form.data.get('document_sender_tel') or ''
-        document_sender_fax = document_sender_form.data.get('document_sender_fax') or ''
-        document_sender_postal_code = document_sender_form.data.get('document_sender_postal_code')
+            ws.row(row_no).height = int(20 * 15)
+            
+            ws.write_merge(row_no, row_no, 7, 8, '合　計', total_label_style)
+            ws.write_merge(row_no, row_no, 9, 10, total, total_value_style)
+            row_no += 1
 
-        ws.row(row_no).height = int(20 * 11.45)
-        ws.write_merge(row_no, row_no, 0, 5, '【商品発送先】', sender_table_title_style)
-        ws.write_merge(row_no, row_no, 6, 10, '【書類発送先】', sender_table_title_style)
-        row_no += 1
+            ws.row(row_no).height = space_height
+            row_no += 1
+            remark_text_list = [
+                "※ 売主、買主、双方の署名・捺印が揃った時点で契約が成立したものとします。",
+                "※ 契約が成立後、原則として売買契約を解除できないものとします。",
+                "※ 当該商品に不備及び故障がある場合の保障は、納品後３日以内とします。",
+                "※ 買主が代金金額の支払いを完了するまでは、売買物件の所有権は売主において留保する。",
+                "※ 売買物件の所有権は、引渡しが終了し、支払いが完了した時点で買主に移行するものとする。",
+                "※ 下記の場合の売主は、何らかの手続きを経ずして、その選択により期限の利益を喪失せしめて残代金の",
+                "  即時支払いを求めるか、又は本契約を解除して売買物件を引き上げる事が出来る。",
+                "1)代金の支払いを1回でも怠った場合。",
+                "2)仮差押え、仮処分等の執行を受け、整理・和議・破損等の申立てを受けた場合。"
+            ]
 
-        ws.row(row_no).height = space_height
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', border_left)
-        ws.write(row_no, 5, '', border_right)
-        ws.write(row_no, 10, '', border_right)
-        row_no += 1
+            for remark_text in remark_text_list:
+                ws.row(row_no).height = int(20 * 9.95)
+                ws.write(row_no, 0, remark_text, remark_text_style)
+                row_no += 1
+
+            ws.row(row_no).height = int(20 * 8.45)
+            row_no += 1
+
+            product_sender_form = TraderPurchasesProductSenderForm(self.request.POST)
+            document_sender_form = TraderPurchasesDocumentSenderForm(self.request.POST)
+            product_sender_id = self.request.POST.get('product_sender_id')
+            product_shipping_company = self.request.POST.get('product_shipping_company')
+            product_sender_remarks = self.request.POST.get('product_sender_remarks')
+            product_desired_arrival_date = self.request.POST.get('product_desired_arrival_date')
+            product_sender_company = None
+            if product_sender_id:
+                product_sender = Sender.objects.get(id=product_sender_id)
+                product_sender_company = product_sender.name
+            product_sender_address = product_sender_form.data.get('product_sender_address')
+            product_sender_tel = product_sender_form.data.get('product_sender_tel') or ''
+            product_sender_fax = product_sender_form.data.get('product_sender_fax') or ''
+            product_sender_postal_code = product_sender_form.data.get('product_sender_postal_code')
+
+            document_sender_company = None
+            document_sender_id = self.request.POST.get('document_sender_id')
+            document_shipping_company = self.request.POST.get('document_shipping_company')
+            document_sender_remarks = self.request.POST.get('document_sender_remarks')
+            document_desired_arrival_date = self.request.POST.get('document_desired_arrival_date')
+            if document_sender_id:
+                document_sender = Sender.objects.get(id=document_sender_id)
+                document_sender_company = document_sender.name
+            document_sender_address = document_sender_form.data.get('document_sender_address')
+            document_sender_tel = document_sender_form.data.get('document_sender_tel') or ''
+            document_sender_fax = document_sender_form.data.get('document_sender_fax') or ''
+            document_sender_postal_code = document_sender_form.data.get('document_sender_postal_code')
+
+            ws.row(row_no).height = int(20 * 11.45)
+            ws.write_merge(row_no, row_no, 0, 5, '【商品発送先】', sender_table_title_style)
+            ws.write_merge(row_no, row_no, 6, 10, '【書類発送先】', sender_table_title_style)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', border_left)
+            ws.write(row_no, 5, '', border_right)
+            ws.write(row_no, 10, '', border_right)
+            row_no += 1
+            
+            ws.row(row_no).height = int(20 * 15)
+            ws.write(row_no, 0, '会社名：', sender_table_field_style)
+            ws.write_merge(row_no, row_no, 1, 5, product_sender_company, sender_table_text_style)
+            ws.write(row_no, 6, '会社名：', sender_table_field_style)
+            ws.write_merge(row_no, row_no, 7, 10, document_sender_company, sender_table_text_style)
+            row_no += 1
+
+            for i in range(0, 6):
+                ws.row(row_no + i).height = int(20 * 15)
+            ws.write(row_no, 0, '住所：', sender_table_field_style)
+            ws.write(row_no, 6, '住所：', sender_table_field_style)
+            ws.write_merge(row_no, row_no + 3, 1, 5, '〒 {} \n {}'.format(product_sender_postal_code, product_sender_address), sender_address_style)
+            ws.write_merge(row_no, row_no + 3, 7, 10, '〒 {} \n {}'.format(document_sender_postal_code, document_sender_address), sender_address_style)
+            row_no += 1
+
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', sender_table_field_style)
+            row_no += 1
+
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', sender_table_field_style)
+            row_no += 1
+
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', sender_table_field_style)
+            row_no += 1
+
+            ws.write(row_no, 0, 'TEL／FAX：', sender_table_field_style)
+            ws.write_merge(row_no, row_no, 1, 5, product_sender_tel + '/' + product_sender_fax, sender_table_text_style)
+            ws.write(row_no, 6, 'TEL／FAX：', sender_table_field_style)
+            ws.write_merge(row_no, row_no, 7, 10, document_sender_tel + '/' + document_sender_fax, sender_table_text_style)
+            row_no += 1
+
+            # ws.write(row_no, 0, '到着予定日：', sender_table_field_style)
+            # ws.write_merge(row_no, row_no, 1, 5, product_desired_arrival_date, sender_table_text_style)
+            # ws.write(row_no, 6, '到着予定日：', sender_table_field_style)
+            # ws.write_merge(row_no, row_no, 7, 10, document_desired_arrival_date, sender_table_text_style)
+            # row_no += 1
+
+            ws.row(row_no).height = space_height
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', border_left)
+            ws.write(row_no, 10, '', border_right)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            for i in range(0, 11):
+                ws.write(row_no, i, '', border_top)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 11.45)
+            ws.write_merge(row_no, row_no, 0, 5, '【買主 署名捺印欄】', sender_table_title_style)
+            ws.write_merge(row_no, row_no, 6, 10, '【売主 署名捺印欄】', sender_table_title_style)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            ws.write(row_no, 6, '', border_left)
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 5, '', border_right)
+            ws.write(row_no, 10, '', border_right)
+            row_no += 1
+
+            for i in range(0, 6):
+                ws.row(row_no + i).height = int(20 * 16.5)
+                ws.write(row_no + i, 0, '', border_left)
+                ws.write(row_no + i, 10, '', border_right)
+            
+            ws.write_merge(row_no, row_no, 0, 5, '〒537-0021　大阪府大阪市東成区東中本2丁目4-15', seal_address_tel_style1)
+            row_no += 1
+            
+            ws.write_merge(row_no, row_no + 1, 0, 5, 'バッジオ株式会社', seal_company_style)
+            row_no += 2
+
+            ws.write_merge(row_no, row_no, 0, 4, '代表取締役　金　昇志', seal_supplier_style)
+            ws.write(row_no, 5, '㊞', seal_mark_style)
+            ws.write(row_no, 10, '㊞', seal_mark_style)
+            row_no += 1
+
+            ws.write_merge(row_no, row_no, 0, 5, 'TEL 06-6753-8078 FAX 06-6753-8079', seal_address_tel_style)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            ws.write(row_no, 0, '', border_left)
+            ws.write(row_no, 6, '', border_left)
+            ws.write(row_no, 10, '', border_right)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            for i in range(0, 11):
+                ws.write(row_no, i, '', border_top)
+            row_no += 1
+
+            ws.write(row_no, 5, '下記の通り御請求申し上げます。', font_11_left)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 13.5)
+
+            ws.write_merge(row_no, row_no, 0, 2, '運送方法', font_11_center_with_border)
+            ws.write_merge(row_no, row_no + 1, 5, 7, '御請求金額', billed_deadline_label_style)
+            ws.write_merge(row_no, row_no + 1, 8, 10, total, billing_amount_value_style)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 13.5)
+
+            shipping_method_label = '発送'
+            if shipping_method == 'D': shipping_method_label = '発送'
+            if shipping_method == 'R': shipping_method_label = '引取'
+            if shipping_method == 'C': shipping_method_label = 'ID変更'
+            if shipping_method == 'B': shipping_method_label = '* 空白'
+
+            ws.write_merge(row_no, row_no, 0, 2, shipping_method_label, font_11_center_with_border)
+            row_no += 1
+            ws.row(row_no).height = int(20 * 8.25)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 13.5)
+            ws.row(row_no+1).height = int(20 * 13.5)
+
+            ws.write_merge(row_no, row_no, 0, 2, 'お支払方法', font_11_center_with_border)
+            ws.write_merge(row_no + 1, row_no + 1, 0, 2, '振込', font_11_center_with_border)
+
+            ws.write_merge(row_no, row_no + 1, 5, 7, 'お支払期限', billed_deadline_label_style)
+            ws.write_merge(row_no, row_no + 1, 8, 10, payment_due_date, billed_deadline_value_style)
+            row_no += 2
+
+            ws.row(row_no).height = space_height
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 14.1)
+            ws.write(row_no, 0, '※ お振込み手数料は貴社ご負担でお願い致します。', font_11_left)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 15)
+
+            ws.write_merge(row_no, row_no, 0, 1, '振込先口座', transfer_account_style)
+            ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 15)
+
+            # ws.write(row_no, 0, '', border_left)
+            # ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
+            # row_no += 1
+
+            ws.write(row_no, 0, '', border_left)
+            ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
+            row_no += 1
+
+            ws.row(row_no).height = space_height
+            for i in range(0, 11):
+                ws.write(row_no, i, '', border_top)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 17.25)
+            ws.write(row_no, 0, '内容をご確認の上、ご捺印後弊社まで返信お願いします。', font_11_left)
+            ws.write(row_no, 7, 'FAX 06-6753-8079', font_14_left1)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 14.1)
+            ws.write(row_no, 0, '※ 請求書原本が必要な場合は必ずチェックしてください。　【　必要　・　不要　】', font_11_left)
+            row_no += 1
+
+            ws.row(row_no).height = int(20 * 15)
+
+            ws.write(row_no, 0, 'No.{}'.format(contract_id), xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz left'))
         
-        ws.row(row_no).height = int(20 * 15)
-        ws.write(row_no, 0, '会社名：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 1, 5, product_sender_company, sender_table_text_style)
-        ws.write(row_no, 6, '会社名：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 7, 10, document_sender_company, sender_table_text_style)
-        row_no += 1
+        else:
+            w_arr = [9.15, 8.04, 10.04, 2.04, 5.04, 8.04, 6.71, 7.15, 12.59, 6.71, 6.71]
+            for i in range(11): 
+                ws.col(i).width = int(300 * w_arr[i])
+            for i in range(56):
+                ws.row(i).height_mismatch = True
+                ws.row(i).height = int(20 * 18)
+            ws.row(44).height = int(20 * 3.75)
+            ws.row(45).height = int(20 * 15.75)
 
-        for i in range(0, 6):
-            ws.row(row_no + i).height = int(20 * 15)
-        ws.write(row_no, 0, '住所：', sender_table_field_style)
-        ws.write(row_no, 6, '住所：', sender_table_field_style)
-        ws.write_merge(row_no, row_no + 3, 1, 5, '〒 {} \n {}'.format(product_sender_postal_code, product_sender_address), sender_address_style)
-        ws.write_merge(row_no, row_no + 3, 7, 10, '〒 {} \n {}'.format(document_sender_postal_code, document_sender_address), sender_address_style)
-        row_no += 1
+            ####################################### Table #####################################
+            ws.write_merge(0, 0, 0, 6, '商　品　名', TTL_CENTER)
+            ws.write(0, 7, '数量', TT_CENTER)
+            ws.write(0, 8, '単　価', TT_CENTER)
+            ws.write_merge(0, 0, 9, 10, '金　額', TTR_CENTER)
 
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', sender_table_field_style)
-        row_no += 1
+            row_no = 1
 
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', sender_table_field_style)
-        row_no += 1
+            total_quantity = total_price = 0
+            ##### Products
+            if num_of_products:
+                for form in product_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('product_id')
+                    product_name = Product.objects.get(id=id).name
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
 
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', sender_table_field_style)
-        row_no += 1
+                    total_quantity += quantity
+                    total_price += price
 
-        ws.write(row_no, 0, 'TEL／FAX：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 1, 5, product_sender_tel + '/' + product_sender_fax, sender_table_text_style)
-        ws.write(row_no, 6, 'TEL／FAX：', sender_table_field_style)
-        ws.write_merge(row_no, row_no, 7, 10, document_sender_tel + '/' + document_sender_fax, sender_table_text_style)
-        row_no += 1
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write(row_no, 7, quantity, TC_RIGHT)
+                    ws.write(row_no, 8, price, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
 
-        # ws.write(row_no, 0, '到着予定日：', sender_table_field_style)
-        # ws.write_merge(row_no, row_no, 1, 5, product_desired_arrival_date, sender_table_text_style)
-        # ws.write(row_no, 6, '到着予定日：', sender_table_field_style)
-        # ws.write_merge(row_no, row_no, 7, 10, document_desired_arrival_date, sender_table_text_style)
-        # row_no += 1
+                    row_no += 1
 
-        ws.row(row_no).height = space_height
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', border_left)
-        ws.write(row_no, 10, '', border_right)
-        row_no += 1
+            ###### Documents
+            if num_of_documents:
+                for form in document_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('document_id')
+                    document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
 
-        ws.row(row_no).height = space_height
-        for i in range(0, 11):
-            ws.write(row_no, i, '', border_top)
-        row_no += 1
+                    total_quantity += quantity
+                    total_price += price
 
-        ws.row(row_no).height = int(20 * 11.45)
-        ws.write_merge(row_no, row_no, 0, 5, '【買主 署名捺印欄】', sender_table_title_style)
-        ws.write_merge(row_no, row_no, 6, 10, '【売主 署名捺印欄】', sender_table_title_style)
-        row_no += 1
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write(row_no, 7, quantity, TC_RIGHT)
+                    ws.write(row_no, 8, price, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
 
-        ws.row(row_no).height = space_height
-        ws.write(row_no, 6, '', border_left)
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 5, '', border_right)
-        ws.write(row_no, 10, '', border_right)
-        row_no += 1
+                    row_no += 1
 
-        for i in range(0, 6):
-            ws.row(row_no + i).height = int(20 * 16.5)
-            ws.write(row_no + i, 0, '', border_left)
-            ws.write(row_no + i, 10, '', border_right)
-        
-        ws.write_merge(row_no, row_no, 0, 5, '〒537-0021　大阪府大阪市東成区東中本2丁目4-15', seal_address_tel_style1)
-        row_no += 1
-        
-        ws.write_merge(row_no, row_no + 1, 0, 5, 'バッジオ株式会社', seal_company_style)
-        row_no += 2
+            if total_number < 39:
+                for i in range(0, 39 - total_number):
 
-        ws.write_merge(row_no, row_no, 0, 4, '代表取締役　金　昇志', seal_supplier_style)
-        ws.write(row_no, 5, '㊞', seal_mark_style)
-        ws.write(row_no, 10, '㊞', seal_mark_style)
-        row_no += 1
+                    ws.write_merge(row_no, row_no, 0, 6, None, TL)
+                    ws.write(row_no, 7, None, TC_RIGHT)
+                    ws.write(row_no, 8, None, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
 
-        ws.write_merge(row_no, row_no, 0, 5, 'TEL 06-6753-8078 FAX 06-6753-8079', seal_address_tel_style)
-        row_no += 1
+                    row_no += 1
 
-        ws.row(row_no).height = space_height
-        ws.write(row_no, 0, '', border_left)
-        ws.write(row_no, 6, '', border_left)
-        ws.write(row_no, 10, '', border_right)
-        row_no += 1
+            ws.write_merge(40, 40, 0, 6, '※備考', LINE_TOP)
+            ws.write_merge(40, 40, 7, 8, '小　計', TTL_CENTER)
+            ws.write_merge(40, 40, 9, 10, sub_total, TTR_RIGHT)
+            ws.write_merge(41, 41, 7, 8, '消費税（10%）', TL_CENTER)        
+            ws.write_merge(41, 41, 9, 10, tax, TR_RIGHT)
+            ws.write_merge(42, 42, 7, 8, '保険代（非課税）', TL_CENTER)
+            ws.write_merge(42, 42, 9, 10, fee, TR_RIGHT)
+            ws.write_merge(43, 43, 7, 8, '合　計', TBL_CENTER)
+            ws.write_merge(43, 43, 9, 10, total, TBR_RIGHT_TOTAL)
 
-        ws.row(row_no).height = space_height
-        for i in range(0, 11):
-            ws.write(row_no, i, '', border_top)
-        row_no += 1
-
-        ws.write(row_no, 5, '下記の通り御請求申し上げます。', font_11_left)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 13.5)
-
-        ws.write_merge(row_no, row_no, 0, 2, '運送方法', font_11_center_with_border)
-        ws.write_merge(row_no, row_no + 1, 5, 7, '御請求金額', billed_deadline_label_style)
-        ws.write_merge(row_no, row_no + 1, 8, 10, total, billing_amount_value_style)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 13.5)
-
-        shipping_method_label = '発送'
-        if shipping_method == 'D': shipping_method_label = '発送'
-        if shipping_method == 'R': shipping_method_label = '引取'
-        if shipping_method == 'C': shipping_method_label = 'ID変更'
-        if shipping_method == 'B': shipping_method_label = '* 空白'
-
-        ws.write_merge(row_no, row_no, 0, 2, shipping_method_label, font_11_center_with_border)
-        row_no += 1
-        ws.row(row_no).height = int(20 * 8.25)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 13.5)
-        ws.row(row_no+1).height = int(20 * 13.5)
-
-        ws.write_merge(row_no, row_no, 0, 2, 'お支払方法', font_11_center_with_border)
-        ws.write_merge(row_no + 1, row_no + 1, 0, 2, '振込', font_11_center_with_border)
-
-        ws.write_merge(row_no, row_no + 1, 5, 7, 'お支払期限', billed_deadline_label_style)
-        ws.write_merge(row_no, row_no + 1, 8, 10, payment_due_date, billed_deadline_value_style)
-        row_no += 2
-
-        ws.row(row_no).height = space_height
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 14.1)
-        ws.write(row_no, 0, '※ お振込み手数料は貴社ご負担でお願い致します。', font_11_left)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 15)
-
-        ws.write_merge(row_no, row_no, 0, 1, '振込先口座', transfer_account_style)
-        ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 15)
-
-        # ws.write(row_no, 0, '', border_left)
-        # ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
-        # row_no += 1
-
-        ws.write(row_no, 0, '', border_left)
-        ws.write_merge(row_no, row_no, 2, 10, '', font_11_left_with_border)
-        row_no += 1
-
-        ws.row(row_no).height = space_height
-        for i in range(0, 11):
-            ws.write(row_no, i, '', border_top)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 17.25)
-        ws.write(row_no, 0, '内容をご確認の上、ご捺印後弊社まで返信お願いします。', font_11_left)
-        ws.write(row_no, 7, 'FAX 06-6753-8079', font_14_left1)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 14.1)
-        ws.write(row_no, 0, '※ 請求書原本が必要な場合は必ずチェックしてください。　【　必要　・　不要　】', font_11_left)
-        row_no += 1
-
-        ws.row(row_no).height = int(20 * 15)
-
-        ws.write(row_no, 0, 'No.{}'.format(contract_id), xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz left'))
+            ws.write_merge(45, 45, 0, 3, 'No.{}'.format(contract_id), F11)
         
         wb.save(response)
         return response
@@ -2051,45 +2350,26 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
         s_dot_rtb = xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top dotted, bottom dotted, right dotted;')
         s_dot_tb = xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, bottom_color black, top dotted, bottom dotted')
 
-        for i in range(25):
-            ws.col(i).width = c_w
-        ws.col(4).width = ws.col(14).width = int(256 * 5.5)
+        TTL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left medium, right thin, bottom thin;')
+        TT_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, bottom_color black, right_color black, top medium, right thin, bottom thin;')
+        TTR_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left thin, right medium, bottom thin;')
+        TC_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: bottom_color black, right_color black, right thin, bottom thin;', num_format_str='#,###')
+        TR_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: bottom_color black, right_color black, right medium, bottom thin;', num_format_str='#,###')
+        F11 = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on;')
+        LINE_TOP = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on; borders: top_color black, top medium;')
+        TTR_RIGHT = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz right, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top medium, left thin, right medium, bottom thin;', num_format_str='#,###')
+        TL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: bottom_color black, left_color black, right_color black, right thin, bottom thin, left medium;')
+        TBL_CENTER = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: horiz center, vert center, wrap on; borders: left_color black, bottom_color black, right_color black, left medium, right thin, bottom medium;')
+        TBR_RIGHT_TOTAL = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック, bold on; align: horiz right, vert center, wrap on; borders: bottom_color black, right_color black, right medium, bottom medium;', num_format_str='"¥"#,###')
+        TL = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: wrap on; borders: bottom_color black, left_color black, right_color black, right thin, bottom thin, left medium;')
+
+        
 
         for i in range(1, 80):
             ws.row(i).height_mismatch = True
             ws.row(i).height = cell_height
 
-        row_no = 0
-
-        ws.row(row_no).height_mismatch = True
-        ws.row(row_no).height = int(20 * 39)
-
-        ws.write_merge(row_no, row_no, 4, 20, '売買契約書', xlwt.easyxf('font: height 400, name ＭＳ 明朝, color black, bold on; align: vert center, horiz center, wrap on; borders: bottom_color black, bottom double;'))
-        row_no += 1
-        ws.row(row_no).height = int(20 * 15)
-        ws.write_merge(row_no, row_no, 23, 24, 'No', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz left; borders: bottom_color black, bottom dotted'))
         
-        row_no += 1
-        ws.row(row_no).height = int(20 * 15)
-        row_no += 1
-        ws.write_merge(row_no, row_no, 0, 6, '会　　社　　名', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, left thin, right dotted, bottom  dotted;'))
-        ws.write_merge(row_no, row_no, 7, 17, '住　　　　　　所', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right dotted'))
-        ws.write_merge(row_no, row_no, 18, 24, '電　　　　　話', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right thin;'))
-
-        row_no += 1
-        ws.write_merge(row_no, row_no, 0, 6, company, xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, bottom thin, left thin, right dotted;'))
-        ws.write_merge(row_no, row_no, 7, 17, address, xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, bottom thin, right dotted;'))
-        ws.write_merge(row_no, row_no, 18, 24, tel, xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, bottom thin, right thin;'))
-
-        row_no += 1
-        ws.write_merge(row_no, row_no + 29, 0, 0, '契\n\n\n\n\n約\n\n\n\n\n条\n\n\n\n\n項', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom thin, left thin, right dotted;'))
-        ws.write_merge(row_no, row_no, 1, 8, '品　　　　　名', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right dotted;'))
-        ws.write_merge(row_no, row_no, 9, 10, '台数', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right dotted;'))
-        ws.write_merge(row_no, row_no, 11, 13, '単　価', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right dotted;'))
-        ws.write_merge(row_no, row_no, 14, 17, '金　　　　額', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right dotted;'))
-        ws.write_merge(row_no, row_no, 18, 24, '備　　　　　考', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right thin;'))
-
-        row_no += 1
 
         product_formset = ProductFormSet(
             self.request.POST,
@@ -2099,91 +2379,20 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
         total_quantity = total_price = 0
 
         num_of_products = product_formset.total_form_count()
-        if num_of_products:
-            for form in product_formset.forms:
-                form.is_valid()
-                id = form.cleaned_data.get('product_id')
-                product_name = Product.objects.get(id=id).name
-                quantity = form.cleaned_data.get('quantity', 0)
-                price = form.cleaned_data.get('price', 0)
-                amount = quantity * price
 
-                total_quantity += quantity
-                total_price += price
-
-                ws.write_merge(row_no, row_no, 1, 8, product_name, s_dot_rb)
-                ws.write_merge(row_no, row_no, 9, 10, quantity, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 11, 13, price, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 14, 17, amount, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 18, 24, '', s_dot_b_thin_r)
-
-                row_no += 1
-
-        # Document Table
         document_formset = DocumentFormSet(
             self.request.POST,
             prefix='document'
         )
         num_of_documents = document_formset.total_form_count()
-        if num_of_documents:
-            for form in document_formset.forms:
-                form.is_valid()
-                id = form.cleaned_data.get('document_id')
-                document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
-                quantity = form.cleaned_data.get('quantity', 0)
-                price = form.cleaned_data.get('price', 0)
-                amount = quantity * price
 
-                total_quantity += quantity
-                total_price += price
-
-                ws.write_merge(row_no, row_no, 1, 8, document_name, s_dot_rb)
-                ws.write_merge(row_no, row_no, 9, 10, quantity, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 11, 13, price, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 14, 17, amount, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 18, 24, '', s_dot_b_thin_r)
-
-                row_no += 1
-        
         document_fee_formset = DocumentFeeFormSet(
             self.request.POST,
             prefix='document_fee'
         )
         num_of_document_fees = document_fee_formset.total_form_count()
-        if num_of_document_fees:
-            for form in document_fee_formset.forms:
-                form.is_valid()
-                id = form.cleaned_data.get('document_fee_id')
-                document_fee = DocumentFee.objects.get(id=id)
-                type = document_fee.type
-                model_count = form.cleaned_data.get('model_count', 0)
-                unit_count = form.cleaned_data.get('unit_count', 0)
-                model_price = document_fee.model_price
-                unit_price = document_fee.unit_price
-                amount = model_price * model_count + unit_price * unit_count + document_fee.application_fee
 
-                total_quantity += model_count
-                total_price += unit_count
-                
-                ws.write_merge(row_no, row_no, 1, 8, str(dict(TYPE_CHOICES)[type]), s_dot_rb)
-                ws.write_merge(row_no, row_no, 9, 10, model_count, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 11, 13, unit_count, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 14, 17, amount, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 18, 24, '', s_dot_b_thin_r)
-
-                row_no += 1
-        
         total_number = num_of_products + num_of_documents + num_of_document_fees
-        if total_number < 12:
-            for i in range(0, 12 - total_number):
-
-                ws.write_merge(row_no, row_no, 1, 8, None, s_dot_rb)
-                ws.write_merge(row_no, row_no, 9, 10, None, s_dot_rb)
-                ws.write_merge(row_no, row_no, 11, 13, None, s_dot_rb)
-                ws.write_merge(row_no, row_no, 14, 17, None, s_dot_rb)
-                ws.write_merge(row_no, row_no, 18, 24, None, s_dot_b_thin_r)
-
-                row_no += 1
 
         remarks = contract_form.data.get('remarks')
         sub_total = contract_form.data.get('sub_total')
@@ -2209,203 +2418,398 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             fee = 0
             total = 0
 
-        ws.write_merge(row_no, row_no, 1, 8, '小　　　　　　　計', s_dot_rb)
-        ws.write_merge(row_no, row_no, 9, 10, None, s_dot_rb_num)
-        ws.write_merge(row_no, row_no, 11, 13, None, s_dot_rb_num)
-        ws.write_merge(row_no, row_no, 14, 17, sub_total, s_dot_rb_num)
-        ws.write_merge(row_no, row_no, 18, 24, None, s_dot_b_thin_r)
-
-        row_no += 1
-        ws.write_merge(row_no, row_no, 1, 8, '消　　　費　　　税', s_dot_rb)
-        ws.write_merge(row_no, row_no, 9, 10, None, s_dot_rb_num)
-        ws.write_merge(row_no, row_no, 11, 13, None, s_dot_rb_num)
-        ws.write_merge(row_no, row_no, 14, 17, tax, s_dot_rb_num)
-        ws.write_merge(row_no, row_no, 18, 24, None, s_dot_b_thin_r)
-
-        row_no += 1
-        ws.write_merge(row_no, row_no, 1, 8, '合　　　　　　　計', s_dot_rb)
-        ws.write_merge(row_no, row_no, 9, 10, total_quantity, s_dot_rb_num)
-        ws.write_merge(row_no, row_no, 11, 13, total_price, s_dot_rb_num)
-        ws.write_merge(row_no, row_no, 14, 17, total, xlwt.easyxf('font: height 280, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, bottom dotted, right dotted;', num_format_str='#,##0'))
-        ws.write_merge(row_no, row_no, 18, 24, None, s_dot_b_thin_r)
-
-        row_no += 1
-        ws.row(row_no).height = int(20 * 6)
-        ws.write(row_no, 24, None, s_thin_r)
-
-        row_no += 1
-        ws.row(row_no).height = int(cell_height / 2)
-        ws.row(row_no + 1).height = int(cell_height / 2)
-        ws.write_merge(row_no, row_no + 1, 1, 3, '契　約　日', s_dot_rtb)
-        # ws.write_merge(row_no, row_no + 1, 4, 4, '令和', s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 4, 5, None, s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 6, 6, '年', s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 7, 7, None, s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 8, 8, '月', s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 9, 9, None, s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 10, 10, '日', s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 11, 13, '納品予定日', s_dot_tb)
-        # ws.write_merge(row_no, row_no + 1, 14, 14, '令和', s_dot_tb)
-        shipping_date = getDate(shipping_date)
-
-        ws.write_merge(row_no, row_no + 1, 14, 15, str(shipping_date.year) if shipping_date else None, s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 16, 16, '年', s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 17, 17, str(shipping_date.month) if shipping_date else None, s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 18, 18, '月', s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 19, 19, str(shipping_date.day) if shipping_date else None, s_dot_tb)
-        ws.write_merge(row_no, row_no + 1, 20, 20, '日', s_dot_tb)
-        ws.write(row_no, 21, 'AM', s_none)
-        ws.write(row_no + 1, 21, 'PM', s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 22, 24, None, s_dot_tb_thin_r)
-
-        row_no += 2
-        ws.row(row_no).height = int(cell_height / 2)
-        ws.row(row_no + 1).height = int(cell_height / 2)
-        ws.write_merge(row_no, row_no + 1, 1, 3, '集　金　日', s_dot_rb)
-        # ws.write_merge(row_no, row_no + 1, 4, 4, '令和', s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 4, 5, None, s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 6, 6, '年', s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 7, 7, None, s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 8, 8, '月', s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 9, 9, None, s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 10, 10, '日', s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 11, 13, '開　店　日', s_dot_b)
-        # ws.write_merge(row_no, row_no + 1, 14, 14, '令和', s_dot_b)
-        opening_date = getDate(opening_date)
-        ws.write_merge(row_no, row_no + 1, 14, 15, str(opening_date.year) if opening_date else None, s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 16, 16, '年', s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 17, 17, str(opening_date.month) if opening_date else None, s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 18, 18, '月', s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 19, 19, str(opening_date.day) if opening_date else None, s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 20, 20, '日', s_dot_b)
-        ws.write(row_no, 21, 'AM', s_none)
-        ws.write(row_no + 1, 21, 'PM', s_dot_b)
-        ws.write_merge(row_no, row_no + 1, 22, 24, None, s_dot_b_thin_r)
-
-        row_no += 2
-        ws.write_merge(row_no, row_no, 1, 4, 'お 支 払 方 法', s_dot_rb)
-        ws.write_merge(row_no, row_no, 5, 16, '現金一括　・　現金及び手形　・　手形', s_dot_rb)
-        ws.write(row_no, 24, None, s_thin_r)
         
-        row_no += 1
-        ws.row(row_no).height = int(20 * 18)
-        ws.write_merge(row_no, row_no + 5, 1, 4, '現金及び手形　　によるお支払', s_dot_rb)
-        ws.write_merge(row_no, row_no, 5, 10, '現金・小切手・振込', s_dot_rb)
-        ws.write_merge(row_no, row_no, 11, 12, '期日', s_dot_rb)
-        ws.write(row_no, 13, ':', s_dot_rb)
-        # ws.write(row_no, 14, '令和', s_dot_rb)
-        ws.write_merge(row_no, row_no, 14, 15, None, s_dot_rb)
-        ws.write(row_no, 16, '年', s_dot_rb)
-        ws.write(row_no, 17, None, s_dot_rtb)
-        ws.write(row_no, 18, '月', s_dot_rtb)
-        ws.write(row_no, 19, None, s_dot_rtb)
-        ws.write(row_no, 20, '日', s_dot_rtb)
-        ws.write_merge(row_no, row_no, 21, 24, None, s_dot_tb_thin_r)
+        
+        if total_number < 12:
+            for i in range(25):
+                ws.col(i).width = c_w
+            ws.col(4).width = ws.col(14).width = int(256 * 5.5)
 
-        milestone_formset = MilestoneFormSet(
-            self.request.POST,
-            prefix='milestone'
-        )
+            row_no = 0
 
-        ind = 0
-        for form in milestone_formset.forms:
-            form.is_valid()
-            date = form.cleaned_data.get('date')
-            year = str(date.year)[0:4] if date else None
-            month = date.month if date else None
-            day = date.day if date else None
+            ws.row(row_no).height_mismatch = True
+            ws.row(row_no).height = int(20 * 39)
 
-            amount = form.cleaned_data.get('amount')
+            ws.write_merge(row_no, row_no, 4, 20, '売買契約書', xlwt.easyxf('font: height 400, name ＭＳ 明朝, color black, bold on; align: vert center, horiz center, wrap on; borders: bottom_color black, bottom double;'))
+            row_no += 1
+            ws.row(row_no).height = int(20 * 15)
+            ws.write_merge(row_no, row_no, 23, 24, 'No', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz left; borders: bottom_color black, bottom dotted'))
+            
+            row_no += 1
+            ws.row(row_no).height = int(20 * 15)
+            row_no += 1
+            ws.write_merge(row_no, row_no, 0, 6, '会　　社　　名', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, left thin, right dotted, bottom  dotted;'))
+            ws.write_merge(row_no, row_no, 7, 17, '住　　　　　　所', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right dotted'))
+            ws.write_merge(row_no, row_no, 18, 24, '電　　　　　話', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right thin;'))
 
             row_no += 1
+            ws.write_merge(row_no, row_no, 0, 6, company, xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, bottom thin, left thin, right dotted;'))
+            ws.write_merge(row_no, row_no, 7, 17, address, xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, bottom thin, right dotted;'))
+            ws.write_merge(row_no, row_no, 18, 24, tel, xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, bottom thin, right thin;'))
+
+            row_no += 1
+            ws.write_merge(row_no, row_no + 29, 0, 0, '契\n\n\n\n\n約\n\n\n\n\n条\n\n\n\n\n項', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom thin, left thin, right dotted;'))
+            ws.write_merge(row_no, row_no, 1, 8, '品　　　　　名', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right dotted;'))
+            ws.write_merge(row_no, row_no, 9, 10, '台数', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right dotted;'))
+            ws.write_merge(row_no, row_no, 11, 13, '単　価', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right dotted;'))
+            ws.write_merge(row_no, row_no, 14, 17, '金　　　　額', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right dotted;'))
+            ws.write_merge(row_no, row_no, 18, 24, '備　　　　　考', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom dotted, right thin;'))
+
+            row_no += 1
+
+            if num_of_products:
+                for form in product_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('product_id')
+                    product_name = Product.objects.get(id=id).name
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    total_quantity += quantity
+                    total_price += price
+
+                    ws.write_merge(row_no, row_no, 1, 8, product_name, s_dot_rb)
+                    ws.write_merge(row_no, row_no, 9, 10, quantity, s_dot_rb_num)
+                    ws.write_merge(row_no, row_no, 11, 13, price, s_dot_rb_num)
+                    ws.write_merge(row_no, row_no, 14, 17, amount, s_dot_rb_num)
+                    ws.write_merge(row_no, row_no, 18, 24, '', s_dot_b_thin_r)
+
+                    row_no += 1
+
+            # Document Table
+            if num_of_documents:
+                for form in document_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('document_id')
+                    document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    total_quantity += quantity
+                    total_price += price
+
+                    ws.write_merge(row_no, row_no, 1, 8, document_name, s_dot_rb)
+                    ws.write_merge(row_no, row_no, 9, 10, quantity, s_dot_rb_num)
+                    ws.write_merge(row_no, row_no, 11, 13, price, s_dot_rb_num)
+                    ws.write_merge(row_no, row_no, 14, 17, amount, s_dot_rb_num)
+                    ws.write_merge(row_no, row_no, 18, 24, '', s_dot_b_thin_r)
+
+                    row_no += 1
+            
+            if num_of_document_fees:
+                for form in document_fee_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('document_fee_id')
+                    document_fee = DocumentFee.objects.get(id=id)
+                    type = document_fee.type
+                    model_count = form.cleaned_data.get('model_count', 0)
+                    unit_count = form.cleaned_data.get('unit_count', 0)
+                    model_price = document_fee.model_price
+                    unit_price = document_fee.unit_price
+                    amount = model_price * model_count + unit_price * unit_count + document_fee.application_fee
+
+                    total_quantity += model_count
+                    total_price += unit_count
+                    
+                    ws.write_merge(row_no, row_no, 1, 8, str(dict(TYPE_CHOICES)[type]), s_dot_rb)
+                    ws.write_merge(row_no, row_no, 9, 10, model_count, s_dot_rb_num)
+                    ws.write_merge(row_no, row_no, 11, 13, unit_count, s_dot_rb_num)
+                    ws.write_merge(row_no, row_no, 14, 17, amount, s_dot_rb_num)
+                    ws.write_merge(row_no, row_no, 18, 24, '', s_dot_b_thin_r)
+
+                    row_no += 1
+
+            for i in range(0, 12 - total_number):
+
+                ws.write_merge(row_no, row_no, 1, 8, None, s_dot_rb)
+                ws.write_merge(row_no, row_no, 9, 10, None, s_dot_rb)
+                ws.write_merge(row_no, row_no, 11, 13, None, s_dot_rb)
+                ws.write_merge(row_no, row_no, 14, 17, None, s_dot_rb)
+                ws.write_merge(row_no, row_no, 18, 24, None, s_dot_b_thin_r)
+
+                row_no += 1
+
+            ws.write_merge(row_no, row_no, 1, 8, '小　　　　　　　計', s_dot_rb)
+            ws.write_merge(row_no, row_no, 9, 10, None, s_dot_rb_num)
+            ws.write_merge(row_no, row_no, 11, 13, None, s_dot_rb_num)
+            ws.write_merge(row_no, row_no, 14, 17, sub_total, s_dot_rb_num)
+            ws.write_merge(row_no, row_no, 18, 24, None, s_dot_b_thin_r)
+
+            row_no += 1
+            ws.write_merge(row_no, row_no, 1, 8, '消　　　費　　　税', s_dot_rb)
+            ws.write_merge(row_no, row_no, 9, 10, None, s_dot_rb_num)
+            ws.write_merge(row_no, row_no, 11, 13, None, s_dot_rb_num)
+            ws.write_merge(row_no, row_no, 14, 17, tax, s_dot_rb_num)
+            ws.write_merge(row_no, row_no, 18, 24, None, s_dot_b_thin_r)
+
+            row_no += 1
+            ws.write_merge(row_no, row_no, 1, 8, '合　　　　　　　計', s_dot_rb)
+            ws.write_merge(row_no, row_no, 9, 10, total_quantity, s_dot_rb_num)
+            ws.write_merge(row_no, row_no, 11, 13, total_price, s_dot_rb_num)
+            ws.write_merge(row_no, row_no, 14, 17, total, xlwt.easyxf('font: height 280, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, bottom dotted, right dotted;', num_format_str='#,##0'))
+            ws.write_merge(row_no, row_no, 18, 24, None, s_dot_b_thin_r)
+
+            row_no += 1
+            ws.row(row_no).height = int(20 * 6)
+            ws.write(row_no, 24, None, s_thin_r)
+
+            row_no += 1
+            ws.row(row_no).height = int(cell_height / 2)
+            ws.row(row_no + 1).height = int(cell_height / 2)
+            ws.write_merge(row_no, row_no + 1, 1, 3, '契　約　日', s_dot_rtb)
+            # ws.write_merge(row_no, row_no + 1, 4, 4, '令和', s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 4, 5, None, s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 6, 6, '年', s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 7, 7, None, s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 8, 8, '月', s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 9, 9, None, s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 10, 10, '日', s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 11, 13, '納品予定日', s_dot_tb)
+            # ws.write_merge(row_no, row_no + 1, 14, 14, '令和', s_dot_tb)
+            shipping_date = getDate(shipping_date)
+
+            ws.write_merge(row_no, row_no + 1, 14, 15, str(shipping_date.year) if shipping_date else None, s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 16, 16, '年', s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 17, 17, str(shipping_date.month) if shipping_date else None, s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 18, 18, '月', s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 19, 19, str(shipping_date.day) if shipping_date else None, s_dot_tb)
+            ws.write_merge(row_no, row_no + 1, 20, 20, '日', s_dot_tb)
+            ws.write(row_no, 21, 'AM', s_none)
+            ws.write(row_no + 1, 21, 'PM', s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 22, 24, None, s_dot_tb_thin_r)
+
+            row_no += 2
+            ws.row(row_no).height = int(cell_height / 2)
+            ws.row(row_no + 1).height = int(cell_height / 2)
+            ws.write_merge(row_no, row_no + 1, 1, 3, '集　金　日', s_dot_rb)
+            # ws.write_merge(row_no, row_no + 1, 4, 4, '令和', s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 4, 5, None, s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 6, 6, '年', s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 7, 7, None, s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 8, 8, '月', s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 9, 9, None, s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 10, 10, '日', s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 11, 13, '開　店　日', s_dot_b)
+            # ws.write_merge(row_no, row_no + 1, 14, 14, '令和', s_dot_b)
+            opening_date = getDate(opening_date)
+            ws.write_merge(row_no, row_no + 1, 14, 15, str(opening_date.year) if opening_date else None, s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 16, 16, '年', s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 17, 17, str(opening_date.month) if opening_date else None, s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 18, 18, '月', s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 19, 19, str(opening_date.day) if opening_date else None, s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 20, 20, '日', s_dot_b)
+            ws.write(row_no, 21, 'AM', s_none)
+            ws.write(row_no + 1, 21, 'PM', s_dot_b)
+            ws.write_merge(row_no, row_no + 1, 22, 24, None, s_dot_b_thin_r)
+
+            row_no += 2
+            ws.write_merge(row_no, row_no, 1, 4, 'お 支 払 方 法', s_dot_rb)
+            ws.write_merge(row_no, row_no, 5, 16, '現金一括　・　現金及び手形　・　手形', s_dot_rb)
+            ws.write(row_no, 24, None, s_thin_r)
+            
+            row_no += 1
             ws.row(row_no).height = int(20 * 18)
-            if ind == 0:
-                ws.write_merge(row_no, row_no, 5, 6, '手形', s_dot_rb)
-                ws.write_merge(row_no, row_no, 7, 8, None, s_dot_rb)
-                ws.write_merge(row_no, row_no, 9, 10, '初回', s_dot_rb)
-            else:
-                ws.write_merge(row_no, row_no, 5, 8, None, s_dot_rb)
-                ws.write_merge(row_no, row_no, 9, 10, str(ind + 1) + '回', s_dot_rb)
+            ws.write_merge(row_no, row_no + 5, 1, 4, '現金及び手形　　によるお支払', s_dot_rb)
+            ws.write_merge(row_no, row_no, 5, 10, '現金・小切手・振込', s_dot_rb)
             ws.write_merge(row_no, row_no, 11, 12, '期日', s_dot_rb)
             ws.write(row_no, 13, ':', s_dot_rb)
             # ws.write(row_no, 14, '令和', s_dot_rb)
-            ws.write_merge(row_no, row_no, 14, 15, year, s_dot_rb)
+            ws.write_merge(row_no, row_no, 14, 15, None, s_dot_rb)
             ws.write(row_no, 16, '年', s_dot_rb)
-            ws.write(row_no, 17, month, s_dot_rb)
-            ws.write(row_no, 18, '月', s_dot_rb)
-            ws.write(row_no, 19, day, s_dot_rb)
-            ws.write(row_no, 20, '日', s_dot_rb)
-            ws.write_merge(row_no, row_no, 21, 24, amount, xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, bottom dotted, right thin;',  num_format_str='#,##0'))
+            ws.write(row_no, 17, None, s_dot_rtb)
+            ws.write(row_no, 18, '月', s_dot_rtb)
+            ws.write(row_no, 19, None, s_dot_rtb)
+            ws.write(row_no, 20, '日', s_dot_rtb)
+            ws.write_merge(row_no, row_no, 21, 24, None, s_dot_tb_thin_r)
 
-            ind += 1
+            milestone_formset = MilestoneFormSet(
+                self.request.POST,
+                prefix='milestone'
+            )
 
-        row_no += 1
-        ws.write_merge(row_no, row_no, 1, 12, '上記の通り契約いたしました', s_none)
-        # ws.write_merge(row_no, row_no, 15, 16, '令和', s_none)
-        ws.write_merge(row_no, row_no, 15, 17, None, s_none)
-        ws.write(row_no, 18, '年', s_none)
-        ws.write(row_no, 19, None, s_none)
-        ws.write(row_no, 20, '月', s_none)
-        ws.write(row_no, 21, None, s_none)
-        ws.write(row_no, 22, '日', s_none)
-        ws.write_merge(row_no, row_no, 23, 24, None, s_thin_r)
-        
-        row_no += 1
-        ws.row(row_no).height = int(20 * 8.25)
-        ws.write_merge(row_no, row_no, 1, 24, None, xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, top dotted, right_color black, right thin, bottom_color black, bottom thin;'))
+            ind = 0
+            for form in milestone_formset.forms:
+                form.is_valid()
+                date = form.cleaned_data.get('date')
+                year = str(date.year)[0:4] if date else None
+                month = date.month if date else None
+                day = date.day if date else None
 
-        row_no += 1
-        ws.row(row_no).height = int(20 * 6)
-        ws.write_merge(row_no, row_no, 0, 24, None, xlwt.easyxf('borders: bottom_color black, bottom thin'))
+                amount = form.cleaned_data.get('amount')
 
-        row_no += 1
-        ws.row(row_no).height = int(20 * 13.5)
-        ws.row(row_no + 1).height = int(20 * 13.5)
-        ws.row(row_no + 2).height = int(20 * 22.5)
-        ws.row(row_no + 3).height = int(20 * 16.5)
-        ws.row(row_no + 4).height = int(20 * 15)
-        ws.row(row_no + 5).height = int(20 * 15)
-        ws.write_merge(row_no, row_no + 5, 0, 0, '買\n\n\n\n\n主', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, right_color black, left thin, right thin;'))
-        ws.write_merge(row_no, row_no + 1, 1, 11, '〒537-0021 \n大阪府大阪市東成区東中本2-4-15', xlwt.easyxf('font: height 180, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
-        ws.write_merge(row_no + 2, row_no + 2, 1, 11, 'バッジオ株式会社', xlwt.easyxf('font: height 360, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
-        ws.write_merge(row_no + 3, row_no + 3, 1, 11, '代表取締役　　　金　　昇志', xlwt.easyxf('font: height 240, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
-        ws.write_merge(row_no + 4, row_no + 4, 1, 11, 'TEL　06-6753-8078', xlwt.easyxf('font: height 220, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
-        ws.write_merge(row_no + 5, row_no + 5, 1, 11, 'FAX　06-6753-8079', xlwt.easyxf('font: height 220, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
-        ws.write_merge(row_no, row_no + 4, 12, 12, None, s_none)
-        ws.write(row_no + 5, 12, '㊞', s_dot_rb)
-        
-        ws.write_merge(row_no, row_no + 5, 13, 13, '売\n\n\n\n\n主', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, right_color black, left thin, right thin;'))
-        ws.write_merge(row_no, row_no + 5, 14, 23, None, xlwt.easyxf('font: height 180, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
-        # ws.write_merge(row_no + 2, row_no + 2, 14, 23, None, xlwt.easyxf('font: height 360, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
-        # ws.write_merge(row_no + 3, row_no + 3, 14, 23, None, xlwt.easyxf('font: height 240, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
-        # ws.write_merge(row_no + 4, row_no + 4, 14, 23, None, xlwt.easyxf('font: height 220, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
-        # ws.write_merge(row_no + 5, row_no + 5, 14, 23, None, xlwt.easyxf('font: height 220, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
-        ws.write_merge(row_no, row_no + 4, 24, 24, None, xlwt.easyxf('font: height 220, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: right_color black, right thin;'))
-        ws.write(row_no + 5, 24, '㊞', s_dot_b_thin_r)
-        
-        row_no += 6
-        ws.row(row_no).height = int(20 * 12)
-        ws.write_merge(row_no, row_no, 0, 24, None, xlwt.easyxf('borders: top_color black, top thin'))
+                row_no += 1
+                ws.row(row_no).height = int(20 * 18)
+                if ind == 0:
+                    ws.write_merge(row_no, row_no, 5, 6, '手形', s_dot_rb)
+                    ws.write_merge(row_no, row_no, 7, 8, None, s_dot_rb)
+                    ws.write_merge(row_no, row_no, 9, 10, '初回', s_dot_rb)
+                else:
+                    ws.write_merge(row_no, row_no, 5, 8, None, s_dot_rb)
+                    ws.write_merge(row_no, row_no, 9, 10, str(ind + 1) + '回', s_dot_rb)
+                ws.write_merge(row_no, row_no, 11, 12, '期日', s_dot_rb)
+                ws.write(row_no, 13, ':', s_dot_rb)
+                # ws.write(row_no, 14, '令和', s_dot_rb)
+                ws.write_merge(row_no, row_no, 14, 15, year, s_dot_rb)
+                ws.write(row_no, 16, '年', s_dot_rb)
+                ws.write(row_no, 17, month, s_dot_rb)
+                ws.write(row_no, 18, '月', s_dot_rb)
+                ws.write(row_no, 19, day, s_dot_rb)
+                ws.write(row_no, 20, '日', s_dot_rb)
+                ws.write_merge(row_no, row_no, 21, 24, amount, xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, bottom dotted, right thin;',  num_format_str='#,##0'))
 
-        row_no += 1
-        ws.row(row_no).height = int(20 * 18)
-        ws.write_merge(row_no, row_no, 0, 24, '※ お振込み手数料は御社負担でお願い致します。', xlwt.easyxf('font: height 200, name ＭＳ 明朝, bold on; align: vert center, horiz right, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom double, left medium, right thin;'))
+                ind += 1
 
-        row_no += 1
-        ws.write_merge(row_no, row_no, 0, 24, ' ＜振込先＞', xlwt.easyxf('font: height 300, name ＭＳ 明朝; align: vert center, horiz left, wrap on; borders: left_color black, bottom_color black, right_color black, bottom thin, left medium, right thin;'))
+            row_no += 1
+            ws.write_merge(row_no, row_no, 1, 12, '上記の通り契約いたしました', s_none)
+            # ws.write_merge(row_no, row_no, 15, 16, '令和', s_none)
+            ws.write_merge(row_no, row_no, 15, 17, None, s_none)
+            ws.write(row_no, 18, '年', s_none)
+            ws.write(row_no, 19, None, s_none)
+            ws.write(row_no, 20, '月', s_none)
+            ws.write(row_no, 21, None, s_none)
+            ws.write(row_no, 22, '日', s_none)
+            ws.write_merge(row_no, row_no, 23, 24, None, s_thin_r)
+            
+            row_no += 1
+            ws.row(row_no).height = int(20 * 8.25)
+            ws.write_merge(row_no, row_no, 1, 24, None, xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, top dotted, right_color black, right thin, bottom_color black, bottom thin;'))
 
-        row_no += 1
-        ws.row(row_no).height = int(20 * 12)
+            row_no += 1
+            ws.row(row_no).height = int(20 * 6)
+            ws.write_merge(row_no, row_no, 0, 24, None, xlwt.easyxf('borders: bottom_color black, bottom thin'))
 
-        row_no += 1
-        ws.row(row_no).height = int(20 * 20.25)
-        ws.write_merge(row_no, row_no, 0, 24, '※売買証明書の弊社到着をもちまして契約が成立したものとします。', xlwt.easyxf('font: height 200, name ＭＳ 明朝, bold on; align: vert center, horiz left, wrap on;'))
+            row_no += 1
+            ws.row(row_no).height = int(20 * 13.5)
+            ws.row(row_no + 1).height = int(20 * 13.5)
+            ws.row(row_no + 2).height = int(20 * 22.5)
+            ws.row(row_no + 3).height = int(20 * 16.5)
+            ws.row(row_no + 4).height = int(20 * 15)
+            ws.row(row_no + 5).height = int(20 * 15)
+            ws.write_merge(row_no, row_no + 5, 0, 0, '買\n\n\n\n\n主', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, right_color black, left thin, right thin;'))
+            ws.write_merge(row_no, row_no + 1, 1, 11, '〒537-0021 \n大阪府大阪市東成区東中本2-4-15', xlwt.easyxf('font: height 180, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
+            ws.write_merge(row_no + 2, row_no + 2, 1, 11, 'バッジオ株式会社', xlwt.easyxf('font: height 360, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
+            ws.write_merge(row_no + 3, row_no + 3, 1, 11, '代表取締役　　　金　　昇志', xlwt.easyxf('font: height 240, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
+            ws.write_merge(row_no + 4, row_no + 4, 1, 11, 'TEL　06-6753-8078', xlwt.easyxf('font: height 220, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
+            ws.write_merge(row_no + 5, row_no + 5, 1, 11, 'FAX　06-6753-8079', xlwt.easyxf('font: height 220, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
+            ws.write_merge(row_no, row_no + 4, 12, 12, None, s_none)
+            ws.write(row_no + 5, 12, '㊞', s_dot_rb)
+            
+            ws.write_merge(row_no, row_no + 5, 13, 13, '売\n\n\n\n\n主', xlwt.easyxf('font: height 200, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: top_color black, left_color black, right_color black, left thin, right thin;'))
+            ws.write_merge(row_no, row_no + 5, 14, 23, None, xlwt.easyxf('font: height 180, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
+            # ws.write_merge(row_no + 2, row_no + 2, 14, 23, None, xlwt.easyxf('font: height 360, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
+            # ws.write_merge(row_no + 3, row_no + 3, 14, 23, None, xlwt.easyxf('font: height 240, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
+            # ws.write_merge(row_no + 4, row_no + 4, 14, 23, None, xlwt.easyxf('font: height 220, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
+            # ws.write_merge(row_no + 5, row_no + 5, 14, 23, None, xlwt.easyxf('font: height 220, name ＭＳ 明朝; align: vert center, horiz center, wrap on;'))
+            ws.write_merge(row_no, row_no + 4, 24, 24, None, xlwt.easyxf('font: height 220, name ＭＳ 明朝; align: vert center, horiz center, wrap on; borders: right_color black, right thin;'))
+            ws.write(row_no + 5, 24, '㊞', s_dot_b_thin_r)
+            
+            row_no += 6
+            ws.row(row_no).height = int(20 * 12)
+            ws.write_merge(row_no, row_no, 0, 24, None, xlwt.easyxf('borders: top_color black, top thin'))
 
-        row_no += 1
-        ws.write_merge(row_no, row_no, 0, 24, '購入証明書送付後、キャンセルした場合には売買成立代金の全額を賠償するものとします。', xlwt.easyxf('font: height 200, name ＭＳ 明朝, bold on; align: vert center, horiz left, wrap on;'))
+            row_no += 1
+            ws.row(row_no).height = int(20 * 18)
+            ws.write_merge(row_no, row_no, 0, 24, '※ お振込み手数料は御社負担でお願い致します。', xlwt.easyxf('font: height 200, name ＭＳ 明朝, bold on; align: vert center, horiz right, wrap on; borders: top_color black, left_color black, bottom_color black, right_color black, top thin, bottom double, left medium, right thin;'))
 
-        row_no += 1
-        ws.write_merge(row_no, row_no, 0, 24, '欠品、破損等のご連絡は商品到着後3日以内とします。それ以降の返品、交換は一切出来かねます。', xlwt.easyxf('font: height 180, name ＭＳ 明朝, bold on; align: vert center, horiz left, wrap on;'))
+            row_no += 1
+            ws.write_merge(row_no, row_no, 0, 24, ' ＜振込先＞', xlwt.easyxf('font: height 300, name ＭＳ 明朝; align: vert center, horiz left, wrap on; borders: left_color black, bottom_color black, right_color black, bottom thin, left medium, right thin;'))
+
+            row_no += 1
+            ws.row(row_no).height = int(20 * 12)
+
+            row_no += 1
+            ws.row(row_no).height = int(20 * 20.25)
+            ws.write_merge(row_no, row_no, 0, 24, '※売買証明書の弊社到着をもちまして契約が成立したものとします。', xlwt.easyxf('font: height 200, name ＭＳ 明朝, bold on; align: vert center, horiz left, wrap on;'))
+
+            row_no += 1
+            ws.write_merge(row_no, row_no, 0, 24, '購入証明書送付後、キャンセルした場合には売買成立代金の全額を賠償するものとします。', xlwt.easyxf('font: height 200, name ＭＳ 明朝, bold on; align: vert center, horiz left, wrap on;'))
+
+            row_no += 1
+            ws.write_merge(row_no, row_no, 0, 24, '欠品、破損等のご連絡は商品到着後3日以内とします。それ以降の返品、交換は一切出来かねます。', xlwt.easyxf('font: height 180, name ＭＳ 明朝, bold on; align: vert center, horiz left, wrap on;'))
+
+        else:
+            w_arr = [9.15, 8.04, 10.04, 2.04, 5.04, 8.04, 6.71, 7.15, 12.59, 6.71, 6.71]
+            for i in range(11): 
+                ws.col(i).width = int(300 * w_arr[i])
+
+            for i in range(56):
+                ws.row(i).height_mismatch = True
+                ws.row(i).height = int(20 * 18)
+            ws.row(44).height = int(20 * 3.75)
+            ws.row(45).height = int(20 * 15.75)
+
+            ####################################### Table #####################################
+            ws.write_merge(0, 0, 0, 6, '商　品　名', TTL_CENTER)
+            ws.write(0, 7, '数量', TT_CENTER)
+            ws.write(0, 8, '単　価', TT_CENTER)
+            ws.write_merge(0, 0, 9, 10, '金　額', TTR_CENTER)
+
+            row_no = 1
+
+            total_quantity = total_price = 0
+            ##### Products
+            if num_of_products:
+                for form in product_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('product_id')
+                    product_name = Product.objects.get(id=id).name
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    total_quantity += quantity
+                    total_price += price
+
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write(row_no, 7, quantity, TC_RIGHT)
+                    ws.write(row_no, 8, price, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
+
+                    row_no += 1
+
+            ###### Documents
+            if num_of_documents:
+                for form in document_formset.forms:
+                    form.is_valid()
+                    id = form.cleaned_data.get('document_id')
+                    document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    price = form.cleaned_data.get('price', 0)
+                    amount = quantity * price
+
+                    total_quantity += quantity
+                    total_price += price
+
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write(row_no, 7, quantity, TC_RIGHT)
+                    ws.write(row_no, 8, price, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
+
+                    row_no += 1
+
+            if total_number < 39:
+                for i in range(0, 39 - total_number):
+
+                    ws.write_merge(row_no, row_no, 0, 6, None, TL)
+                    ws.write(row_no, 7, None, TC_RIGHT)
+                    ws.write(row_no, 8, None, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
+
+                    row_no += 1
+
+            ws.write_merge(40, 40, 0, 6, '※備考', LINE_TOP)
+            ws.write_merge(40, 40, 7, 8, '小　計', TTL_CENTER)
+            ws.write_merge(40, 40, 9, 10, sub_total, TTR_RIGHT)
+            ws.write_merge(41, 41, 7, 8, '消費税（10%）', TL_CENTER)        
+            ws.write_merge(41, 41, 9, 10, tax, TR_RIGHT)
+            ws.write_merge(42, 42, 7, 8, '保険代（非課税）', TL_CENTER)
+            ws.write_merge(42, 42, 9, 10, fee, TR_RIGHT)
+            ws.write_merge(43, 43, 7, 8, '合　計', TBL_CENTER)
+            ws.write_merge(43, 43, 9, 10, total, TBR_RIGHT_TOTAL)
+
+            ws.write_merge(45, 45, 0, 3, 'No.{}'.format(contract_id), F11)
 
         wb.save(response)
         return response
