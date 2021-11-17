@@ -38,7 +38,7 @@ def getDate(date):
 class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
     def post(self, *args, **kwargs):
         top_padding_height = int(256 * 0.4)
-        cell_width_list = [ 256 *  10, 256 * 9, int(256 * 12.5), int(256 * 2.0), 
+        cell_width_list = [ 256 *  10, 256 * 10, int(256 * 11.5), int(256 * 2.0), 
                             int(256 * 4.5), int(256 * 7.5), 256 * 10, int(256 * 6.5),
                             int(256 * 13.5), int(256 * 8.5), int(256 * 7.5)]
         cell_height = int(20 * 15)
@@ -248,22 +248,22 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
         ws.row(6).height = space_height
         ws.row(7).height = height_16_5
         # ws.write(6, 0, 'TEL:', primary_text_style)
-        ws.write_merge(7, 7, 0, 1, 'FAX: {}'.format(fax), font_11_left)
-        ws.write_merge(7, 7, 2, 4, 'TEL {}'.format(tel), font_11_left)
+        ws.write_merge(7, 7, 0, 1, 'TEL {}'.format(tel), font_11_left)
+        ws.write_merge(7, 7, 2, 5, 'FAX: {}'.format(fax), font_11_left)
 
         ws.row(8).height = height_16_5
         ws.row(9).height = height_16_5
-        ws.write_merge(8, 9, 6, 10, "バッジオ株式会社", company_label_style1)
+        ws.write_merge(8, 9, 5, 10, "バッジオ株式会社", company_label_style1)
 
         ws.row(10).height = height_16_5
-        ws.write_merge(10, 10, 6, 10, "〒537-0021　大阪府大阪市東成区東中本2丁目4-15", font_11_left)
+        ws.write_merge(10, 10, 5, 10, "〒537-0021　大阪府大阪市東成区東中本2丁目4-15", font_11_left)
 
         ws.row(11).height = height_16_5
-        ws.write_merge(11, 11, 6, 10, "TEL 06-6753-8078 FAX 06-6753-8079", font_11_left)
+        ws.write_merge(11, 11, 5, 10, "TEL 06-6753-8078  FAX 06-6753-8079", font_11_left)
 
         ws.row(12).height = height_16_5
-        ws.write(12, 6, '担当：', font_11_left)
-        ws.write_merge(12, 12, 7, 10, person_in_charge, font_11_left)
+        ws.write(12, 5, '担当：', font_11_left)
+        ws.write_merge(12, 12, 6, 10, person_in_charge, font_11_left)
 
         ws.row(13).height = space_height
 

@@ -644,7 +644,7 @@ class HallPurchasesContractForm(forms.Form):
     remarks = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control h-197-px'}), required=False)
     sub_total = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control border-none', 'readonly': 'readonly'}), initial=0, required=False)
     tax = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control border-none', 'readonly': 'readonly'}), initial=0, required=False)
-    fee = forms.CharField(widget=forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly'}), initial=0, required=False)
+    fee = forms.CharField(widget=forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly', 'data-type': 'hall'}), initial=0, required=False)
     total = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control border-none', 'readonly': 'readonly'}), initial=0, required=False)
     shipping_date = forms.DateField(widget=forms.TextInput(attrs={'class': 'form-control daterange-single'}), input_formats=INPUT_FORMATS, required=False)
     opening_date = forms.DateField(widget=forms.TextInput(attrs={'class': 'form-control daterange-single'}), input_formats=INPUT_FORMATS, required=False)

@@ -4,7 +4,7 @@ function resetMangementForm(prefix) {
     $('#id_' + prefix + '-TOTAL_FORMS').val(numTotalForms);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
     // Set formset prefixes here
     var product_prefix = 'product';
@@ -35,8 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         $('#id_sub_total').val(sub_total.toLocaleString());
         $('#id_tax').val(tax_sum.toLocaleString());
-        $('#id_fee').val(fee_sum.toLocaleString());
-        console.log('[data-type]', $('#id_fee').prop('data-type'))
+        if ($('#id_fee').attr('data-type') != 'hall') {
+            $('#id_fee').val(fee_sum.toLocaleString());
+        }
         calculateTotal();
     }
 
@@ -52,14 +53,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // SetLang
-    $('a[data-lang]').click(function(e) {
+    $('a[data-lang]').click(function (e) {
         e.stopImmediatePropagation();
         e.preventDefault();
         var new_lang = $(e.currentTarget).data('lang');
         if (lang == new_lang) return;
 
         var url = document.URL.replace(/^(?:\/\/|[^/]+)*\/(ja|en)/, '');
-      
+
         $.ajax({
             type: 'POST',
             url: '/i18n/setlang/',
@@ -67,14 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 language: new_lang,
                 next: '/'
             },
-            beforeSend: function(request) {
+            beforeSend: function (request) {
                 request.setRequestHeader('X-CSRFToken', csrftoken);
             }
         })
-        .done(function() {
-            // Remove URL parameters to avoid date format inconsistency b/w English and Japanese
-            window.location.href = url.split('?')[0];
-        });
+            .done(function () {
+                // Remove URL parameters to avoid date format inconsistency b/w English and Japanese
+                window.location.href = url.split('?')[0];
+            });
     });
 
 
@@ -123,14 +124,14 @@ document.addEventListener('DOMContentLoaded', function() {
             $fs.find('input[name$="_sender_fax"]').val(null);
             return;
         }
-        
+
         $.ajax({
             type: 'POST',
             url: `/${lang}/master/sender/`,
             data: {
                 id: id,
             },
-            beforeSend: function(request) {
+            beforeSend: function (request) {
                 request.setRequestHeader('X-CSRFToken', csrftoken);
             },
             success: function (result) {
@@ -142,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Adding the product to ProductFormSet based table
-    $('button[name="add_product_btn"]').click( function (e) {
+    $('button[name="add_product_btn"]').click(function (e) {
         // unless product is selected, nothing happens
         var value = $('select.select-product').val();
         if (value == "") {
@@ -178,9 +179,9 @@ document.addEventListener('DOMContentLoaded', function() {
             autoWidth: false
         });
     });
-    
+
     // When clicking "Add Document" button
-    $('button[name="add_document_btn"]').click( function (e) {
+    $('button[name="add_document_btn"]').click(function (e) {
         // unless any document is selected, nothing happens
         var value = $('select.select-document').val();
         var document = $('select.select-document').children("option:selected").text();
@@ -216,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
             data: {
                 id: value,
             },
-            beforeSend: function(request) {
+            beforeSend: function (request) {
                 request.setRequestHeader('X-CSRFToken', csrftoken);
             },
             success: function (result) {
@@ -227,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // When clicking "Add Document Fee" button
-    $('button[name="add_document_fee_btn"]').click( function (e) {
+    $('button[name="add_document_fee_btn"]').click(function (e) {
         // unless any document is selected, nothing happens
         var value = $('select.select-document-fee').val();
         var document_fee = $('select.select-document-fee').children("option:selected").text();
@@ -260,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
             data: {
                 id: value,
             },
-            beforeSend: function(request) {
+            beforeSend: function (request) {
                 request.setRequestHeader('X-CSRFToken', csrftoken);
             },
             success: function (result) {
@@ -281,9 +282,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         return true;
     });
-    
 
-   // Adding change event lister to input field inside table-product
+
+    // Adding change event lister to input field inside table-product
     $('table.table-product').on('input', 'input[type="number"]', function (e) {
         // Calculate quantity * price and set it in id_product-xx-amount td element
         var $self = $(this);
