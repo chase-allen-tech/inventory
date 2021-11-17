@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#id_sub_total').val(sub_total.toLocaleString());
         $('#id_tax').val(tax_sum.toLocaleString());
         $('#id_fee').val(fee_sum.toLocaleString());
+        console.log('[data-type]', $('#id_fee').prop('data-type'))
         calculateTotal();
     }
 
