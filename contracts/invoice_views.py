@@ -216,8 +216,6 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
             total = 0
 
         #### Start drawing ###############################################################
-        prev_counter = 0
-        next_counter = 0
 
         ws.row(0).height_mismatch = True
         ws.row(0).height = top_padding_height
@@ -279,15 +277,18 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
             for form in product_formset.forms:
                 form.is_valid()
 
-                if prev_counter == 6:
-                    break
-                prev_counter += 1
+                # if prev_counter == 6:
+                #     break
+                # prev_counter += 1
 
                 id = form.cleaned_data.get('product_id')
                 product_name = Product.objects.get(id=id).name
                 quantity = form.cleaned_data.get('quantity', 0)
                 price = form.cleaned_data.get('price', 0)
                 amount = quantity * price
+
+                if total_number > 6: 
+                    continue
 
                 ws.row(row_no).height = height_18
                 ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
@@ -301,16 +302,15 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
             for form in document_formset.forms:
                 form.is_valid()
 
-                if prev_counter == 6:
-                    break
-                prev_counter += 1
-
                 id = form.cleaned_data.get('document_id')
                 document_name = Document.objects.get(id=id).name
                 document_name = document_name.replace('（売上）', '').replace('（仕入）', '')
                 quantity = form.cleaned_data.get('quantity', 0)
                 price = form.cleaned_data.get('price', 0)
                 amount = quantity * price
+
+                if total_number > 6: 
+                    continue
 
                 ws.row(row_no).height = height_18
                 ws.write_merge(row_no, row_no, 0, 6, document_name, product_first_content_style)
@@ -319,14 +319,15 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
                 ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
                 row_no += 1
         
-        if total_number < 6:
-            for i in range(0, 6 - total_number):
-                ws.row(row_no).height = height_18
-                ws.write_merge(row_no, row_no, 0, 6, None, product_first_content_style)
-                ws.write(row_no, 7, None, product_content_style)
-                ws.write(row_no, 8, None, product_content_style)
-                ws.write_merge(row_no, row_no, 9, 10, None, product_last_content_style)
-                row_no += 1
+        # if total_number < 6:
+        forRange = 6 - total_number if total_number <= 6 else 6
+        for i in range(0, forRange):
+            ws.row(row_no).height = height_18
+            ws.write_merge(row_no, row_no, 0, 6, None, product_first_content_style)
+            ws.write(row_no, 7, None, product_content_style)
+            ws.write(row_no, 8, None, product_content_style)
+            ws.write_merge(row_no, row_no, 9, 10, None, product_last_content_style)
+            row_no += 1
         
         ws.row(row_no).height = height_15
         # ws.write_merge(row_no, row_no, 0, 1, '{}: '.format(shipping_date_label), shipping_date_label_style)
@@ -454,9 +455,9 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
                 for form in product_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 6:
-                        next_counter += 1
-                        continue
+                    # if next_counter < 6:
+                    #     next_counter += 1
+                    #     continue
 
                     id = form.cleaned_data.get('product_id')
                     product_name = Product.objects.get(id=id).name
@@ -479,9 +480,9 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
                 for form in document_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 6:
-                        next_counter += 1
-                        continue
+                    # if next_counter < 6:
+                    #     next_counter += 1
+                    #     continue
 
                     id = form.cleaned_data.get('document_id')
                     document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
@@ -499,12 +500,12 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
 
                     row_no += 1
 
-            if total_number - (next_counter + 1) < 39:
-                for i in range(0, 39 - total_number + next_counter + 1):
+            if total_number - 1 < 39:
+                for i in range(0, 39 - total_number + 1):
 
-                    if prev_counter <= 6:
-                        prev_counter += 1
-                        continue
+                    # if prev_counter <= 6:
+                    #     prev_counter += 1
+                    #     continue
 
                     ws.write_merge(row_no, row_no, 0, 6, None, TL)
                     ws.write(row_no, 7, None, TC_RIGHT)
@@ -774,8 +775,6 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
         ws.write(9, 8, '単　価', product_table_th_style)
         ws.write_merge(9, 9, 9, 10, '金　額', product_table_last_th_style)
 
-        prev_counter = 0
-        next_counter = 0
         # Product Table
         row_no = 10
         
@@ -783,15 +782,14 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
             for form in product_formset.forms:
                 form.is_valid()
 
-                if prev_counter == 6:
-                    break
-                prev_counter += 1
-
                 id = form.cleaned_data.get('product_id')
                 product_name = Product.objects.get(id=id).name
                 quantity = form.cleaned_data.get('quantity', 0)
                 price = form.cleaned_data.get('price', 0)
                 amount = quantity * price
+
+                if total_number > 6: 
+                    continue
 
                 ws.row(row_no).height = int(20 * 15)
                 ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
@@ -805,16 +803,15 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
             for form in document_formset.forms:
                 form.is_valid()
 
-                if prev_counter == 6:
-                    break
-                prev_counter += 1
-
                 id = form.cleaned_data.get('document_id')
                 document_name = Document.objects.get(id=id).name
                 document_name = document_name.replace('（売上）', '').replace('（仕入）', '')
                 quantity = form.cleaned_data.get('quantity', 0)
                 price = form.cleaned_data.get('price', 0)
                 amount = quantity * price
+
+                if total_number > 6: 
+                    continue
 
                 ws.row(row_no).height = int(20 * 15)
                 ws.write_merge(row_no, row_no, 0, 6, document_name, product_first_content_style)
@@ -823,7 +820,8 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
                 ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
                 row_no += 1
 
-        for i in range(0, 6 - total_number):
+        forRange = 6 - total_number if total_number <= 6 else 6
+        for i in range(0, forRange):
             ws.row(row_no).height = int(20 * 15)
             ws.write_merge(row_no, row_no, 0, 6, None, product_first_content_style)
             ws.write(row_no, 7, None, product_content_style)
@@ -1114,10 +1112,6 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
                 for form in product_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 6:
-                        next_counter += 1
-                        continue
-
                     id = form.cleaned_data.get('product_id')
                     product_name = Product.objects.get(id=id).name
                     quantity = form.cleaned_data.get('quantity', 0)
@@ -1139,10 +1133,6 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
                 for form in document_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 6:
-                        next_counter += 1
-                        continue
-
                     id = form.cleaned_data.get('document_id')
                     document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
                     quantity = form.cleaned_data.get('quantity', 0)
@@ -1159,8 +1149,8 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
 
                     row_no += 1
 
-            if total_number - (next_counter + 1) < 39:
-                for i in range(0, 39 - total_number + next_counter + 1):
+            if total_number - 1 < 39:
+                for i in range(0, 39 - total_number + 1):
 
                     ws.write_merge(row_no, row_no, 0, 6, None, TL)
                     ws.write(row_no, 7, None, TC_RIGHT)
@@ -1436,22 +1426,18 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
 
         row_no = 10
 
-        prev_counter = 0
-        next_counter = 0
-        
         if num_of_products:
             for form in product_formset.forms:
                 form.is_valid()
-
-                if prev_counter == 6:
-                    break
-                prev_counter += 1
 
                 id = form.cleaned_data.get('product_id')
                 product_name = Product.objects.get(id=id).name
                 quantity = form.cleaned_data.get('quantity', 0)
                 price = form.cleaned_data.get('price', 0)
                 amount = quantity * price
+
+                if total_number > 6: 
+                    continue
 
                 ws.row(row_no).height = int(20 * 15)
                 ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
@@ -1464,15 +1450,16 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             for form in document_formset.forms:
                 form.is_valid()
 
-                if prev_counter == 6:
-                    break
-                prev_counter += 1
+                
                 id = form.cleaned_data.get('document_id')
                 document_name = Document.objects.get(id=id).name
                 document_name = document_name.replace('（売上）', '').replace('（仕入）', '')
                 quantity = form.cleaned_data.get('quantity', 0)
                 price = form.cleaned_data.get('price', 0)
                 amount = quantity * price
+
+                if total_number > 6: 
+                    continue
 
                 ws.row(row_no).height = int(20 * 15)
                 ws.write_merge(row_no, row_no, 0, 6, document_name, product_first_content_style)
@@ -1481,7 +1468,8 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                 ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
                 row_no += 1
 
-        for i in range(0, 6 - total_number):
+        forRange = 6 - total_number if total_number <= 6 else 6
+        for i in range(0, forRange):
             ws.row(row_no).height = int(20 * 15)
             ws.write_merge(row_no, row_no, 0, 6, None, product_first_content_style)
             ws.write(row_no, 7, None, product_content_style)
@@ -1777,10 +1765,6 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                 for form in product_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 6:
-                        next_counter += 1
-                        continue
-
                     id = form.cleaned_data.get('product_id')
                     product_name = Product.objects.get(id=id).name
                     quantity = form.cleaned_data.get('quantity', 0)
@@ -1802,10 +1786,6 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                 for form in document_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 6:
-                        next_counter += 1
-                        continue
-
                     id = form.cleaned_data.get('document_id')
                     document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
                     quantity = form.cleaned_data.get('quantity', 0)
@@ -1822,8 +1802,8 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
 
                     row_no += 1
 
-            if total_number - (next_counter + 1) < 39:
-                for i in range(0, 39 - total_number + next_counter + 1):
+            if total_number - 1 < 39:
+                for i in range(0, 39 - total_number + 1):
 
                     ws.write_merge(row_no, row_no, 0, 6, None, TL)
                     ws.write(row_no, 7, None, TC_RIGHT)
@@ -1985,6 +1965,8 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
         person_in_charge = contract_form.data.get('person_in_charge', '')
         confirmor = contract_form.data.get('confirmor')
 
+        total_number = num_of_products + num_of_documents + num_of_document_fees
+
         try:
             sub_total = int(sub_total.replace(',', '')) if len(sub_total.replace(',', '')) > 0 else 0
             tax = int(tax.replace(',', '')) if len(tax.replace(',', '')) > 0 else 0
@@ -2058,17 +2040,10 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
 
         row_no = 20
 
-        prev_counter = 0
-        next_counter = 0
-
         ##### Products
         if num_of_products:
             for form in product_formset.forms:
                 form.is_valid()
-
-                if prev_counter == 16:
-                    break
-                prev_counter += 1
 
                 id = form.cleaned_data.get('product_id')
                 product_name = Product.objects.get(id=id).name
@@ -2078,6 +2053,9 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
 
                 total_quantity += quantity
                 total_price += price
+
+                if total_number > 16: 
+                    continue
 
                 ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
                 ws.write(row_no, 7, quantity, TC_RIGHT)
@@ -2091,10 +2069,6 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
             for form in document_formset.forms:
                 form.is_valid()
 
-                if prev_counter == 16:
-                    break
-                prev_counter += 1
-
                 id = form.cleaned_data.get('document_id')
                 document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
                 quantity = form.cleaned_data.get('quantity', 0)
@@ -2103,6 +2077,9 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
 
                 total_quantity += quantity
                 total_price += price
+
+                if total_number > 16: 
+                    continue
 
                 ws.write_merge(row_no, row_no, 0, 6, document_name, TL)
                 ws.write(row_no, 7, quantity, TC_RIGHT)
@@ -2116,10 +2093,6 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
             for form in document_fee_formset.forms:
                 form.is_valid()
 
-                if prev_counter == 16:
-                    break
-                prev_counter += 1
-
                 id = form.cleaned_data.get('document_fee_id')
                 document_fee = DocumentFee.objects.get(id=id)
                 type = document_fee.type
@@ -2132,23 +2105,25 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
                 total_quantity += model_count
                 total_price += unit_count
 
+                if total_number > 16: 
+                    continue
+
                 ws.write_merge(row_no, row_no, 0, 6, str(dict(TYPE_CHOICES)[type]) + ' ' + str(model_count) + '機種' + str(unit_count) + '台', TL)
-                ws.write(row_no, 7, model_count, TC_RIGHT)
-                ws.write(row_no, 8, unit_count, TC_RIGHT)
-                ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
-
-                row_no += 1
-
-        total_number = num_of_products + num_of_documents + num_of_document_fees
-        if total_number < 16:
-            for i in range(0, 16 - total_number):
-
-                ws.write_merge(row_no, row_no, 0, 6, None, TL)
                 ws.write(row_no, 7, None, TC_RIGHT)
                 ws.write(row_no, 8, None, TC_RIGHT)
                 ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
 
                 row_no += 1
+
+        forRange = 16 - total_number if total_number <= 16 else 16
+        for i in range(0, forRange):
+
+            ws.write_merge(row_no, row_no, 0, 6, None, TL)
+            ws.write(row_no, 7, None, TC_RIGHT)
+            ws.write(row_no, 8, None, TC_RIGHT)
+            ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
+
+            row_no += 1
 
         ws.write_merge(36, 39, 0, 6, '※備考: ' + remarks, xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert top, wrap on; borders: top_color black, top medium, left_color black, left thin, bottom_color black, bottom thin;'))
         ws.write_merge(36, 36, 7, 8, '小　計', TTL_CENTER)
@@ -2312,10 +2287,6 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
                 for form in product_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 16:
-                        next_counter += 1
-                        continue
-
                     id = form.cleaned_data.get('product_id')
                     product_name = Product.objects.get(id=id).name
                     quantity = form.cleaned_data.get('quantity', 0)
@@ -2336,10 +2307,6 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
             if num_of_documents:
                 for form in document_formset.forms:
                     form.is_valid()
-
-                    if next_counter < 16:
-                        next_counter += 1
-                        continue
 
                     id = form.cleaned_data.get('document_id')
                     document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
@@ -2362,10 +2329,6 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
                 for form in document_fee_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 16:
-                        next_counter += 1
-                        continue
-
                     id = form.cleaned_data.get('document_fee_id')
                     document_fee = DocumentFee.objects.get(id=id)
                     type = document_fee.type
@@ -2379,15 +2342,15 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
                     total_price += unit_count
 
                     ws.write_merge(row_no, row_no, 0, 6, str(dict(TYPE_CHOICES)[type]) + ' ' + str(model_count) + '機種' + str(unit_count) + '台', TL)
-                    ws.write(row_no, 7, model_count, TC_RIGHT)
-                    ws.write(row_no, 8, unit_count, TC_RIGHT)
-                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
+                    ws.write(row_no, 7, None, TC_RIGHT)
+                    ws.write(row_no, 8, None, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
 
                     row_no += 1
 
             total_number = num_of_products + num_of_documents + num_of_document_fees
-            if total_number - (next_counter + 1) < 39:
-                for i in range(0, 39 - total_number + next_counter + 1):
+            if total_number - 1 < 39:
+                for i in range(0, 39 - total_number + 1):
 
                     ws.write_merge(row_no, row_no, 0, 6, None, TL)
                     ws.write(row_no, 7, None, TC_RIGHT)
@@ -2574,16 +2537,9 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
 
         row_no += 1
 
-        prev_counter = 0
-        next_counter = 0
-
         if num_of_products:
             for form in product_formset.forms:
                 form.is_valid()
-                
-                if prev_counter == 12:
-                    break
-                prev_counter += 1
 
                 id = form.cleaned_data.get('product_id')
                 product_name = Product.objects.get(id=id).name
@@ -2593,6 +2549,9 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
 
                 total_quantity += quantity
                 total_price += price
+
+                if total_number > 12: 
+                    continue
 
                 ws.write_merge(row_no, row_no, 1, 8, product_name, s_dot_rb)
                 ws.write_merge(row_no, row_no, 9, 10, quantity, s_dot_rb_num)
@@ -2607,10 +2566,6 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             for form in document_formset.forms:
                 form.is_valid()
 
-                if prev_counter == 12:
-                    break
-                prev_counter += 1
-
                 id = form.cleaned_data.get('document_id')
                 document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
                 quantity = form.cleaned_data.get('quantity', 0)
@@ -2619,6 +2574,9 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
 
                 total_quantity += quantity
                 total_price += price
+
+                if total_number > 12: 
+                    continue
 
                 ws.write_merge(row_no, row_no, 1, 8, document_name, s_dot_rb)
                 ws.write_merge(row_no, row_no, 9, 10, quantity, s_dot_rb_num)
@@ -2632,10 +2590,6 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             for form in document_fee_formset.forms:
                 form.is_valid()
 
-                if prev_counter == 12:
-                    break
-                prev_counter += 1
-
                 id = form.cleaned_data.get('document_fee_id')
                 document_fee = DocumentFee.objects.get(id=id)
                 type = document_fee.type
@@ -2647,16 +2601,20 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
 
                 total_quantity += model_count
                 total_price += unit_count
+
+                if total_number > 12: 
+                    continue
                 
                 ws.write_merge(row_no, row_no, 1, 8, str(dict(TYPE_CHOICES)[type]), s_dot_rb)
-                ws.write_merge(row_no, row_no, 9, 10, model_count, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 11, 13, unit_count, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 14, 17, amount, s_dot_rb_num)
+                ws.write_merge(row_no, row_no, 9, 10, None, s_dot_rb_num)
+                ws.write_merge(row_no, row_no, 11, 13, None, s_dot_rb_num)
+                ws.write_merge(row_no, row_no, 14, 17, None, s_dot_rb_num)
                 ws.write_merge(row_no, row_no, 18, 24, '', s_dot_b_thin_r)
 
                 row_no += 1
 
-        for i in range(0, 12 - total_number):
+        forRange = 12 - total_number if total_number <= 12 else 12
+        for i in range(0, forRange):
 
             ws.write_merge(row_no, row_no, 1, 8, None, s_dot_rb)
             ws.write_merge(row_no, row_no, 9, 10, None, s_dot_rb)
@@ -2900,10 +2858,6 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                 for form in product_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 12:
-                        next_counter += 1
-                        continue
-
                     id = form.cleaned_data.get('product_id')
                     product_name = Product.objects.get(id=id).name
                     quantity = form.cleaned_data.get('quantity', 0)
@@ -2925,10 +2879,6 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                 for form in document_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 12:
-                        next_counter += 1
-                        continue
-
                     id = form.cleaned_data.get('document_id')
                     document_name = Document.objects.get(id=id).name.replace('（売上）', '').replace('（仕入）', '')
                     quantity = form.cleaned_data.get('quantity', 0)
@@ -2949,10 +2899,6 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                 for form in document_fee_formset.forms:
                     form.is_valid()
 
-                    if next_counter < 12:
-                        next_counter += 1
-                        continue
-
                     id = form.cleaned_data.get('document_fee_id')
                     document_fee = DocumentFee.objects.get(id=id)
                     type = document_fee.type
@@ -2966,14 +2912,14 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                     total_price += price
 
                     ws.write_merge(row_no, row_no, 0, 6, str(dict(TYPE_CHOICES)[type]), TL)
-                    ws.write(row_no, 7, model_count, TC_RIGHT)
-                    ws.write(row_no, 8, unit_count, TC_RIGHT)
-                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
+                    ws.write(row_no, 7, None, TC_RIGHT)
+                    ws.write(row_no, 8, None, TC_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
 
                     row_no += 1
 
-            if total_number + (next_counter + 1) < 39:
-                for i in range(0, 39 - total_number + next_counter + 1):
+            if total_number + 1 < 39:
+                for i in range(0, 39 - total_number + 1):
 
                     ws.write_merge(row_no, row_no, 0, 6, None, TL)
                     ws.write(row_no, 7, None, TC_RIGHT)
