@@ -1833,7 +1833,7 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
         print('ENTER')
 
         ######################################### Style Define ########################################
-        w_arr = [9.15, 8.04, 10.04, 2.04, 5.04, 8.04, 6.71, 7.15, 12.59, 6.71, 6.71]
+        w_arr = [9.15, 8.04, 10.04, 2.04, 7.04, 6.04, 6.71, 7.15, 12.59, 6.71, 6.71]
 
         h_arr = [5.25, 21.75, 17.25, 6, 15.75, 6, 23.25, 12.75, 12.75, 12.75, 
                 12.75, 3.75, 18.75, 18.75, 18.75, 4.5, 16.5, 16.5, 4.5, 18,
@@ -2013,13 +2013,13 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
         # ws.write_merge(2, 2, 3, 7, '（お客様控え）', xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック, color black; align: horiz center, wrap on;'))
         ws.write_merge(2, 2, 8, 10, date_str, xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック, color black; align: horiz right, wrap on;'))
         ws.write(4, 0, '買主（甲）', F11)
-        ws.write_merge(4, 4, 6, 7, '売主（乙）', F11)
-        ws.write_merge(6, 6, 6, 10, 'バッジオ株式会社', xlwt.easyxf('font: height 320, name ＭＳ Ｐゴシック, color black, bold on; align: horiz left, vert center, wrap on;'))
-        ws.write_merge(7, 7, 6, 10, '代表取締役　金　昇志', F11)
-        ws.write_merge(8, 8, 6, 10, '〒537-0021　大阪府大阪市東成区東中本2丁目4-15', F11)
-        ws.write_merge(9, 9, 6, 9, 'TEL 06-6753-8078', F11)
+        ws.write_merge(4, 4, 5, 7, '売主（乙）', F11)
+        ws.write_merge(6, 6, 5, 10, 'バッジオ株式会社', xlwt.easyxf('font: height 320, name ＭＳ Ｐゴシック, color black, bold on; align: horiz left, vert center, wrap on;'))
+        ws.write_merge(7, 7, 5, 10, '代表取締役　金　昇志', F11)
+        ws.write_merge(8, 8, 5, 10, '〒537-0021　大阪府大阪市東成区東中本2丁目4-15', F11)
+        ws.write_merge(9, 9, 5, 9, 'TEL: 06-6753-8078', F11)
         ws.write(10, 4, '㊞', F11)
-        ws.write_merge(10, 10, 6, 9, 'FAX 06-6753-8079', F11)
+        ws.write_merge(10, 10, 5, 9, 'FAX: 06-6753-8079', F11)
         ws.write(10, 10, '㊞', F11)
 
         ws.write(12, 0, '設置場所', F11)
@@ -2111,7 +2111,7 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
                 ws.write_merge(row_no, row_no, 0, 6, str(dict(TYPE_CHOICES)[type]) + ' ' + str(model_count) + '機種' + str(unit_count) + '台', TL)
                 ws.write(row_no, 7, None, TC_RIGHT)
                 ws.write(row_no, 8, None, TC_RIGHT)
-                ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
+                ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
 
                 row_no += 1
 
@@ -2344,7 +2344,7 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
                     ws.write_merge(row_no, row_no, 0, 6, str(dict(TYPE_CHOICES)[type]) + ' ' + str(model_count) + '機種' + str(unit_count) + '台', TL)
                     ws.write(row_no, 7, None, TC_RIGHT)
                     ws.write(row_no, 8, None, TC_RIGHT)
-                    ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
 
                     row_no += 1
 
@@ -2608,7 +2608,7 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                 ws.write_merge(row_no, row_no, 1, 8, str(dict(TYPE_CHOICES)[type]), s_dot_rb)
                 ws.write_merge(row_no, row_no, 9, 10, None, s_dot_rb_num)
                 ws.write_merge(row_no, row_no, 11, 13, None, s_dot_rb_num)
-                ws.write_merge(row_no, row_no, 14, 17, None, s_dot_rb_num)
+                ws.write_merge(row_no, row_no, 14, 17, amount, s_dot_rb_num)
                 ws.write_merge(row_no, row_no, 18, 24, '', s_dot_b_thin_r)
 
                 row_no += 1
@@ -2914,7 +2914,7 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                     ws.write_merge(row_no, row_no, 0, 6, str(dict(TYPE_CHOICES)[type]), TL)
                     ws.write(row_no, 7, None, TC_RIGHT)
                     ws.write(row_no, 8, None, TC_RIGHT)
-                    ws.write_merge(row_no, row_no, 9, 10, None, TR_RIGHT)
+                    ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
 
                     row_no += 1
 
