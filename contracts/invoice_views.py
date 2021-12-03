@@ -493,7 +493,7 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
                     total_quantity += quantity
                     total_price += price
 
-                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write_merge(row_no, row_no, 0, 6, document_name, TL)
                     ws.write(row_no, 7, quantity, TC_RIGHT)
                     ws.write(row_no, 8, price, TC_RIGHT)
                     ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
@@ -1106,11 +1106,15 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
 
             row_no = 1
 
+
             total_quantity = total_price = 0
             ##### Products
             if num_of_products:
                 for form in product_formset.forms:
                     form.is_valid()
+
+                    print("product_name1")
+
 
                     id = form.cleaned_data.get('product_id')
                     product_name = Product.objects.get(id=id).name
@@ -1142,7 +1146,7 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
                     total_quantity += quantity
                     total_price += price
 
-                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write_merge(row_no, row_no, 0, 6, document_name, TL)
                     ws.write(row_no, 7, quantity, TC_RIGHT)
                     ws.write(row_no, 8, price, TC_RIGHT)
                     ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
@@ -1795,7 +1799,7 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                     total_quantity += quantity
                     total_price += price
 
-                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write_merge(row_no, row_no, 0, 6, document_name, TL)
                     ws.write(row_no, 7, quantity, TC_RIGHT)
                     ws.write(row_no, 8, price, TC_RIGHT)
                     ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
@@ -2317,7 +2321,7 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
                     total_quantity += quantity
                     total_price += price
 
-                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write_merge(row_no, row_no, 0, 6, document_name, TL)
                     ws.write(row_no, 7, quantity, TC_RIGHT)
                     ws.write(row_no, 8, price, TC_RIGHT)
                     ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
@@ -2888,7 +2892,7 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                     total_quantity += quantity
                     total_price += price
 
-                    ws.write_merge(row_no, row_no, 0, 6, product_name, TL)
+                    ws.write_merge(row_no, row_no, 0, 6, document_name, TL)
                     ws.write(row_no, 7, quantity, TC_RIGHT)
                     ws.write(row_no, 8, price, TC_RIGHT)
                     ws.write_merge(row_no, row_no, 9, 10, amount, TR_RIGHT)
