@@ -373,16 +373,17 @@ class HallSalesContractView(AdminLoginRequiredMixin, TemplateView):
         contract_form = HallSalesContractForm(self.request.POST)
      
         if self.request.POST['sub_total'] != '0' and self.request.POST['sub_total'] != '' and contract_form.is_valid():
-            mdate = self.request.POST.dict()['milestone-0-date']
-            try: 
-                try:
-                    mdate = datetime.strptime(mdate, '%m/%d/%Y')
-                except:
-                    print('error occured')
-                    mdate = datetime.strptime(mdate, '%Y/%m/%d')
-            except:
-                mdate = None
-            contract = contract_form.save(mdate)
+            # mdate = self.request.POST.dict()['milestone-0-date']
+            # try: 
+            #     try:
+            #         mdate = datetime.strptime(mdate, '%m/%d/%Y')
+            #     except:
+            #         print('error occured')
+            #         mdate = datetime.strptime(mdate, '%Y/%m/%d')
+            # except:
+            #     mdate = None
+            # contract = contract_form.save(mdate)
+            contract = contract_form.save()
 
         else:
             return render(request, self.template_name, self.get_context_data(**kwargs))
@@ -483,15 +484,17 @@ class HallPurchasesContractView(AdminLoginRequiredMixin, TemplateView):
         contract_form = HallPurchasesContractForm(self.request.POST)
         print( self.request.POST['sub_total'])
         if self.request.POST['sub_total'] != '0' and self.request.POST['sub_total'] != '' and contract_form.is_valid():
-            mdate = self.request.POST.dict()['milestone-0-date']
-            try:
-                try:
-                    mdate = datetime.strptime(mdate, '%m/%d/%Y')
-                except:
-                    mdate = datetime.strptime(mdate, '%Y/%m/%d')
-            except:
-                mdate = None
-            contract = contract_form.save(mdate)
+            # mdate = self.request.POST.dict()['milestone-0-date']
+            # try:
+            #     try:
+            #         mdate = datetime.strptime(mdate, '%m/%d/%Y')
+            #     except:
+            #         mdate = datetime.strptime(mdate, '%Y/%m/%d')
+            # except:
+            #     mdate = None
+            # contract = contract_form.save(mdate)
+            contract = contract_form.save()
+
         else:
             return render(request, self.template_name, self.get_context_data(**kwargs))
 

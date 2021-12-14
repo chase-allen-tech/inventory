@@ -1113,9 +1113,6 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
                 for form in product_formset.forms:
                     form.is_valid()
 
-                    print("product_name1")
-
-
                     id = form.cleaned_data.get('product_id')
                     product_name = Product.objects.get(id=id).name
                     quantity = form.cleaned_data.get('quantity', 0)

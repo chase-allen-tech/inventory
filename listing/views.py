@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 import xlwt
 import json
 from datetime import datetime
@@ -20,7 +21,7 @@ from listing.models import ExportHistory
 from contracts.utilities import generate_random_number, date_dump, log_export_operation
 from .filters import ProductFilter
 from .forms import ListingSearchForm, ProductForm, ListingLinkSearchForm, ListingLinkShowSearchForm
-from contracts.models import TraderPurchasesContract, TraderSalesContract, TraderLink, TraderContract
+from contracts.models import TraderPurchasesContract, TraderSalesContract, TraderLink, TraderContract, Milestone
 
 cell_width = 256 * 20
 wide_cell_width = 256 * 45
@@ -96,7 +97,13 @@ class SalesListView(AdminLoginRequiredMixin, ListView):
                 queryset = queryset.filter(Q(product__name__icontains=name))
             if inventory_status:
                 queryset = queryset.filter(Q(status=inventory_status))
-        return queryset.order_by('-pk')
+        
+        for i in range(len(queryset)):
+            if queryset[i].content_type_id == hall_class_id:
+                milestone = Milestone.objects.filter(object_id=queryset[i].object_id, content_type_id=hall_class_id).first()
+                queryset[i].content_object.shipping_date = milestone.date
+
+        return queryset
     
     def post(self, request, *args, **kwargs):
         user_id = self.request.user.id
@@ -241,7 +248,12 @@ class PurchasesListView(AdminLoginRequiredMixin, ListView):
             if inventory_status:
                 queryset = queryset.filter(Q(status=inventory_status))
 
-        return queryset.order_by('-pk')
+        for i in range(len(queryset)):
+            if queryset[i].content_type_id == hall_class_id:
+                milestone = Milestone.objects.filter(object_id=queryset[i].object_id, content_type_id=hall_class_id).first()
+                queryset[i].content_object.shipping_date = milestone.date
+
+        return queryset
     
     def post(self, request, *args, **kwargs):
         user_id = self.request.user.id

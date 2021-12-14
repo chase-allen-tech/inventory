@@ -459,7 +459,7 @@ class HallSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         id = kwargs.get('pk')
         contract = HallSalesContract.objects.get(id=id)
-        print(contract.hall.customer_name)
+
         contract_data = {
             'contract_id': contract.contract_id,
             'created_at': contract.created_at,
