@@ -859,6 +859,7 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
         remark_text_list = [
             "※ 売主、買主、双方の署名・捺印が揃った時点で契約が成立したものとします。",
             "※ 契約が成立後、原則として売買契約を解除できないものとします。",
+            "※ Ｐ－ＳＥＮＳＯＲあんしん決済使用時は、納品後３日以内にＯＫボタンを押すこととする。",
             "※ 当該商品に不備及び故障がある場合の保障は、納品後３日以内とします。",
             "※ 買主が代金金額の支払いを完了するまでは、売買物件の所有権は売主において留保する。",
             "※ 売買物件の所有権は、引渡しが終了し、支払いが完了した時点で買主に移行するものとする。",
@@ -873,8 +874,8 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
             ws.write(row_no, 0, remark_text, remark_text_style)
             row_no += 1
 
-        ws.row(row_no).height = int(20 * 8.45)
-        row_no += 1
+        # ws.row(row_no).height = int(20 * 8.45)
+        # row_no += 1
 
         product_sender_form = TraderSalesProductSenderForm(self.request.POST)
         document_sender_form = TraderSalesDocumentSenderForm(self.request.POST)
@@ -1509,6 +1510,7 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
         remark_text_list = [
             "※ 売主、買主、双方の署名・捺印が揃った時点で契約が成立したものとします。",
             "※ 契約が成立後、原則として売買契約を解除できないものとします。",
+            "※ Ｐ－ＳＥＮＳＯＲあんしん決済使用時は、納品後３日以内にＯＫボタンを押すこととする。",
             "※ 当該商品に不備及び故障がある場合の保障は、納品後３日以内とします。",
             "※ 買主が代金金額の支払いを完了するまでは、売買物件の所有権は売主において留保する。",
             "※ 売買物件の所有権は、引渡しが終了し、支払いが完了した時点で買主に移行するものとする。",
@@ -1523,8 +1525,8 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             ws.write(row_no, 0, remark_text, remark_text_style)
             row_no += 1
 
-        ws.row(row_no).height = int(20 * 8.45)
-        row_no += 1
+        # ws.row(row_no).height = int(20 * 8.45)
+        # row_no += 1
 
         product_sender_form = TraderPurchasesProductSenderForm(self.request.POST)
         document_sender_form = TraderPurchasesDocumentSenderForm(self.request.POST)
