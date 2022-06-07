@@ -1,32 +1,14 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# POSTAL_CODE = '537―0021'
-# ADDRESS = '大阪府大阪市東成区東中本2丁目4―15'
-# COMPANY_NAME = 'バッジオ株式会社'
-# CEO = '金 昇志'
-# TEL = '06-6753-8078'
-# FAX = '06-6753-8079'
-# TRANSFER_ACCOUNT = 'りそな銀行　船場支店（101）　普通　0530713　バッジオカブシキガイシャ'
-# REFAX = '06-6753-8079'
-# P_SENSOR_NUMBER = '8240-2413-3628'
-# INPUT_FORMATS = ['%Y/%m/%d', '%m/%d/%Y']
-# THRESHOLD_PRICE = 100000
-
-# SECURE_PAYMENT = 'あんしん決済'
-# NO_FEE_SALES = '非課売上'
-# FEE_SALES = '課税売上10%'
-# NO_FEE_PURCHASES = '非課仕入'
-# FEE_PURCHASES = '課対仕入10%'
-
 POSTAL_CODE = '537―0021'
-ADDRESS = '〒107-0062 港区南青山5丁目8番地10号'
-COMPANY_NAME = 'プラス・ケア株式会社'
+ADDRESS = '大阪府大阪市東成区東中本2丁目4―15'
+COMPANY_NAME = 'バッジオ株式会社'
 CEO = '金 昇志'
-TEL = '03-5566-5656'
-FAX = '03-5566-5666'
-TRANSFER_ACCOUNT = 'りそな銀行 船場支店(101) 普通 0000000 カブシキガイシャ'
-REFAX = '03-5566-5666'
+TEL = '06-6753-8078'
+FAX = '06-6753-8079'
+TRANSFER_ACCOUNT = 'りそな銀行　船場支店（101）　普通　0530713　バッジオカブシキガイシャ'
+REFAX = '06-6753-8079'
 P_SENSOR_NUMBER = '8240-2413-3628'
 INPUT_FORMATS = ['%Y/%m/%d', '%m/%d/%Y']
 THRESHOLD_PRICE = 100000
@@ -36,7 +18,6 @@ NO_FEE_SALES = '非課売上'
 FEE_SALES = '課税売上10%'
 NO_FEE_PURCHASES = '非課仕入'
 FEE_PURCHASES = '課対仕入10%'
-
 
 SHIPPING_METHOD_CHOICES = (
     ('D', _('Delivery')),
