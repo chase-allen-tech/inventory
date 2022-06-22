@@ -17,6 +17,7 @@ from .forms import (
 )
 from .utilities import generate_contract_id
 from datetime import datetime
+import math
 
 class TraderSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
     template_name = 'contracts/trader_sales.html'
@@ -156,6 +157,8 @@ class TraderSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
         product_set = []
         products = contract.products.all()
         for product in products:
+            price = math.ceil(product.price / 10000) * 10000
+            fee = round(200 * product.quantity * (price / 100000)) if price > 100000 else product.fee
             data = {
                 'id': product.id,
                 'product_id': product.product.id,
@@ -164,7 +167,7 @@ class TraderSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
                 'quantity': product.quantity,
                 'price': product.price,
                 'tax': product.tax,
-                'fee': product.fee,
+                'fee': fee, # product.fee,
                 'amount': product.amount
             }
             product_form = ProductForm(data)

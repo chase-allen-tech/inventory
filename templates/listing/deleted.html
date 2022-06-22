@@ -87,13 +87,32 @@
 
             <div class="col-md-4">
               <div class="form-group">
+                <label>{% trans "Shipping date" %}:</label>
+                <div class="d-flex">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-calendar22"></i></span>
+                    <input type="text" class="form-control datepicker-nullable" name="shipping_date_from"
+                      value="{{ shipping_date_from }}">
+                  </div>
+                  <div style="margin-top: auto; margin-bottom: auto; margin-left: 10px; margin-right: 10px;">~</div>
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-calendar22"></i></span>
+                    <input type="text" class="form-control datepicker-nullable" name="shipping_date_to"
+                      value="{{ shipping_date_to }}">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="form-group">
                 <label>{% trans "Person in charge" %}:</label>
                 <input type="text" class="form-control" name="person_in_charge" value="{{ person_in_charge }}"
                   placeholder="{% trans 'Person in charge' %}">
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-2">
               <div class="form-group">
                 <label>{% trans "Inventory status" %}:</label>
                 <select name="inventory_status" class="selectbox">

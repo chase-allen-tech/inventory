@@ -18,7 +18,7 @@ from .forms import (
     ProductFormSet, DocumentFormSet, DocumentFeeFormSet, MilestoneFormSet,
     TraderSalesProductSenderForm, TraderSalesDocumentSenderForm, TraderPurchasesProductSenderForm, TraderPurchasesDocumentSenderForm,
 )
-from .utilities import generate_contract_id, get_shipping_date_label
+from .utilities import date_dump, date_str_dump, generate_contract_id, get_shipping_date_label
 import json
 
 # List of people in charge for common contract pages
@@ -373,18 +373,9 @@ class HallSalesContractView(AdminLoginRequiredMixin, TemplateView):
         contract_form = HallSalesContractForm(self.request.POST)
      
         if self.request.POST['sub_total'] != '0' and self.request.POST['sub_total'] != '' and contract_form.is_valid():
-            # mdate = self.request.POST.dict()['milestone-0-date']
-            # try: 
-            #     try:
-            #         mdate = datetime.strptime(mdate, '%m/%d/%Y')
-            #     except:
-            #         print('error occured')
-            #         mdate = datetime.strptime(mdate, '%Y/%m/%d')
-            # except:
-            #     mdate = None
-            # contract = contract_form.save(mdate)
-            contract = contract_form.save()
-
+            mdate = date_str_dump(self.request.POST.dict()['milestone-0-date'], self.request.LANGUAGE_CODE)
+            contract = contract_form.save(mdate)
+            # contract = contract_form.save()
         else:
             return render(request, self.template_name, self.get_context_data(**kwargs))
 
@@ -424,9 +415,16 @@ class HallSalesContractView(AdminLoginRequiredMixin, TemplateView):
                          'contract_class': 'HallSalesContract'},
             prefix='milestone'
         )
+   
+        milestoneIndex = 0
         for form in milestone_formset.forms:
             if form.is_valid():
-                form.save()
+                if milestoneIndex == 0:
+                    form.save(self.request.POST['total'], date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
+                else:
+                    form.save()
+            milestoneIndex += 1
+
         return redirect('listing:sales-list')
 
     def get_context_data(self, **kwargs):
@@ -484,17 +482,9 @@ class HallPurchasesContractView(AdminLoginRequiredMixin, TemplateView):
         contract_form = HallPurchasesContractForm(self.request.POST)
         print( self.request.POST['sub_total'])
         if self.request.POST['sub_total'] != '0' and self.request.POST['sub_total'] != '' and contract_form.is_valid():
-            # mdate = self.request.POST.dict()['milestone-0-date']
-            # try:
-            #     try:
-            #         mdate = datetime.strptime(mdate, '%m/%d/%Y')
-            #     except:
-            #         mdate = datetime.strptime(mdate, '%Y/%m/%d')
-            # except:
-            #     mdate = None
-            # contract = contract_form.save(mdate)
-            contract = contract_form.save()
-
+            mdate = date_str_dump(self.request.POST.dict()['milestone-0-date'], self.request.LANGUAGE_CODE)
+            contract = contract_form.save(mdate)
+            # contract = contract_form.save()
         else:
             return render(request, self.template_name, self.get_context_data(**kwargs))
 
@@ -534,9 +524,15 @@ class HallPurchasesContractView(AdminLoginRequiredMixin, TemplateView):
                          'contract_class': 'HallPurchasesContract'},
             prefix='milestone'
         )
+
+        milestoneIndex = 0
         for form in milestone_formset.forms:
             if form.is_valid():
-                form.save()
+                if milestoneIndex == 0:
+                    form.save(self.request.POST['total'], date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
+                else:
+                    form.save()
+            milestoneIndex += 1
 
         return redirect('listing:purchases-list')
 

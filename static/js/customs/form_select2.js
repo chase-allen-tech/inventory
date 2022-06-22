@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // customer-search select2 changed event
     $('.select-customer').on('select2:select', function(e) {
-        console.log('clicked--oks');
+        console.log('clicked--oks asdf');
         var customer = e.params.data;
         var frigana = customer.frigana;
         var postal_code = customer.postal_code;
@@ -96,6 +96,22 @@ document.addEventListener('DOMContentLoaded', function() {
             $('span.buyer-fax').text(fax);
         }
         
+    });
+
+    $('.v-contract-clear').on('click', function(e) {
+        console.log('[clearing]');
+        $('.v-select-customer > .select-customer').text('');
+        $('input[name="frigana"]').val('');
+        $('input[name="postal_code"]').val('');
+        $('input[name="address"]').val('');
+        $('input[name="tel"]').val('');
+        $('input[name="fax"]').val('');
+        $('span.buyer-postal-code').text('');
+        $('span.buyer-address').text('');
+        $('h4.buyer-company').text(''.name);
+        $('span.buyer-tel').text('');
+        $('span.buyer-fax').text('');
+
     });
     // End of select customer select2 initialization and formatting
 

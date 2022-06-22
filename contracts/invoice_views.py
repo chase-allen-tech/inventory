@@ -94,7 +94,7 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
                                             borders: top_color black, right_color black, top medium, right thin;')
         product_table_last_th_style = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz center, wrap on;\
                                             borders: top_color black, right_color black, top medium, right medium;')
-        product_first_content_style = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap on;\
+        product_first_content_style = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap no;\
                                             borders: top_color black, left_color black, right_color black, bottom_color black, bottom thin, top thin, left medium, right thin;')
         primary_text_style = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap on;')
         product_content_style = xlwt.easyxf('font: height 220, name ＭＳ ゴシック; align: vert center, horiz right, wrap on;\
@@ -157,8 +157,10 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
             tel = customer.tel
             fax = customer.fax
 
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xls"'.format(contract_id)
+        # response = HttpResponse(content_type='application/ms-excel')
+        # response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xls"'.format(contract_id)
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xlsx"'.format(contract_id)
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet('業者売用請求書原本', cell_overwrite_ok=True)
 
@@ -584,7 +586,7 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
                                             borders: top_color black, right_color black, top medium, right thin;')
         product_table_last_th_style = xlwt.easyxf('font: height 190, name ＭＳ Ｐゴシック; align: vert center, horiz center, wrap on;\
                                             borders: top_color black, right_color black, top medium, right medium;')
-        product_first_content_style = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap on;\
+        product_first_content_style = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap no;\
                                             borders: top_color black, left_color black, right_color black, bottom_color black, bottom thin, top thin, left medium, right thin;')
         product_content_style = xlwt.easyxf('font: height 240, name ＭＳ ゴシック; align: vert center, horiz right, wrap on;\
                                             borders: top_color black, right_color black, bottom_color black, bottom thin, top thin, right thin;',
@@ -716,8 +718,10 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
             fee = 0
             total = 0
 
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xls"'.format(contract_id)
+        # response = HttpResponse(content_type='application/ms-excel')
+        # response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xls"'.format(contract_id)
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xlsx"'.format(contract_id)
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet('請求書', cell_overwrite_ok=True)
 
@@ -874,8 +878,8 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
             ws.write(row_no, 0, remark_text, remark_text_style)
             row_no += 1
 
-        # ws.row(row_no).height = int(20 * 8.45)
-        # row_no += 1
+        ws.row(row_no).height = space_height
+        row_no += 1
 
         product_sender_form = TraderSalesProductSenderForm(self.request.POST)
         document_sender_form = TraderSalesDocumentSenderForm(self.request.POST)
@@ -1077,7 +1081,7 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
         row_no += 1
 
         ws.row(row_no).height = int(20 * 15)
-        ws.write(row_no, 0, 'No.{}'.format(contract_id), font_11_left)
+        ws.write(row_no, 0, 'No.{}'.format(contract_id), xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz left'))
         
         # -------------------------------------------------------------------------------------------------------------------------
         if total_number > 6:
@@ -1234,7 +1238,7 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                                             borders: top_color black, right_color black, top medium, right thin;')
         product_table_last_th_style = xlwt.easyxf('font: height 190, name ＭＳ Ｐゴシック; align: vert center, horiz center, wrap on;\
                                             borders: top_color black, right_color black, top medium, right medium;')
-        product_first_content_style = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap on;\
+        product_first_content_style = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap no;\
                                             borders: top_color black, left_color black, right_color black, bottom_color black, bottom thin, top thin, left medium, right thin;')
         product_content_style = xlwt.easyxf('font: height 240, name ＭＳ ゴシック; align: vert center, horiz right, wrap on;\
                                             borders: top_color black, right_color black, bottom_color black, bottom thin, top thin, right thin;',
@@ -1368,8 +1372,10 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             fee = 0
             total = 0
 
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="trader_purchases_contract_{}.xls"'.format(contract_id)
+        # response = HttpResponse(content_type='application/ms-excel')
+        # response['Content-Disposition'] = 'attachment; filename="trader_purchases_contract_{}.xls"'.format(contract_id)
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="trader_purchases_contract_{}.xlsx"'.format(contract_id)
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet("{}-{}".format(_('Sales contract'), _('Trader purchases')), cell_overwrite_ok=True)
 
@@ -1525,8 +1531,8 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             ws.write(row_no, 0, remark_text, remark_text_style)
             row_no += 1
 
-        # ws.row(row_no).height = int(20 * 8.45)
-        # row_no += 1
+        ws.row(row_no).height = space_height
+        row_no += 1
 
         product_sender_form = TraderPurchasesProductSenderForm(self.request.POST)
         document_sender_form = TraderPurchasesDocumentSenderForm(self.request.POST)
@@ -1984,8 +1990,10 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
 
         ######################################### Sheet Init ########################################
 
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="hall_sales_contract_{}.xls"'.format(contract_id)
+        # response = HttpResponse(content_type='application/ms-excel')
+        # response['Content-Disposition'] = 'attachment; filename="hall_sales_contract_{}.xls"'.format(contract_id)
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="hall_sales_contract_{}.xlsx"'.format(contract_id)
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet("請求書", cell_overwrite_ok=True)
 
@@ -2411,8 +2419,10 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             address = hall_address = hall.address
             hall_tel = hall.tel
 
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="hall_purchases_contract_{}.xls"'.format(contract_id)
+        # response = HttpResponse(content_type='application/ms-excel')
+        # response['Content-Disposition'] = 'attachment; filename="hall_purchases_contract_{}.xls"'.format(contract_id)
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="hall_purchases_contract_{}.xlsx"'.format(contract_id)
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet("請求書", cell_overwrite_ok=True)
 

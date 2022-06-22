@@ -34,6 +34,7 @@ bold_style = xlwt.easyxf('font: bold on, height 200; align: vert center, horiz l
 
 class SalesListView(AdminLoginRequiredMixin, TemplateView):
     template_name = 'accounting/sales.html'
+    paginate_by = 5
     
     def get_contract_list(self):
         trader_qs = TraderSalesContract.objects.filter(available='T').all()
@@ -59,46 +60,56 @@ class SalesListView(AdminLoginRequiredMixin, TemplateView):
             if customer:
                 trader_qs = trader_qs.filter(customer__name__icontains=customer)
                 hall_qs = hall_qs.filter(customer__name__icontains=customer)
+
+            if none_date == 'Enable' or none_date == 'Disable':
+                null_flag = False if none_date == 'Enable' else True
+                trader_qs = trader_qs.filter(sale_print_date__isnull=null_flag)
+                hall_qs = hall_qs.filter(sale_print_date__isnull=null_flag)
+
         contract_list = list(trader_qs) + list(hall_qs)
 
-        contract_list_json = []
+        contract_id_list = [contract.contract_id.strip() for contract in contract_list]
 
-        for contract in contract_list:
-            customer_name = ''
-            try:
-                customer_name = contract.customer.excel
-                # if customer_name == None or customer_name == '':
-                #     customer_name = contract.hall.customer_name
-            except:
-                print('[cutomer error]', contract.contract_id)
-                try:
-                    customer_name = contract.hall.payee
-                except:
-                    customer_name = ''
+        # contract_list_json = []
 
-            item = {
-                "contract_id": contract.contract_id,
-                "created_at": contract.created_at,
-                "fee_total": round(int(contract.taxed_total)),
-                "name": customer_name,
-                "print_date": contract.sale_print_date,
+        # for contract in contract_list:
+        #     customer_name = ''
+        #     try:
+        #         customer_name = contract.customer.excel
+        #         # if customer_name == None or customer_name == '':
+        #         #     customer_name = contract.hall.customer_name
+        #     except:
+        #         print('[cutomer error]', contract.contract_id)
+        #         try:
+        #             customer_name = contract.hall.payee
+        #         except:
+        #             customer_name = ''
 
-                "fee": contract.fee,
-            }
+        #     item = {
+        #         "contract_id": contract.contract_id,
+        #         "created_at": contract.created_at,
+        #         "fee_total": round(int(contract.taxed_total)),
+        #         "name": customer_name,
+        #         "print_date": contract.sale_print_date,
 
-            if none_date == 'Enable' and item['print_date'] is None: continue
-            if none_date == 'Disable' and item['print_date'] is not None: continue
-            contract_list_json.append(item)
+        #         "fee": contract.fee,
+        #     }
 
-        # contract_list_json = list(frozenset(contract_list_json))
-        contract_list_json = { each['contract_id'] : each for each in contract_list_json }.values()
+        #     if none_date == 'Enable' and item['print_date'] is None: continue
+        #     if none_date == 'Disable' and item['print_date'] is not None: continue
+        #     contract_list_json.append(item)
 
-        # Sort data with print date as ascending order
-        contract_list_json = sorted(contract_list_json, key=lambda k: k['print_date'] if k['print_date'] else datetime.date.min, reverse=True)
+        # # contract_list_json = list(frozenset(contract_list_json))
+        # contract_list_json = { each['contract_id'] : each for each in contract_list_json }.values()
 
-        contract_id_list = [contract['contract_id'].strip() for contract in contract_list_json]
+        # # Sort data with print date as ascending order
+        # contract_list_json = sorted(contract_list_json, key=lambda k: k['print_date'] if k['print_date'] else datetime.date.min, reverse=True)
 
-        return [contract_list_json, contract_id_list, contract_list]
+        # contract_id_list = [contract['contract_id'].strip() for contract in contract_list_json]
+
+        # return [contract_list_json, contract_id_list, contract_list]
+
+        return [contract_list, contract_id_list]
     
     def get_paginator(self):
         page = self.request.GET.get('page', 1)
@@ -108,6 +119,7 @@ class SalesListView(AdminLoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_obj'] = self.get_paginator()
+
         context['whole_contract_ids'] = self.get_contract_list()[1]
         params = self.request.GET
         for k, v in params.items():
@@ -165,7 +177,7 @@ class SalesListView(AdminLoginRequiredMixin, TemplateView):
         ws.col(6).width = wide_cell_width
 
         row_no = 1
-        contract_list = self.get_contract_list()[2]
+        contract_list = self.get_contract_list()[0]
         date_style.num_format_str = 'yyyy/mm/dd' if self.request.LANGUAGE_CODE == 'ja' else 'mm/dd/yyyy'
 
         for contract in contract_list:
@@ -239,43 +251,50 @@ class PurchasesListView(AdminLoginRequiredMixin, TemplateView):
                 trader_qs = trader_qs.filter(customer__name__icontains=customer)
                 hall_qs = hall_qs.filter(customer__name__icontains=customer)
 
+            if none_date == 'Enable' or none_date == 'Disable':
+                null_flag = False if none_date == 'Enable' else True
+                trader_qs = trader_qs.filter(purchase_print_date__isnull=null_flag)
+                hall_qs = hall_qs.filter(purchase_print_date__isnull=null_flag)
+
         contract_list = list(trader_qs) + list(hall_qs)
 
-        contract_list_json = []
+        contract_id_list = [contract.contract_id.strip() for contract in contract_list]
 
-        for contract in contract_list:
-            customer_name = ''
-            try:
-                customer_name = contract.customer.excel
-                # if customer_name == None or customer_name == '':
-                #     customer_name = contract.hall.customer_name
-            except:
-                try:
-                    customer_name = contract.hall.payee
-                except:
-                    customer_name = ''
+        # contract_list_json = []
 
-            item = {
-                "contract_id": contract.contract_id,
-                "created_at": contract.created_at,
-                "fee_total": round(int(contract.taxed_total)),
-                "name": customer_name,
-                "print_date": contract.purchase_print_date,
+        # for contract in contract_list:
+        #     customer_name = ''
+        #     try:
+        #         customer_name = contract.customer.excel
+        #         # if customer_name == None or customer_name == '':
+        #         #     customer_name = contract.hall.customer_name
+        #     except:
+        #         try:
+        #             customer_name = contract.hall.payee
+        #         except:
+        #             customer_name = ''
 
-                "fee": contract.fee,
-            }
+        #     item = {
+        #         "contract_id": contract.contract_id,
+        #         "created_at": contract.created_at,
+        #         "fee_total": round(int(contract.taxed_total)),
+        #         "name": customer_name,
+        #         "print_date": contract.purchase_print_date,
 
-            if none_date == 'Enable' and item['print_date'] is None: continue
-            if none_date == 'Disable' and item['print_date'] is not None: continue
-            contract_list_json.append(item)
+        #         "fee": contract.fee,
+        #     }
+
+        #     if none_date == 'Enable' and item['print_date'] is None: continue
+        #     if none_date == 'Disable' and item['print_date'] is not None: continue
+        #     contract_list_json.append(item)
     
-        contract_list_json = { each['contract_id'] : each for each in contract_list_json }.values()
+        # contract_list_json = { each['contract_id'] : each for each in contract_list_json }.values()
 
-        # Sort data with print date as ascending order
-        contract_list_json = sorted(contract_list_json, key=lambda k: k['print_date'] if k['print_date'] else datetime.date.min, reverse=True)
+        # # Sort data with print date as ascending order
+        # contract_list_json = sorted(contract_list_json, key=lambda k: k['print_date'] if k['print_date'] else datetime.date.min, reverse=True)
             
-        contract_id_list = [contract['contract_id'].strip() for contract in contract_list_json]
-        return [contract_list_json, contract_id_list, contract_list]
+        # contract_id_list = [contract['contract_id'].strip() for contract in contract_list_json]
+        return [contract_list, contract_id_list]
     
     def get_paginator(self):
         page = self.request.GET.get('page', 1)
@@ -340,7 +359,7 @@ class PurchasesListView(AdminLoginRequiredMixin, TemplateView):
 
         row_no = 1
         date_style.num_format_str = 'yyyy/mm/dd' if self.request.LANGUAGE_CODE == 'ja' else 'mm/dd/yyyy'
-        contract_list = self.get_contract_list()[2]
+        contract_list = self.get_contract_list()[0]
         for contract in contract_list:
             if contract.contract_id in income_items.keys() and income_items[contract.contract_id]:
 

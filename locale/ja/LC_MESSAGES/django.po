@@ -366,15 +366,15 @@ msgstr "報告日"
 
 #: .\masterdata\models.py:23
 msgid "Delivery"
-msgstr "発送"
+msgstr "商品発送先"
 
 #: .\masterdata\models.py:24 .\templates\contracts\trader_purchases.html:550
 msgid "Receipt"
-msgstr "引取"
+msgstr "商品引取先"
 
 #: .\masterdata\models.py:25
 msgid "ID Change"
-msgstr "ID変更"
+msgstr "商品保管先"
 
 #: .\masterdata\models.py:26
 msgid "* Blank"

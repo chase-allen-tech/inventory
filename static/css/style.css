@@ -361,7 +361,7 @@
     opacity: 1;
 }
 .select-customer + .select2-container {
-    padding-right: 36px;
+    padding-right: 50px;
 }
 .modal_error .modal-body {
     width: 80%;
@@ -470,4 +470,10 @@ form.master-search-form input {
 	.border-sm-right-0 {
         border-right: 0 !important;
 	}
+}
+
+.v-contract-clear {
+    position: absolute;
+    right: -12px;
+    top: 7px;
 }

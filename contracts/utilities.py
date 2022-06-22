@@ -32,6 +32,14 @@ def date_dump(date, lang_code):
         return date.strftime('%m/%d/%Y')
     return date.strftime('%Y/%m/%d')
 
+def date_str_dump(dateStr, lang_code):
+    try:
+        if lang_code == 'en':
+            return datetime.strptime(dateStr, '%m/%d/%Y')
+        return datetime.strptime(dateStr, '%Y/%m/%d')
+    except:
+        return None
+
 def get_shipping_date_label(mode):
     if mode == 'R':
         return _('Receipt date')
