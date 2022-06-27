@@ -42,10 +42,10 @@ def date_str_dump(dateStr, lang_code):
 
 def get_shipping_date_label(mode):
     if mode == 'R':
-        return _('Receipt date')
+        return _('Receipt date'), _('Receipt')
     elif mode == 'C':
-        return _('ID Change date')
-    return _('Delivery date')
+        return _('ID Change date'), _('ID Change')
+    return _('Delivery date'),  _('Product sender')
 
 def log_export_operation(user_id, export):
     data = {

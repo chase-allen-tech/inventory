@@ -472,8 +472,8 @@ form.master-search-form input {
 	}
 }
 
-.v-contract-clear {
-    position: absolute;
-    right: -12px;
-    top: 7px;
+.v-sender-clear,
+.v-document-clear {
+    float: right;
+    margin-top: 5px;
 }

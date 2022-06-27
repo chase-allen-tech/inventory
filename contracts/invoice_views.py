@@ -157,10 +157,10 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
             tel = customer.tel
             fax = customer.fax
 
-        # response = HttpResponse(content_type='application/ms-excel')
-        # response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xls"'.format(contract_id)
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xlsx"'.format(contract_id)
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xls"'.format(contract_id)
+        # response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        # response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xlsx"'.format(contract_id)
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet('業者売用請求書原本', cell_overwrite_ok=True)
 
@@ -718,10 +718,10 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
             fee = 0
             total = 0
 
-        # response = HttpResponse(content_type='application/ms-excel')
-        # response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xls"'.format(contract_id)
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xlsx"'.format(contract_id)
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xls"'.format(contract_id)
+        # response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        # response['Content-Disposition'] = 'attachment; filename="trader_sales_contract_{}.xlsx"'.format(contract_id)
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet('請求書', cell_overwrite_ok=True)
 

@@ -41,7 +41,8 @@ class ContractShippingLabelAjaxView(AdminLoginRequiredMixin, View):
     def post(self, *args, **kwargs):
         if self.request.method == 'POST' and self.request.is_ajax():
             data = self.request.POST.get('data')
-            return JsonResponse({'data': get_shipping_date_label(data)}, status=200)
+            dateLabel, senderLabel = get_shipping_date_label(data)
+            return JsonResponse({'data': dateLabel, 'data1': senderLabel}, status=200)
         return JsonResponse({'success': False}, status=400)
 
 class ContractClassNameAjaxViewPermanent(AdminLoginRequiredMixin, View):

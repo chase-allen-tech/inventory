@@ -90,9 +90,6 @@
 														<select class="select-customer" name="customer_id" required style="flex: 1">
 															<option value="" selected>{% trans "Search by customer, frigana, tel or fax" %}</option>
 														</select>
-
-                            <a href="#" class="v-contract-clear"><i class="icon-minus-circle2 ml-3 color-danger"></i></a>
-														
 														<div class="form-control-feedback w-50-px">
 															<span>{% trans "CO." %}</span>
 														</div>
@@ -631,26 +628,29 @@
 								<div class="row">
 									<div class="col-12 form-group">
 										<span type="text" class="form-control h-200-px">
-※ {% trans "The contract will be effective when both seller and buyer sign and seal." %}<br/>
-※ {% trans "As a general rule, the contract cannot be canceled once signed." %}<br/>
-※ {% trans "3 days warranty after delivery will be provided just in case of defects or malfunctions in the products." %}<br/>
-※ {% trans "The seller will keep the ownership of the products until the buyer makes the full payment." %}<br/>
-※ {% trans "The Ownership of the products shall be transferred to the buyer when product delivery is completed and full payment is made." %}<br/>
-※ {% trans "In the following cases, the seller may, without any procedure, request the immediate payment of the remaining balance, or cancel the contract and take back the products." %}<br/>
-<span>&nbsp;&nbsp;&nbsp;&nbsp;1) {% trans "When the buyer fail to make the payment even once." %}</span><br/>
-<span>&nbsp;&nbsp;&nbsp;&nbsp;2) {% trans "When the products were forfeited or disposed temporarily, or the request for arrangement, reconciliation, damage etc is received." %}</span>
+											※ {% trans "The contract will be effective when both seller and buyer sign and seal." %}<br/>
+											※ {% trans "As a general rule, the contract cannot be canceled once signed." %}<br/>
+											※ {% trans "3 days warranty after delivery will be provided just in case of defects or malfunctions in the products." %}<br/>
+											※ {% trans "The seller will keep the ownership of the products until the buyer makes the full payment." %}<br/>
+											※ {% trans "The Ownership of the products shall be transferred to the buyer when product delivery is completed and full payment is made." %}<br/>
+											※ {% trans "In the following cases, the seller may, without any procedure, request the immediate payment of the remaining balance, or cancel the contract and take back the products." %}<br/>
+											<span>&nbsp;&nbsp;&nbsp;&nbsp;1) {% trans "When the buyer fail to make the payment even once." %}</span><br/>
+											<span>&nbsp;&nbsp;&nbsp;&nbsp;2) {% trans "When the products were forfeited or disposed temporarily, or the request for arrangement, reconciliation, damage etc is received." %}</span>
 										</span>
 									</div>
 								</div>
+								
 								<div class="row d-flex flex-wrap mt-5-s">
+									<!-------------------------------- Product Sender ------------------------------->
 									<div class="col-lg-6 col-xs-12">
 										<fieldset class="content-group">
-											<legend class="text-bold text-center">{% trans "Product sender" %}</legend>
-											<div class="form-group">
+											<legend class="text-bold text-center product-sender-label">{% trans "Product sender" %}</legend>
+											<div class="form-group v-select-product-sender">
 												<label class="control-label">{% trans "Company" %}</label>
 												<select name="product_sender_id" class="select-sender select-product-sender">
 													<option value="">{% trans 'Select product sender' %}...</option>
 												</select>
+												<a href="#" class="v-sender-clear"><i class="icon-minus-circle2 ml-3 color-danger"></i></a>
 											</div>
 											{{ product_sender_form.p_id }}
 											{{product_sender_form.product_sender_tel.placeHolder}}
@@ -686,14 +686,17 @@
 											</div>
 										</fieldset>
 									</div>
+
+									<!-------------------------------- Document Sender ------------------------------->
 									<div class="col-lg-6 col-xs-12">
 										<fieldset class="content-group">
 											<legend class="text-bold text-center">{% trans "Document sender" %}</legend>
-											<div class="form-group">
+											<div class="form-group v-select-document-sender">
 												<label class="control-label">{% trans "Company" %}</label>
 												<select name="document_sender_id" class="select-sender select-document-sender">
 													<option value="">{% trans 'Select document sender' %}...</option>
 												</select>
+												<a href="#" class="v-document-clear"><i class="icon-minus-circle2 ml-3 color-danger"></i></a>
 											</div>
 											{{ document_sender_form.d_id }}
 											<div class="form-group">
@@ -845,6 +848,7 @@
 							},
 							success: function (result) {
 								$('span.shipping_date_label').text(result.data);
+								$('legend.product-sender-label').text(result.data1);
 							}
 						});
 					});
