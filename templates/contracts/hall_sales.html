@@ -828,6 +828,12 @@
 					$form.submit();
 				});
 
+				$('#id_milestone-0-date').on('change', function(e) {
+					if(!$('#id_shipping_date').val()) {
+						$('#id_shipping_date').val($('#id_milestone-0-date').val());
+					}
+				});
+
 			});
 		</script>
 

@@ -374,9 +374,9 @@ class HallSalesContractView(AdminLoginRequiredMixin, TemplateView):
         contract_form = HallSalesContractForm(self.request.POST)
      
         if self.request.POST['sub_total'] != '0' and self.request.POST['sub_total'] != '' and contract_form.is_valid():
-            mdate = date_str_dump(self.request.POST.dict()['milestone-0-date'], self.request.LANGUAGE_CODE)
-            contract = contract_form.save(mdate)
-            # contract = contract_form.save()
+            # mdate = date_str_dump(self.request.POST.dict()['milestone-0-date'], self.request.LANGUAGE_CODE)
+            # contract = contract_form.save(mdate)
+            contract = contract_form.save()
         else:
             return render(request, self.template_name, self.get_context_data(**kwargs))
 
@@ -483,9 +483,9 @@ class HallPurchasesContractView(AdminLoginRequiredMixin, TemplateView):
         contract_form = HallPurchasesContractForm(self.request.POST)
         print( self.request.POST['sub_total'])
         if self.request.POST['sub_total'] != '0' and self.request.POST['sub_total'] != '' and contract_form.is_valid():
-            mdate = date_str_dump(self.request.POST.dict()['milestone-0-date'], self.request.LANGUAGE_CODE)
-            contract = contract_form.save(mdate)
-            # contract = contract_form.save()
+            # mdate = date_str_dump(self.request.POST.dict()['milestone-0-date'], self.request.LANGUAGE_CODE)
+            # contract = contract_form.save(mdate)
+            contract = contract_form.save()
         else:
             return render(request, self.template_name, self.get_context_data(**kwargs))
 
@@ -530,7 +530,8 @@ class HallPurchasesContractView(AdminLoginRequiredMixin, TemplateView):
         for form in milestone_formset.forms:
             if form.is_valid():
                 if milestoneIndex == 0:
-                    form.save(self.request.POST['total'], date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
+                    print('[total]', self.request.POST['total'])
+                    form.save(int(self.request.POST['total'].replace(',', '')), date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
                 else:
                     form.save()
             milestoneIndex += 1

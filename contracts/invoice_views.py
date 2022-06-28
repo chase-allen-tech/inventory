@@ -96,6 +96,8 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
                                             borders: top_color black, right_color black, top medium, right medium;')
         product_first_content_style = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap no;\
                                             borders: top_color black, left_color black, right_color black, bottom_color black, bottom thin, top thin, left medium, right thin;')
+        product_first_content_style_thin = xlwt.easyxf('font: height 180, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap no;\
+                                            borders: top_color black, left_color black, right_color black, bottom_color black, bottom thin, top thin, left medium, right thin;')
         primary_text_style = xlwt.easyxf('font: height 220, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap on;')
         product_content_style = xlwt.easyxf('font: height 220, name ＭＳ ゴシック; align: vert center, horiz right, wrap on;\
                                             borders: top_color black, right_color black, bottom_color black, bottom thin, top thin, right thin;',
@@ -293,7 +295,10 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
                     continue
 
                 ws.row(row_no).height = height_18
-                ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
+                if len(product_name) > 23:
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style_thin)
+                else:
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
                 ws.write(row_no, 7, quantity, product_content_style)
                 ws.write(row_no, 8, price, product_content_style)
                 ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
@@ -588,6 +593,8 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
                                             borders: top_color black, right_color black, top medium, right medium;')
         product_first_content_style = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap no;\
                                             borders: top_color black, left_color black, right_color black, bottom_color black, bottom thin, top thin, left medium, right thin;')
+        product_first_content_style_thin = xlwt.easyxf('font: height 180, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap no;\
+                                            borders: top_color black, left_color black, right_color black, bottom_color black, bottom thin, top thin, left medium, right thin;')
         product_content_style = xlwt.easyxf('font: height 240, name ＭＳ ゴシック; align: vert center, horiz right, wrap on;\
                                             borders: top_color black, right_color black, bottom_color black, bottom thin, top thin, right thin;',
                                             num_format_str='#,##0')
@@ -795,8 +802,12 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
                 if total_number > 6: 
                     continue
 
+                print('[len]', len(product_name))
                 ws.row(row_no).height = int(20 * 15)
-                ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
+                if len(product_name) > 23:
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style_thin)
+                else: 
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
                 ws.write(row_no, 7, quantity, product_content_style)
                 ws.write(row_no, 8, price, product_content_style)
                 ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
@@ -1240,6 +1251,8 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                                             borders: top_color black, right_color black, top medium, right medium;')
         product_first_content_style = xlwt.easyxf('font: height 240, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap no;\
                                             borders: top_color black, left_color black, right_color black, bottom_color black, bottom thin, top thin, left medium, right thin;')
+        product_first_content_style_thin = xlwt.easyxf('font: height 180, name ＭＳ Ｐゴシック; align: vert center, horiz left, wrap no;\
+                                            borders: top_color black, left_color black, right_color black, bottom_color black, bottom thin, top thin, left medium, right thin;')
         product_content_style = xlwt.easyxf('font: height 240, name ＭＳ ゴシック; align: vert center, horiz right, wrap on;\
                                             borders: top_color black, right_color black, bottom_color black, bottom thin, top thin, right thin;',
                                             num_format_str='#,##0')
@@ -1448,7 +1461,10 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
                     continue
 
                 ws.row(row_no).height = int(20 * 15)
-                ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
+                if len(product_name) > 23:
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style_thin)
+                else:
+                    ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style)
                 ws.write(row_no, 7, quantity, product_content_style)
                 ws.write(row_no, 8, price, product_content_style)
                 ws.write_merge(row_no, row_no, 9, 10, amount, product_last_content_style)
