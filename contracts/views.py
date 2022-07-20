@@ -421,7 +421,7 @@ class HallSalesContractView(AdminLoginRequiredMixin, TemplateView):
         for form in milestone_formset.forms:
             if form.is_valid():
                 if milestoneIndex == 0:
-                    form.save(self.request.POST['total'], date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
+                    form.save(int(self.request.POST['total'].replace(',', '')), date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
                 else:
                     form.save()
             milestoneIndex += 1
@@ -530,7 +530,6 @@ class HallPurchasesContractView(AdminLoginRequiredMixin, TemplateView):
         for form in milestone_formset.forms:
             if form.is_valid():
                 if milestoneIndex == 0:
-                    print('[total]', self.request.POST['total'])
                     form.save(int(self.request.POST['total'].replace(',', '')), date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
                 else:
                     form.save()
