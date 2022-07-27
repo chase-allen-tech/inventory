@@ -206,7 +206,7 @@ class TraderSalesInvoiceViewOnly(AdminLoginRequiredMixin, View):
         fee = contract_form.data.get('fee')
         total = contract_form.data.get('total')
         remarks = contract_form.data.get('remarks')
-        shipping_date_label = get_shipping_date_label(shipping_method)
+        shipping_date_label, shipping_sender = get_shipping_date_label(shipping_method)
 
         try:
             sub_total = int(sub_total.replace(',', '')) if len(sub_total.replace(',', '')) > 0 else 0
@@ -712,7 +712,7 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
         fee = contract_form.data.get('fee')
         total = contract_form.data.get('total')
         remarks = contract_form.data.get('remarks')
-        shipping_date_label = get_shipping_date_label(shipping_method)
+        shipping_date_label, shipping_sender = get_shipping_date_label(shipping_method)
 
         try:
             sub_total = int(sub_total.replace(',', '')) if len(sub_total.replace(',', '')) > 0 else 0
@@ -1372,7 +1372,7 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
         fee = contract_form.data.get('fee')
         total = contract_form.data.get('total')
         remarks = contract_form.data.get('remarks')
-        shipping_date_label = get_shipping_date_label(shipping_method)
+        shipping_date_label, shipping_sender = get_shipping_date_label(shipping_method)
 
         try:
             sub_total = int(sub_total.replace(',', '')) if len(sub_total.replace(',', '')) > 0 else 0
@@ -1385,10 +1385,10 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             fee = 0
             total = 0
 
-        # response = HttpResponse(content_type='application/ms-excel')
-        # response['Content-Disposition'] = 'attachment; filename="trader_purchases_contract_{}.xls"'.format(contract_id)
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename="trader_purchases_contract_{}.xlsx"'.format(contract_id)
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="trader_purchases_contract_{}.xls"'.format(contract_id)
+        # response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        # response['Content-Disposition'] = 'attachment; filename="trader_purchases_contract_{}.xlsx"'.format(contract_id)
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet("{}-{}".format(_('Sales contract'), _('Trader purchases')), cell_overwrite_ok=True)
 
@@ -2006,10 +2006,10 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
 
         ######################################### Sheet Init ########################################
 
-        # response = HttpResponse(content_type='application/ms-excel')
-        # response['Content-Disposition'] = 'attachment; filename="hall_sales_contract_{}.xls"'.format(contract_id)
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename="hall_sales_contract_{}.xlsx"'.format(contract_id)
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="hall_sales_contract_{}.xls"'.format(contract_id)
+        # response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        # response['Content-Disposition'] = 'attachment; filename="hall_sales_contract_{}.xlsx"'.format(contract_id)
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet("請求書", cell_overwrite_ok=True)
 
@@ -2435,10 +2435,10 @@ class HallPurchasesInvoiceView(AdminLoginRequiredMixin, View):
             address = hall_address = hall.address
             hall_tel = hall.tel
 
-        # response = HttpResponse(content_type='application/ms-excel')
-        # response['Content-Disposition'] = 'attachment; filename="hall_purchases_contract_{}.xls"'.format(contract_id)
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename="hall_purchases_contract_{}.xlsx"'.format(contract_id)
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="hall_purchases_contract_{}.xls"'.format(contract_id)
+        # response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        # response['Content-Disposition'] = 'attachment; filename="hall_purchases_contract_{}.xlsx"'.format(contract_id)
         wb = xlwt.Workbook(encoding='utf-8')
         ws = wb.add_sheet("請求書", cell_overwrite_ok=True)
 

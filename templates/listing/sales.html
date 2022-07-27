@@ -148,6 +148,7 @@
               <th class="w-10">{% trans "Customer" %}</th>
               <th class="w-10">{% trans "Delivered place" %}</th>
               <th>{% trans "Person in charge" %}</th>
+              <th>{% trans "Date of shipment" %}</th>
               <th>{% trans "Payment date" %}</th>
               <th class="w-18-5">{% trans "Product name" %}</th>
               <th>{% trans "Unit count" %}</th>
@@ -176,6 +177,7 @@
               <td></td>
               {% endif %}
               <td>{{ product.content_object.person_in_charge }}</td>
+              <td>{{ product.content_object.shipping_date }}</td>
               {% if product.content_type_id == hall_contract_id %}
                 <td>{{ product.content_object.shipping_date }}</td>
               {% else %}
