@@ -419,12 +419,14 @@ class HallSalesContractView(AdminLoginRequiredMixin, TemplateView):
    
         milestoneIndex = 0
         for form in milestone_formset.forms:
+            # if form.is_valid():
+            #     if milestoneIndex == 0:
+            #         form.save(int(self.request.POST['total'].replace(',', '')), date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
+            #     else:
+            #         form.save()
+            # milestoneIndex += 1
             if form.is_valid():
-                if milestoneIndex == 0:
-                    form.save(int(self.request.POST['total'].replace(',', '')), date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
-                else:
-                    form.save()
-            milestoneIndex += 1
+                form.save()
 
         return redirect('listing:sales-list')
 
@@ -528,12 +530,14 @@ class HallPurchasesContractView(AdminLoginRequiredMixin, TemplateView):
 
         milestoneIndex = 0
         for form in milestone_formset.forms:
+            # if form.is_valid():
+            #     if milestoneIndex == 0:
+            #         form.save(int(self.request.POST['total'].replace(',', '')), date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
+            #     else:
+            #         form.save()
+            # milestoneIndex += 1
             if form.is_valid():
-                if milestoneIndex == 0:
-                    form.save(int(self.request.POST['total'].replace(',', '')), date_str_dump(self.request.POST['shipping_date'], self.request.LANGUAGE_CODE))
-                else:
-                    form.save()
-            milestoneIndex += 1
+                form.save()
 
         return redirect('listing:purchases-list')
 
