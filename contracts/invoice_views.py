@@ -904,6 +904,8 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
         product_sender_tel = product_sender_form.data.get('product_sender_tel')
         product_sender_fax = product_sender_form.data.get('product_sender_fax')
         product_sender_postal_code = product_sender_form.data.get('product_sender_postal_code')
+
+        print("POSTAL: ", product_sender_postal_code)
         
         document_sender_id = self.request.POST.get('document_sender_id')
         document_expected_arrival_date = self.request.POST.get('document_expected_arrival_date')

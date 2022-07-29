@@ -95,6 +95,7 @@ class TraderSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         id = kwargs.get('pk')
         contract = TraderSalesContract.objects.get(id=id)
+        print("POAT:", contract.customer, contract.customer.postal_code)
         contract_data = {
             'contract_id': contract.contract_id,
             'created_at': contract.created_at,
@@ -131,6 +132,7 @@ class TraderSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
                 'product_sender_name': product_sender.sender.name if product_sender.sender else None,
                 'product_sender_address': product_sender.sender.address if product_sender.sender else None,
                 'product_sender_tel': product_sender.sender.tel if product_sender.sender else None,
+                'product_sender_postal_code': product_sender.sender.postal_code if product_sender.sender.postal_code else None,
                 'product_sender_fax': product_sender.sender.fax if product_sender.sender else None,
                 'product_expected_arrival_date': product_sender.expected_arrival_date
             })
@@ -142,6 +144,7 @@ class TraderSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
                 'document_sender_name': document_sender.sender.name if document_sender.sender else None,
                 'document_sender_address': document_sender.sender.address if document_sender.sender else None,
                 'document_sender_tel': document_sender.sender.tel if document_sender.sender else None,
+                'document_sender_postal_code': document_sender.sender.postal_code if document_sender.sender.postal_code else None,
                 'document_sender_fax': document_sender.sender.fax if document_sender.sender else None,
                 'document_expected_arrival_date': document_sender.expected_arrival_date
             })
@@ -373,17 +376,17 @@ class HallSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         id = kwargs.get('pk')
         contract_form = HallSalesContractForm(self.request.POST, id=id)
-        mdate = self.request.POST.dict()['milestone-0-date']
-        try: 
-            try:
-                mdate = datetime.strptime(mdate, '%m/%d/%Y')
-            except:
-                print('error occured')
-                mdate = datetime.strptime(mdate, '%Y/%m/%d')
-        except:
-            mdate = None
+        # mdate = self.request.POST.dict()['milestone-0-date']
+        # try: 
+        #     try:
+        #         mdate = datetime.strptime(mdate, '%m/%d/%Y')
+        #     except:
+        #         print('error occured')
+        #         mdate = datetime.strptime(mdate, '%Y/%m/%d')
+        # except:
+        #     mdate = None
         if contract_form.is_valid():
-            contract = contract_form.save(mdate)
+            contract = contract_form.save()
         else:
             return render(request, self.template_name, self.get_context_data(**kwargs))
             
@@ -576,16 +579,16 @@ class HallPurchasesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         id = kwargs.get('pk')
         contract_form = HallPurchasesContractForm(self.request.POST, id=id)
-        mdate = self.request.POST.dict()['milestone-0-date']
-        try:
-            try:
-                mdate = datetime.strptime(mdate, '%m/%d/%Y')
-            except:
-                mdate = datetime.strptime(mdate, '%Y/%m/%d')
-        except:
-            mdate = None
+        # mdate = self.request.POST.dict()['milestone-0-date']
+        # try:
+        #     try:
+        #         mdate = datetime.strptime(mdate, '%m/%d/%Y')
+        #     except:
+        #         mdate = datetime.strptime(mdate, '%Y/%m/%d')
+        # except:
+        #     mdate = None
         if contract_form.is_valid():
-            contract = contract_form.save(mdate)
+            contract = contract_form.save()
             
         product_formset = ProductFormSet(
             self.request.POST,
