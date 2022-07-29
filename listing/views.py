@@ -115,7 +115,9 @@ class SalesListView(AdminLoginRequiredMixin, ListView):
         for i in range(len(queryset)):
             if queryset[i].content_type_id == hall_class_id:
                 milestone = Milestone.objects.filter(object_id=queryset[i].object_id, content_type_id=hall_class_id).first()
-                queryset[i].content_object.shipping_date = milestone.date if milestone else None
+                queryset[i].content_object.payment_due_date = milestone.date if milestone else None
+
+        print(queryset[0])
 
         return queryset
     
@@ -278,7 +280,7 @@ class PurchasesListView(AdminLoginRequiredMixin, ListView):
         for i in range(len(queryset)):
             if queryset[i].content_type_id == hall_class_id:
                 milestone = Milestone.objects.filter(object_id=queryset[i].object_id, content_type_id=hall_class_id).first()
-                queryset[i].content_object.shipping_date = milestone.date if milestone else None
+                queryset[i].content_object.payment_due_date = milestone.date if milestone else None
 
         return queryset
     
