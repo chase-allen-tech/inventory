@@ -132,7 +132,7 @@ class TraderSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
                 'product_sender_name': product_sender.sender.name if product_sender.sender else None,
                 'product_sender_address': product_sender.sender.address if product_sender.sender else None,
                 'product_sender_tel': product_sender.sender.tel if product_sender.sender else None,
-                'product_sender_postal_code': product_sender.sender.postal_code if product_sender.sender.postal_code else None,
+                'product_sender_postal_code': product_sender.sender.postal_code if product_sender.sender and product_sender.sender.postal_code else None,
                 'product_sender_fax': product_sender.sender.fax if product_sender.sender else None,
                 'product_expected_arrival_date': product_sender.expected_arrival_date
             })
