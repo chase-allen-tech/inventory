@@ -2290,6 +2290,9 @@ class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
         if total_items_count > 16: 
             ws = wb.add_sheet('別紙', cell_overwrite_ok=True)
 
+            for i in range(11): 
+                ws.col(i).width = int(300 * w_arr[i])
+
             ws.set_header_str(str.encode(''))
             ws.set_footer_str(str.encode(''))
             ws.set_left_margin(0.314961)
