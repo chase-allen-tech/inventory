@@ -38,6 +38,7 @@ class SalesListView(AdminLoginRequiredMixin, TemplateView):
     def get_contract_list(self):
         trader_qs = TraderSalesContract.objects.filter(available='T').all()
         hall_qs = HallSalesContract.objects.filter(available='T').all()
+
         search_form = SearchForm(self.request.GET)
         if search_form.is_valid():
             contract_id = search_form.cleaned_data.get('contract_id')
@@ -62,8 +63,11 @@ class SalesListView(AdminLoginRequiredMixin, TemplateView):
         contract_list = list(trader_qs) + list(hall_qs)
 
         contract_list_json = []
+        
 
         for contract in contract_list:
+            if none_date == 'Enable' and contract.sale_print_date is None: continue
+            if none_date == 'Disable' and contract.sale_print_date is not None: continue
             customer_name = ''
             try:
                 customer_name = contract.customer.excel
@@ -86,8 +90,6 @@ class SalesListView(AdminLoginRequiredMixin, TemplateView):
                 "fee": contract.fee,
             }
 
-            if none_date == 'Enable' and item['print_date'] is None: continue
-            if none_date == 'Disable' and item['print_date'] is not None: continue
             contract_list_json.append(item)
 
         # contract_list_json = list(frozenset(contract_list_json))
@@ -131,7 +133,6 @@ class SalesListView(AdminLoginRequiredMixin, TemplateView):
 
         
         
-
         if self.request.LANGUAGE_CODE == 'en':
             ws = wb.add_sheet('Accounting CSV - Sales')
             ws.set_header_str(str.encode(''))
