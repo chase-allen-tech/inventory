@@ -125,9 +125,17 @@
               <td>{{ contract.created_at }}</td>
               <td>{% trans "Income" %}</td>
               <td>{{ fee_purchases }}</td>
-              <td>{{ contract.fee_total }}</td>
-              <td>{{ contract.name }}</td>
-              <td rowspan="2">{{ contract.print_date|default_if_none:"" }}</td>
+              <td>{{ contract.taxed_total | floatformat:0 }}</td>
+
+              {% if contract.customer is not none and contract.customer.excel is not none %}
+                <td>{{ contract.customer.excel }}</td>
+              {% elif contract.hall is not none and contract.hall.payee is not none %}
+                <td>{{ contract.hall.payee }}</td>
+              {% else %}
+                <td></td>
+              {% endif %}
+              
+              <td rowspan="2">{{ contract.purchase_print_date|default_if_none:"" }}</td>
               <td rowspan="2">
                 <input type="checkbox" class="form-control cw-20-px" id="check-item"
                   data-contract-id="{{contract.contract_id}}">
@@ -138,8 +146,15 @@
               <td>{{ contract.created_at }}</td>
               <td></td>
               <td>{{ no_fee_purchases }}</td>
+
               <td>{{ contract.fee }}</td>
-              <td>{{ contract.name }}</td>
+               {% if contract.customer is not none and contract.customer.excel is not none %}
+                <td>{{ contract.customer.excel }}</td>
+              {% elif contract.hall is not none and contract.hall.payee is not none %}
+                <td>{{ contract.hall.payee }}</td>
+              {% else %}
+                <td></td>
+              {% endif %}
             </tr>
             {% endfor %}
           </tbody>
@@ -158,7 +173,7 @@
             <form action="" method="post">
               {% csrf_token %}
               <input type="text" hidden id="printable-items" name="printable-items">
-              <button type="submit" class="btn btn-primary"><i
+              <button type="submit" class="btn btn-primary v-excel-output"><i
                   class="icon-exit3 position-left"></i>{% trans "Export to excel" %}</button>
             </form>
           </div>
@@ -188,6 +203,18 @@
         items[okey] = ovalue;
         localStorage.setItem(key, JSON.stringify(items));
       }
+
+      $('.v-excel-output').click(function(e) {
+        let data = localStorage.getItem(SALE_INCOME_ITEMS);
+        data = JSON.parse(data) || {};
+        for(let item of Object.keys(data)) {
+          data[item] = false;
+        }
+        setTimeout(() => {
+          localStorage.setItem(SALE_INCOME_ITEMS, JSON.stringify(data));
+          $('input#printable-items').val(JSON.stringify(data));
+        }, 2000);
+      });
 
       $('input#check-item').click(function (e) {
         setLocalStorage(PURCHASE_INCOME_ITEMS, $(this).data('contract-id'), $(this).prop('checked'));

@@ -32,12 +32,20 @@ def date_dump(date, lang_code):
         return date.strftime('%m/%d/%Y')
     return date.strftime('%Y/%m/%d')
 
+def date_str_dump(dateStr, lang_code):
+    try:
+        if lang_code == 'en':
+            return datetime.strptime(dateStr, '%m/%d/%Y')
+        return datetime.strptime(dateStr, '%Y/%m/%d')
+    except:
+        return None
+
 def get_shipping_date_label(mode):
     if mode == 'R':
-        return _('Receipt date')
+        return _('Receipt date'), _('Receipt label')
     elif mode == 'C':
-        return _('ID Change date')
-    return _('Delivery date')
+        return _('ID Change date'), _('ID Change label')
+    return _('Delivery date'),  _('Product sender')
 
 def log_export_operation(user_id, export):
     data = {

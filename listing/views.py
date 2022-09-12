@@ -59,6 +59,8 @@ class SalesListView(AdminLoginRequiredMixin, ListView):
             contract_id = search_form.cleaned_data.get('contract_id')
             created_at =  search_form.cleaned_data.get('created_at')
             created_at_to =  search_form.cleaned_data.get('created_at_to')
+            shipping_date_from =  search_form.cleaned_data.get('shipping_date_from')
+            shipping_date_to =  search_form.cleaned_data.get('shipping_date_to')
             customer = search_form.cleaned_data.get('customer')
             name = search_form.cleaned_data.get('name')
             person_in_charge = search_form.cleaned_data.get('person_in_charge')
@@ -78,6 +80,18 @@ class SalesListView(AdminLoginRequiredMixin, ListView):
                 queryset = queryset.filter(
                     Q(trader_sales_contract__created_at__lte=created_at_to) |
                     Q(hall_sales_contract__created_at__lte=created_at_to)
+                )
+            
+            if shipping_date_from:
+                queryset = queryset.filter(
+                    Q(trader_sales_contract__shipping_date__gte=shipping_date_from) |
+                    Q(hall_sales_contract__shipping_date__gte=shipping_date_from)
+                )
+
+            if shipping_date_to:
+                queryset = queryset.filter(
+                    Q(trader_sales_contract__shipping_date__lte=shipping_date_to) |
+                    Q(hall_sales_contract__shipping_date__lte=shipping_date_to)
                 )
 
             if customer:
@@ -101,7 +115,9 @@ class SalesListView(AdminLoginRequiredMixin, ListView):
         for i in range(len(queryset)):
             if queryset[i].content_type_id == hall_class_id:
                 milestone = Milestone.objects.filter(object_id=queryset[i].object_id, content_type_id=hall_class_id).first()
-                queryset[i].content_object.shipping_date = milestone.date if milestone else None
+                queryset[i].content_object.payment_due_date = milestone.date if milestone else None
+
+        print(queryset[0])
 
         return queryset
     
@@ -210,6 +226,8 @@ class PurchasesListView(AdminLoginRequiredMixin, ListView):
             contract_id = search_form.cleaned_data.get('contract_id')
             created_at =  search_form.cleaned_data.get('created_at')
             created_at_to =  search_form.cleaned_data.get('created_at_to')
+            shipping_date_from =  search_form.cleaned_data.get('shipping_date_from')
+            shipping_date_to =  search_form.cleaned_data.get('shipping_date_to')
             customer = search_form.cleaned_data.get('customer')
             name = search_form.cleaned_data.get('name')
             person_in_charge = search_form.cleaned_data.get('person_in_charge')
@@ -231,7 +249,18 @@ class PurchasesListView(AdminLoginRequiredMixin, ListView):
                     Q(hall_purchases_contract__created_at__lte=created_at_to)
                 )
 
-            print(customer)
+            if shipping_date_from:
+                queryset = queryset.filter(
+                    Q(trader_purchases_contract__shipping_date__gte=shipping_date_from) |
+                    Q(hall_purchases_contract__shipping_date__gte=shipping_date_from)
+                )
+
+            if shipping_date_to:
+                queryset = queryset.filter(
+                    Q(trader_purchases_contract__shipping_date__lte=shipping_date_to) |
+                    Q(hall_purchases_contract__shipping_date__lte=shipping_date_to)
+                )
+
             if customer:
                 queryset = queryset.filter(
                     Q(trader_purchases_contract__customer__name__icontains=customer) |
@@ -251,7 +280,7 @@ class PurchasesListView(AdminLoginRequiredMixin, ListView):
         for i in range(len(queryset)):
             if queryset[i].content_type_id == hall_class_id:
                 milestone = Milestone.objects.filter(object_id=queryset[i].object_id, content_type_id=hall_class_id).first()
-                queryset[i].content_object.shipping_date = milestone.date if milestone else None
+                queryset[i].content_object.payment_due_date = milestone.date if milestone else None
 
         return queryset
     
@@ -359,6 +388,8 @@ class DeletedListView(AdminLoginRequiredMixin, ListView):
             contract_id = search_form.cleaned_data.get('contract_id')
             created_at =  search_form.cleaned_data.get('created_at')
             created_at_to =  search_form.cleaned_data.get('created_at_to')
+            shipping_date_from =  search_form.cleaned_data.get('shipping_date_from')
+            shipping_date_to =  search_form.cleaned_data.get('shipping_date_to')
             customer = search_form.cleaned_data.get('customer')
             name = search_form.cleaned_data.get('name')
             person_in_charge = search_form.cleaned_data.get('person_in_charge')
@@ -384,6 +415,22 @@ class DeletedListView(AdminLoginRequiredMixin, ListView):
                     Q(hall_sales_contract__created_at__lte=created_at_to) |
                     Q(trader_purchases_contract__created_at__lte=created_at_to) |
                     Q(hall_purchases_contract__created_at__lte=created_at_to)
+                )
+
+            if shipping_date_from:
+                queryset = queryset.filter(
+                    Q(trader_sales_contract__created_at__gte=shipping_date_from) |
+                    Q(hall_sales_contract__created_at__gte=shipping_date_from) |
+                    Q(trader_purchases_contract__created_at__gte=shipping_date_from) |
+                    Q(hall_purchases_contract__created_at__gte=shipping_date_from)
+                )
+
+            if shipping_date_to:
+                queryset = queryset.filter(
+                    Q(trader_sales_contract__created_at__lte=shipping_date_to) |
+                    Q(hall_sales_contract__created_at__lte=shipping_date_to) |
+                    Q(trader_purchases_contract__created_at__lte=shipping_date_to) |
+                    Q(hall_purchases_contract__created_at__lte=shipping_date_to)
                 )
 
             if customer:
@@ -558,6 +605,8 @@ class LinkListShowView(AdminLoginRequiredMixin, ListView):
             contract_id = search_form.cleaned_data.get('contract_id')
             created_at = search_form.cleaned_data.get('created_at')
             created_at_to = search_form.cleaned_data.get('created_at_to')
+            shipping_date_from = search_form.cleaned_data.get('shipping_date_from')
+            shipping_date_to = search_form.cleaned_data.get('shipping_date_to')
             person_in_charge = search_form.cleaned_data.get('person_in_charge')
             report_date = search_form.cleaned_data.get('report_date')
             inventory_status = search_form.cleaned_data.get('inventory_status')
@@ -568,6 +617,10 @@ class LinkListShowView(AdminLoginRequiredMixin, ListView):
                 payload = [item for item in payload if item['p']['created_at'] >= created_at or item['s']['created_at'] >= created_at]
             if created_at_to:
                 payload = [item for item in payload if item['p']['created_at'] <= created_at_to or item['s']['created_at'] <= created_at_to]
+            if shipping_date_from:
+                payload = [item for item in payload if item['p']['shipping_date'] >= shipping_date_from or item['s']['shipping_date'] >= shipping_date_from]
+            if shipping_date_to:
+                payload = [item for item in payload if item['p']['shipping_date'] <= shipping_date_to or item['s']['shipping_date'] <= shipping_date_to]
             if person_in_charge:
                 payload = [item for item in payload if item['p']['person_in_charge'] == person_in_charge or item['s']['person_in_charge'] == person_in_charge]
             if report_date:
@@ -731,6 +784,8 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
             p_contract_id = search_form.cleaned_data.get('p_contract_id')
             p_created_at =  search_form.cleaned_data.get('p_created_at')
             p_created_at_to =  search_form.cleaned_data.get('p_created_at_to')
+            p_shipping_date_from =  search_form.cleaned_data.get('p_shipping_date_from')
+            p_shipping_date_to =  search_form.cleaned_data.get('p_shipping_date_to')
             p_customer = search_form.cleaned_data.get('p_customer')
             p_name = search_form.cleaned_data.get('p_name')
             p_person_in_charge = search_form.cleaned_data.get('p_person_in_charge')
@@ -739,6 +794,8 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
             s_contract_id = search_form.cleaned_data.get('s_contract_id')
             s_created_at =  search_form.cleaned_data.get('s_created_at')
             s_created_at_to =  search_form.cleaned_data.get('s_created_at_to')
+            s_shipping_date_from =  search_form.cleaned_data.get('s_shipping_date_from')
+            s_shipping_date_to =  search_form.cleaned_data.get('s_shipping_date_to')
             s_customer = search_form.cleaned_data.get('s_customer')
             s_name = search_form.cleaned_data.get('s_name')
             s_person_in_charge = search_form.cleaned_data.get('s_person_in_charge')
@@ -765,6 +822,18 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
                 purchase_queryset = purchase_queryset.filter(
                     Q(trader_purchases_contract__created_at__lte=p_created_at_to) |
                     Q(hall_purchases_contract__created_at__lte=p_created_at_to)
+                )
+
+            if p_shipping_date_from:
+                queryset = queryset.filter(
+                    Q(trader_purchases_contract__shipping_date__gte=p_shipping_date_from) |
+                    Q(hall_purchases_contract__shipping_date__gte=p_shipping_date_from)
+                )
+
+            if p_shipping_date_to:
+                queryset = queryset.filter(
+                    Q(trader_purchases_contract__shipping_date__lte=p_shipping_date_to) |
+                    Q(hall_purchases_contract__shipping_date__lte=p_shipping_date_to)
                 )
 
             if p_customer:
@@ -815,6 +884,18 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
                 sales_queryset = sales_queryset.filter(
                     Q(trader_sales_contract__created_at__lte=s_created_at_to) |
                     Q(hall_sales_contract__created_at__lte=s_created_at_to)
+                )
+
+            if s_shipping_date_from:
+                queryset = queryset.filter(
+                    Q(trader_sales_contract__shipping_date__gte=s_shipping_date_from) |
+                    Q(hall_sales_contract__shipping_date__gte=s_shipping_date_from)
+                )
+
+            if s_shipping_date_to:
+                queryset = queryset.filter(
+                    Q(trader_sales_contract__shipping_date__lte=s_shipping_date_to) |
+                    Q(hall_sales_contract__shipping_date__lte=s_shipping_date_to)
                 )
 
             if s_customer:

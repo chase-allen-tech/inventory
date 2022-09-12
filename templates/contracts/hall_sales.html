@@ -9,7 +9,7 @@
 {% block content %}
 
 <!-- Main content -->
-<div class="content-wrapper">
+<div class="content-wrapper" style="background: #F1BFC0">
 
 	<!-- Page header -->
 	<div class="page-header">
@@ -827,6 +827,14 @@
 					$form.data('invoice', true);
 					$form.submit();
 				});
+
+				/*
+				$('#id_milestone-0-date').on('change', function(e) {
+					if(!$('#id_shipping_date').val()) {
+						$('#id_shipping_date').val($('#id_milestone-0-date').val());
+					}
+				});
+				*/
 
 			});
 		</script>

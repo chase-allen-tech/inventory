@@ -9,7 +9,7 @@
 {% block content %}
 
 <!-- Main content -->
-<div class="content-wrapper">
+<div class="content-wrapper" style="background: #ABACE2">
 
 	<!-- Page header -->
 	<div class="page-header">
@@ -92,7 +92,6 @@
 															{% trans "Search by customer, frigana, tel or fax" %}
 														</option>
 													</select>
-
 													<div class="form-control-feedback w-50-px">
 														<span>{% trans "CO." %}</span>
 													</div>
@@ -621,15 +620,19 @@
 									</span>
 								</div>
 							</div>
+							
 							<div class="row d-flex flex-wrap mt-5-s">
+
+								<!-------------------------------- Product Sender ------------------------------->
 								<div class="col-lg-6 col-xs-12">
 									<fieldset class="content-group">
-										<legend class="text-bold text-center">{% trans "Product sender" %}</legend>
-										<div class="form-group">
+										<legend class="text-bold text-center product-sender-label">{% trans "Product sender" %}</legend>
+										<div class="form-group v-select-product-sender">
 											<label class="control-label">{% trans "Company" %}</label>
 											<select name="product_sender_id" class="select-sender select-product-sender">
 												<option value="">{% trans 'Select product sender' %}...</option>
 											</select>
+											<a href="#" class="v-sender-clear"><i class="icon-minus-circle2 ml-3 color-danger"></i></a>
 										</div>
 										{{ product_sender_form.p_id }}
 										<div class="form-group">
@@ -672,14 +675,17 @@
 									</fieldset>
 
 								</div>
+
+								<!-------------------------------- Document Sender ------------------------------->
 								<div class="col-lg-6 col-xs-12">
 									<fieldset class="content-group">
 										<legend class="text-bold text-center">{% trans "Document sender" %}</legend>
-										<div class="form-group">
+										<div class="form-group v-select-document-sender">
 											<label class="control-label">{% trans "Company" %}</label>
 											<select name="document_sender_id" class="select-sender select-document-sender">
 												<option value="">{% trans 'Select document sender' %}...</option>
 											</select>
+											<a href="#" class="v-document-clear"><i class="icon-minus-circle2 ml-3 color-danger"></i></a>
 										</div>
 										{{ document_sender_form.d_id }}
 										<div class="form-group">
@@ -913,6 +919,24 @@
 
 				resetMangementForm('product');
 				resetMangementForm('document');
+
+				$('#id_shipping_method').change(function () {
+					var shipping_method = $(this).val();
+					$.ajax({
+						type: 'POST',
+						url: "{% url 'contract:shipping-label' %}",
+						data: {
+							data: shipping_method,
+						},
+						beforeSend: function(request) {
+							request.setRequestHeader('X-CSRFToken', csrftoken);
+						},
+						success: function (result) {
+							$('span.shipping_date_label').text(result.data);
+							$('legend.product-sender-label').text(result.data1);
+						}
+					});
+				});
 
 				$('button.create-invoice').click(function (e) {
 					var $form = $(this).closest('form');

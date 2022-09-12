@@ -29,6 +29,8 @@
               <input type="text" name="p_contract_id" value="{{ p_contract_id }}">
               <input type="text" name="p_created_at" value="{{ p_created_at }}">
               <input type="text" name="p_created_at_to" value="{{ p_created_at_to }}">
+              <input type="text" name="p_shipping_date_from" value="{{ p_shipping_date_from }}">
+              <input type="text" name="p_shipping_date_to" value="{{ p_shipping_date_to }}">
               <input type="text" name="p_customer" value="{{ p_customer }}">
               <input type="text" name="p_name" value="{{ p_name }}">
               <input type="text" name="p_inventory_status" value="{{ p_inventory_status }}">
@@ -36,6 +38,8 @@
               <input type="text" name="s_contract_id" value="{{ s_contract_id }}">
               <input type="text" name="s_created_at" value="{{ s_created_at }}">
               <input type="text" name="s_created_at_to" value="{{ s_created_at_to }}">
+              <input type="text" name="s_shipping_date_from" value="{{ s_shipping_date_from }}">
+              <input type="text" name="s_shipping_date_to" value="{{ s_shipping_date_to }}">
               <input type="text" name="s_customer" value="{{ s_customer }}">
               <input type="text" name="s_name" value="{{ s_name }}">
               <input type="text" name="s_inventory_status" value="{{ s_inventory_status }}">
@@ -109,6 +113,8 @@
               <input type="text" name="s_contract_id" value="{{ s_contract_id }}">
               <input type="text" name="s_created_at" value="{{ s_created_at }}">
               <input type="text" name="s_created_at_to" value="{{ s_created_at_to }}">
+              <input type="text" name="s_shipping_date_from" value="{{ s_shipping_date_from }}">
+              <input type="text" name="s_shipping_date_to" value="{{ s_shipping_date_to }}">
               <input type="text" name="s_customer" value="{{ s_customer }}">
               <input type="text" name="s_name" value="{{ s_name }}">
               <input type="text" name="s_inventory_status" value="{{ s_inventory_status }}">
@@ -148,6 +154,25 @@
 
               <div class="col-md-2">
                 <div class="form-group">
+                  <label>{% trans "Created date" %}:</label>
+                  <div class="d-flex">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="icon-calendar22"></i></span>
+                      <input type="text" class="form-control datepicker-nullable" name="p_shipping_date_from"
+                        value="{{ p_shipping_date_from }}">
+                    </div>
+                    <div style="margin-top: auto; margin-bottom: auto; margin-left: 10px; margin-right: 10px;">~</div>
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="icon-calendar22"></i></span>
+                      <input type="text" class="form-control datepicker-nullable" name="p_shipping_date_to"
+                        value="{{ p_shipping_date_to }}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-2">
+                <div class="form-group">
                   <label>{% trans "Customer" %}:</label>
                   <input type="text" class="form-control" name="p_customer" value="{{ p_customer }}"
                     placeholder="{% trans 'Customer' %}">
@@ -162,7 +187,7 @@
                 </div>
               </div>
 
-              <div class="col-md-2">
+              <div class="col-md-1">
                 <div class="form-group">
                   <label>{% trans "Person in charge" %}:</label>
                   <input type="text" class="form-control" name="p_person_in_charge" value="{{ p_person_in_charge }}"
@@ -170,7 +195,7 @@
                 </div>
               </div>
 
-              <div class="col-md-2">
+              <div class="col-md-1">
                 <div class="form-group">
                   <label>{% trans "Inventory status" %}:</label>
                   <select name="p_inventory_status" class="selectbox">
@@ -375,6 +400,8 @@
               <input type="text" name="p_contract_id" value="{{ p_contract_id }}">
               <input type="text" name="p_created_at" value="{{ p_created_at }}">
               <input type="text" name="p_created_at_to" value="{{ p_created_at_to }}">
+              <input type="text" name="p_shipping_date_from" value="{{ p_shipping_date_from }}">
+              <input type="text" name="p_shipping_date_to" value="{{ p_shipping_date_to }}">
               <input type="text" name="p_customer" value="{{ p_customer }}">
               <input type="text" name="p_name" value="{{ p_name }}">
               <input type="text" name="p_inventory_status" value="{{ p_inventory_status }}">
@@ -413,6 +440,25 @@
               </div>
               <div class="col-md-2">
                 <div class="form-group">
+                  <label>{% trans "Date of shipment" %}:</label>
+
+                  <div class="d-flex">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="icon-calendar22"></i></span>
+                      <input type="text" class="form-control datepicker-nullable" name="s_shipping_date_from"
+                        value="{{ s_shipping_date_from }}">
+                    </div>
+                    <div style="margin-top: auto; margin-bottom: auto; margin-left: 10px; margin-right: 10px;">~</div>
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="icon-calendar22"></i></span>
+                      <input type="text" class="form-control datepicker-nullable" name="s_shipping_date_to"
+                        value="{{ s_shipping_date_to }}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
                   <label>{% trans "Customer" %}:</label>
                   <input type="text" class="form-control" name="s_customer" value="{{ s_customer }}"
                     placeholder="{% trans 'Customer' %}">
@@ -425,14 +471,14 @@
                     placeholder="{% trans 'Product name' %}">
                 </div>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-1">
                 <div class="form-group">
                   <label>{% trans "Person in charge" %}:</label>
                   <input type="text" class="form-control" name="s_person_in_charge" value="{{ s_person_in_charge }}"
                     placeholder="{% trans 'Person in charge' %}">
                 </div>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-1">
                 <div class="form-group">
                   <label>{% trans "Inventory status" %}:</label>
                   <select name="s_inventory_status" class="selectbox">

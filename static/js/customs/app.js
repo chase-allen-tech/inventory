@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if ($tr.find('input[name$="-fee"]').length) {
                     var fee = parseInt($tr.find('input[name$="-fee"]').val().replaceAll(',', ''));
                     fee_sum += fee;
+                    console.log('[fee sum]', fee_sum);
                 }
             });
         });
@@ -277,7 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Only ASCII charactar in that range allowed
     $('table').on('keypress', 'input[type="number"]', function (e) {
-        var ASCIICode = (e.which) ? e.which : e.keyCode
+        var ASCIICode = (e.which) ? e.which : e.keyCode;
         if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
             return false;
         return true;
@@ -356,5 +357,5 @@ document.addEventListener('DOMContentLoaded', function () {
             $(this).attr('action', $(location).attr('href'));
         else
             $(this).data('invoice', false);
-    })
+    });
 });

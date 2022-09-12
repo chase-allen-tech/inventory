@@ -157,24 +157,24 @@ class MilestoneForm(forms.Form):
         data = self.cleaned_data['date']
         return data
     
-    def save(self):
+    def save(self, amount = None, shipping_date = None):
         id = self.cleaned_data.get('id')
         if id:
             milestone = Milestone.objects.get(id=id)
-            milestone.date = self.cleaned_data.get('date')
-            milestone.amount = self.cleaned_data.get('amount')
+            milestone.date = self.cleaned_data.get('date') if self.cleaned_data.get('date') else shipping_date
+            milestone.amount = self.cleaned_data.get('amount') if self.cleaned_data.get('amount') else amount
             milestone.save()
         else:
             contract_class_name = ContentType.objects.get(model=self.contract_class)
             contract_class = contract_class_name.model_class()
             contract = contract_class.objects.get(id=self.contract_id)
             data = {
-                'date': self.cleaned_data.get('date'),
-                'amount': self.cleaned_data.get('amount'),
+                'date': self.cleaned_data.get('date') if self.cleaned_data.get('date') else shipping_date,
+                'amount': self.cleaned_data.get('amount') if self.cleaned_data.get('amount') else amount,
                 'content_object': contract,
             }
             Milestone.objects.create(**data)
-
+# shipping_date if shipping_date else cleaned_data.get('shipping_date')
 
 class ItemValidationFormSet(BaseFormSet):
     def get_form_kwargs(self, index):
