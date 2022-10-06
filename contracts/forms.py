@@ -594,7 +594,6 @@ class HallSalesContractForm(forms.Form):
         
 
     def save(self, shipping_date = None):
-        print(self.fields)
         if self.id:
             contract = HallSalesContract.objects.get(id=self.id)
             cleaned_data = self.cleaned_data

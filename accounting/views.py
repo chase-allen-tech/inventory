@@ -80,7 +80,6 @@ class SalesListView(AdminLoginRequiredMixin, TemplateView):
         #         # if customer_name == None or customer_name == '':
         #         #     customer_name = contract.hall.customer_name
         #     except:
-        #         print('[cutomer error]', contract.contract_id)
         #         try:
         #             customer_name = contract.hall.payee
         #         except:
@@ -188,7 +187,6 @@ class SalesListView(AdminLoginRequiredMixin, TemplateView):
                     # if customer_name == None or customer_name == '':
                     #     customer_name = contract.hall.customer_name
                 except:
-                    print('[cutomer error]', contract.contract_id)
                     try:
                         customer_name = contract.hall.payee
                     except:
@@ -315,7 +313,6 @@ class PurchasesListView(AdminLoginRequiredMixin, TemplateView):
     
     def post(self, request, *args, **kwargs):
         income_items = json.loads(self.request.POST.get('printable-items'))
-        print(income_items)
 
         user_id = self.request.user.id
         log_export_operation(user_id, "{} - {}".format(_("Accounting software CSV"), _("Purchase")))

@@ -95,7 +95,6 @@ class TraderSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         id = kwargs.get('pk')
         contract = TraderSalesContract.objects.get(id=id)
-        print("POAT:", contract.customer, contract.customer.postal_code)
         contract_data = {
             'contract_id': contract.contract_id,
             'created_at': contract.created_at,
@@ -381,7 +380,6 @@ class HallSalesContractUpdateView(AdminLoginRequiredMixin, TemplateView):
         #     try:
         #         mdate = datetime.strptime(mdate, '%m/%d/%Y')
         #     except:
-        #         print('error occured')
         #         mdate = datetime.strptime(mdate, '%Y/%m/%d')
         # except:
         #     mdate = None

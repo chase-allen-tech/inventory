@@ -29,7 +29,6 @@ class ContractProduct(models.Model):
 
     @property
     def fee(self):
-        print('--fee--')
         price = round(self.price / 1000) * 1000
         if price > THRESHOLD_PRICE:
             return int(200 * self.quantity * (price / THRESHOLD_PRICE))

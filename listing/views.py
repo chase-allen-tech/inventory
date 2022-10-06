@@ -53,7 +53,6 @@ class SalesListView(AdminLoginRequiredMixin, ListView):
             Q(content_type_id=trader_class_id) |
             Q(content_type_id=hall_class_id)
         ).filter(available='T').order_by('-pk')
-        # print(ContractProduct.objects.all())
         search_form = ListingSearchForm(self.request.GET)
         if search_form.is_valid():
             contract_id = search_form.cleaned_data.get('contract_id')
@@ -116,8 +115,6 @@ class SalesListView(AdminLoginRequiredMixin, ListView):
             if queryset[i].content_type_id == hall_class_id:
                 milestone = Milestone.objects.filter(object_id=queryset[i].object_id, content_type_id=hall_class_id).first()
                 queryset[i].content_object.payment_due_date = milestone.date if milestone else None
-
-        print(queryset[0])
 
         return queryset
     
@@ -381,7 +378,6 @@ class DeletedListView(AdminLoginRequiredMixin, ListView):
         ).filter(available='F').order_by('-pk')
 
         whole = queryset.all()
-        print(len(whole))
 
         search_form = ListingSearchForm(self.request.GET)
         if search_form.is_valid():
@@ -454,7 +450,6 @@ class DeletedListView(AdminLoginRequiredMixin, ListView):
             if inventory_status:
                 queryset = queryset.filter(Q(status=inventory_status))
 
-            print(queryset)
         return queryset.order_by('-pk')
   
     def get_context_data(self, **kwargs):
@@ -469,7 +464,6 @@ class DeletedListView(AdminLoginRequiredMixin, ListView):
 
 class LinkProductsAjaxView(AdminLoginRequiredMixin, View):
     def get(self):
-        # print('-' * 30, 'LinkProductsAjaxView')
         queryset = TraderLink.objects.order_by('-pk')
         return queryset
 
@@ -490,8 +484,6 @@ class LinkProductsAjaxView(AdminLoginRequiredMixin, View):
             p_same_order = self.request.POST.get('p_same_order')
             s_contract_id = self.request.POST.get('s_contract_id')
             s_same_order = self.request.POST.get('s_same_order')
-
-            # print(p_contract_id, p_same_order, s_contract_id, s_same_order)
 
             purchase_queryset, sales_queryset, _, _, _, _ = getQuerySet()
 
@@ -774,8 +766,6 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
 
         purchase_queryset, sales_queryset, _, phid, _, shid = getQuerySet()
 
-        print('[pur]', len(purchase_queryset))
-
         search_form = ListingLinkSearchForm(self.request.GET)
         
         if search_form.is_valid():
@@ -899,7 +889,6 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
                 )
 
             if s_customer:
-                print('customer]', s_customer)
                 sales_queryset = sales_queryset.filter(
                     Q(trader_sales_contract__customer__name__icontains=s_customer) |
                     # Q(hall_sales_contract__customer__name__icontains=s_customer)
@@ -943,8 +932,6 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
                 prev_contract_id = p.content_object.contract_id
                 same_order = 0
             report_date = json.loads(p.report_date) if p.report_date else {}
-
-            print('[product]', p)
 
             while True:
                 if p.content_object == None: break
@@ -1034,19 +1021,13 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
         # Already exists
         traderLinks = TraderLink.objects.order_by('-pk').all()
         pids = [(pid.purchase_contract_id, pid.purchase_same_order) for pid in traderLinks]
-        print(pids)
         for idx, p in enumerate(p_result):
-            print("**", p['id'], p['same_order'])
             p_result[idx]['linked'] = (int(p['id']), int(p['same_order'])) in pids
 
-        print('*' * 20)
         sids = [(sid.sale_contract_id, sid.sale_same_order) for sid in traderLinks]
-        print(sids)
         for idx, s in enumerate(s_result):
-            print("**", s['id'], s['same_order'])
             s_result[idx]['linked'] = (int(s['id']), int(s['same_order'])) in sids
             
-
         return [paginator1.page(first_page_num), paginator2.page(second_page_num), paginator1, paginator2, p_contract_id_list, s_contract_id_list, p_result, s_result]
 
     def get_context_data(self, **kwargs):
@@ -1093,7 +1074,6 @@ class LinkListView(AdminLoginRequiredMixin, ListView):
             Q(trader_sales_contract__contract_id__icontains=s_id) |
             Q(hall_sales_contract__contract_id__icontains=s_id)
         )
-        # print(purchase_queryset, sale_queryset)
         try:
             purchase_queryset = purchase_queryset.get()
         except Exception:

@@ -107,7 +107,6 @@ bold_style = xlwt.easyxf('font: bold on, height 200; align: vert center, horiz l
                     # if customer_name == None or customer_name == '':
                     #     customer_name = contract.hall.customer_name
                 except:
-                    print('[cutomer error]', contract.contract_id)
                     try:
                         customer_name = contract.hall.payee
                     except:

@@ -802,7 +802,6 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
                 if total_number > 6: 
                     continue
 
-                print('[len]', len(product_name))
                 ws.row(row_no).height = int(20 * 15)
                 if len(product_name) > 23:
                     ws.write_merge(row_no, row_no, 0, 6, product_name, product_first_content_style_thin)
@@ -905,8 +904,6 @@ class TraderSalesInvoiceView(AdminLoginRequiredMixin, View):
         product_sender_fax = product_sender_form.data.get('product_sender_fax')
         product_sender_postal_code = product_sender_form.data.get('product_sender_postal_code')
 
-        print("POSTAL: ", product_sender_postal_code)
-        
         document_sender_id = self.request.POST.get('document_sender_id')
         document_expected_arrival_date = self.request.POST.get('document_expected_arrival_date')
         document_sender_company = ""
@@ -1856,8 +1853,6 @@ class TraderPurchasesInvoiceView(AdminLoginRequiredMixin, View):
 
 class HallSalesInvoiceView(AdminLoginRequiredMixin, View):
     def post(self, *args, **kwargs):
-
-        print('ENTER')
 
         ######################################### Style Define ########################################
         w_arr = [9.15, 8.04, 10.04, 2.04, 7.04, 6.04, 6.71, 7.15, 12.59, 6.71, 6.71]

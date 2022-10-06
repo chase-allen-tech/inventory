@@ -101,7 +101,6 @@ class HallListView(AdminLoginRequiredMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        # print(json.dumps(HallFilter(self.request.GET, queryset=self.queryset).qs.order_by('pk')[1]))
         return HallFilter(self.request.GET, queryset=self.queryset).qs.order_by('pk')
 
     def get_context_data(self, **kwargs):

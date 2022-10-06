@@ -51,8 +51,6 @@ class ContractClassNameAjaxViewPermanent(AdminLoginRequiredMixin, View):
         dels = QueryDict(self.request.body)
         contract_id = dels.get('contract_id')
 
-        print('*****', dels)
-
         purchase_trader_class_id = ContentType.objects.get(model='traderpurchasescontract').id
         purchase_hall_class_id = ContentType.objects.get(model='hallpurchasescontract').id
         sales_trader_class_id = ContentType.objects.get(model='tradersalescontract').id
@@ -134,8 +132,6 @@ class ContractClassNameAjaxView(AdminLoginRequiredMixin, View):
 
             # TraderSalesContract.objects.filter(contract_id__icontains=contract_id).all().delete()
             # HallSalesContract.objects.filter(contract_id__icontains=contract_id).all().delete()
-
-            # print(TraderSalesContract.objects.filter(contract_id__icontains=contract_id).all(), contract_id)
 
             TraderSalesContract.objects.filter(contract_id__icontains=contract_id).all().update(available='F')
             HallSalesContract.objects.filter(contract_id__icontains=contract_id).all().update(available='F')
@@ -285,8 +281,6 @@ class TraderPurchasesContractView(AdminLoginRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
 
-        print(self.request.POST)
-
         contract_form = TraderPurchasesContractForm(self.request.POST)
         if self.request.POST['sub_total'] != '0' and contract_form.is_valid():
             contract = contract_form.save()
@@ -310,7 +304,6 @@ class TraderPurchasesContractView(AdminLoginRequiredMixin, TemplateView):
             prefix='product'
         )
         for form in product_formset.forms:
-            print(form.is_valid())
             if form.is_valid():
                 form.save()
 
@@ -483,7 +476,6 @@ class HallPurchasesContractView(AdminLoginRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         contract_form = HallPurchasesContractForm(self.request.POST)
-        print( self.request.POST['sub_total'])
         if self.request.POST['sub_total'] != '0' and self.request.POST['sub_total'] != '' and contract_form.is_valid():
             # mdate = date_str_dump(self.request.POST.dict()['milestone-0-date'], self.request.LANGUAGE_CODE)
             # contract = contract_form.save(mdate)
