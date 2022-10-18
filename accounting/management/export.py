@@ -96,8 +96,6 @@ bold_style = xlwt.easyxf('font: bold on, height 200; align: vert center, horiz l
         contract_list = self.get_contract_list()[2]
         date_style.num_format_str = 'yyyy/mm/dd' if self.request.LANGUAGE_CODE == 'ja' else 'mm/dd/yyyy'
 
-          
-          
         for contract in contract_list:
             if contract.contract_id in income_items.keys() and income_items[contract.contract_id]:
 
